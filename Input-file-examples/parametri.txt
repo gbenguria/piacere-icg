@@ -1,0 +1,1 @@
+{"provider": "aws", "anagrafica":{"nome": "Danilo", "cognome": "Molteni"}, "vm":{"os": "ubuntu"}}

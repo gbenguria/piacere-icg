@@ -1,0 +1,1 @@
+{"provider": "aws", "network":{"subname": "Danilo", "vpcname": "Molteni"}, "vm":{"os": "ubuntu"}}
