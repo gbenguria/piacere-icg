@@ -1,10 +1,10 @@
 resource "aws_db_instance" "education" {
   identifier             = "education"
   instance_class         = "db.t3.micro"
-  allocated_storage      = 1
+  allocated_storage      = 5
   engine                 = "postgres"
   engine_version         = "13.1"
-  username               = "danilo"
+  username               = "edu"
   password               = var.db_password
   db_subnet_group_name   = aws_db_subnet_group.education.name
   vpc_security_group_ids = [aws_security_group.rds.id]

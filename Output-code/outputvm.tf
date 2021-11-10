@@ -1,46 +1,16 @@
-data "aws_ami" "ubuntu" {
-  executable_users = ["self"]
+
+data "aws_ami" "ami2" {
+  #executable_users = ["self"]
   most_recent = true
-  name_regex = ^myami-\d{3}
-  owners = ["self"]
-
-  filter {
-   name   = "name"
-   values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
-  }
-   filter {
-   name   = "virtualization-type"
-   values = ["hvm"]
-  }
-   
+  name_regex = "ubuntu*"
+  #owners = ["self"]
+  
+  owners = ["099720109477"] # Canonical
 }
-
-resource "aws_instance" "web" {
-
-  ami = data.aws_ami.ubuntu.id
-  instance_type = m6g.8xlarge
-
-}
-data "aws_ami" "ubuntu" {
-  executable_users = ["self"]
-  most_recent = true
-  name_regex = ^myami-\d{3}
-  owners = ["self"]
-
-  filter {
-   name   = "name"
-   values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
-  }
-   filter {
-   name   = "virtualization-type"
-   values = ["hvm"]
-  }
-   
-}
-
-resource "aws_instance" "web" {
-
-  ami = data.aws_ami.ubuntu.id
-  instance_type = m6g.16xlarge
-
+resource "aws_instance" "instance2" {
+  ami = data.aws_ami.ami2.id
+  instance_type = "t2.micro"
+    tags = {
+     Name = "secondvm"
+   }
 }

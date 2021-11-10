@@ -1,4 +1,4 @@
-def amazon (vcpu, gib, sigla):
+def vmcatalog1 (vcpu, gib, sigla):
     vcpu = str(vcpu)
     gib = str(gib)
     if sigla == "mac" and vcpu=='12' and gib=='32':
@@ -82,7 +82,7 @@ def amazon (vcpu, gib, sigla):
         return sigla+".2xlarge"
     return "t3.micro"
 
-def amz (vcpu, gib):
+def vmcatalog (vcpu, gib):
     vcpu = str(vcpu)
     gib = str(gib)
     if vcpu=='12' and gib=='32':
@@ -160,4 +160,4 @@ def amz (vcpu, gib):
         return "t3.xlarge"
     if vcpu == '8' and gib == '32':
         return "t3.2xlarge"
-    return "t3.micro"
+    return "t2.micro"

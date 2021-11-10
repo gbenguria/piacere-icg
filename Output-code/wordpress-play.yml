@@ -7,10 +7,9 @@
 
   pre_tasks:
     - name: "Install packages"
-      apt: "name={{ item }} state=present"
+      yum: "name={{ item }} state=present"
       with_items:
         - docker
-        - docker.io
 
     - name: "Install Python packages"
       pip: "name={{ item }}  state=present"

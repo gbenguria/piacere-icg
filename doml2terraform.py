@@ -4,32 +4,33 @@ import yaml
 import sys
  
 
-def TerraformICG(parametri):
-    if 'vm' in parametri:
-        if (parametri['provider']=='aws'):
-            from functions import vm
-            vm(parametri['vm'])
-            if 'network' in parametri:
+def TerraformICG(parameters):
+    if 'vm' in parameters:
+        if (parameters['provider']=='aws'):
+            if 'vm' in parameters:
+                from functions import awsvm
+                awsvm(parameters['vm'])
+            if 'network' in parameters:
                 from functions import networkaws
-                networkaws(parametri['network'])
-            if 'db' in parametri:
+                networkaws(parameters['network'])
+            if 'db' in parameters:
                 from functions import awsdb
-                awsdb(parametri['db'])
-        elif (parametri['provider']=='gcp'):
-            from functions import gcp
-            gcp(parametri['vm'])
-            if 'network' in parametri:
+                awsdb(parameters['db'])
+        elif (parameters['provider']=='gcp'):
+            from functions import gcpvm
+            gcpvm(parameters['vm'])
+            if 'network' in parameters:
                 from functions import networkg
-                networkg(parametri['network'])
-            if 'db' in parametri:
+                networkg(parameters['network'])
+            if 'db' in parameters:
                 from functions import googlesql
-                googlesql(parametri['db'])
-        elif (parametri['provider']=='azurerm'):
-            from functions import azurem
-            azurem(parametri['vm'])
-            if 'network' in parametri:
+                googlesql(parameters['db'])
+        elif (parameters['provider']=='azure'):
+            from functions import azurevm
+            azurevm(parameters['vm'])
+            if 'network' in parameters:
                 from functions import networkaz
-                networkaz(parametri['network'])
-            if 'db' in parametri:
+                networkaz(parameters['network'])
+            if 'db' in parameters:
                 from functions import azuredb
-                azuredb(parametri['db'])
+                azuredb(parameters['db'])
