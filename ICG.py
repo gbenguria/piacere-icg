@@ -13,10 +13,10 @@ else:
 input_file = open(file_name, "r")
 parameters = json.load(input_file)
 for step in parameters["steps"]:
-    if step["programing_lenguage"] == "ansible":
+    if step["programming_language"] == "ansible":
         input_data = InputData(app_type=step["type"], code_path=step["output_path"], template_type=step["info"]["name"], template_path=step["info"]["template_path"], template_data=step["data"])
         icg = AnsibleICG()
         icg.generate_code(input_data)
-    elif step["programing_lenguage"] == "terraform":
+    elif step["programming_language"] == "terraform":
         input_data = step["data"]
         TerraformICG(input_data)

@@ -1,6 +1,6 @@
 {
     "steps" : [{
-        "programing_lenguage": "terraform",
+        "programming_language": "terraform",
         "output_path": "Output-code/",
         "data":{
             "provider": "aws",
@@ -33,7 +33,7 @@
             ]
         }
     },{
-        "programing_lenguage": "ansible",
+        "programming_language": "ansible",
         "type":"database",
         "output_path": "Output-code/",
         "info" : { 
