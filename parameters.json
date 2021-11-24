@@ -47,11 +47,14 @@
                 "DB_NAME": "app1"
             },
             "play":{
-                "OS": "centos"
+                "OS": "debian",
+                "HOST": 1,
+                "ADMIN_USER": "A",
+                "ADMIN_PASSWORD": "A"
             }
         }
     },{
-        "programing_lenguage": "ansible",
+        "programming_language": "ansible",
         "type":"docker-service",
         "output_path": "Output-code/",
         "info" : { 
@@ -67,7 +70,10 @@
                 "WORDPRESS_TABLE_PREFIX": "wp"
             },
             "play":{
-                "OS": "centos"
+                "OS": "debian",
+                "HOST": 2,
+                "ADMIN_USER": "B",
+                "ADMIN_PASSWORD": "B"
             }
         }
     }]
