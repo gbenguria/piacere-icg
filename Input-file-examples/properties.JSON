@@ -1,0 +1,30 @@
+{
+    "provider": "aws",
+    "network": [
+        {
+            "id": 1,
+            "subname": "Danilo",
+            "vpcname": "Molteni"
+        }
+    ],
+    "vm": [
+        {
+            "id": 1,
+            "ram": 128,
+            "cpu": 32
+        },
+        {
+            "id": 2,
+            "ram": 256,
+            "cpu": 64
+        }
+    ],
+    "db": [
+        {
+            "id": 1,
+            "engine": "postgres",
+            "username": "danilo",
+            "storage": 1
+        }
+    ]
+}

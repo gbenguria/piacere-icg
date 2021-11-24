@@ -1,0 +1,1 @@
+{"provider": "gcp", "network":{"subname": "Danilo", "vpcname": "Molteni"},  "vm":{"name": "flask-vm-$8"}}

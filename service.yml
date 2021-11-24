@@ -1,0 +1,16 @@
+---
+- deployment:
+  - name: vm
+    language: terraform
+    code: 
+      - outputNetwork.tf
+        outputdb.tf
+        outputvm.tf
+
+- orchestration:
+  - name: postgres
+    language: ansible
+    code: postgres-play.yml
+  - name: wordpress
+    language: ansible
+    code: wordpress-play.yml
