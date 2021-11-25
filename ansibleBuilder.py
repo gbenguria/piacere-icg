@@ -1,4 +1,4 @@
-import ansibleComponents 
+import ansibleUtils 
 
 class InputData:
     app_type: str
@@ -32,9 +32,9 @@ class AnsibleModule:
 
     def edit_template(self, template_type, template_list, template_data, kind):
         if template_type == "postgres":
-            new_file = ansibleComponents.databases_postgres(template_list, template_data, kind)
+            new_file = ansibleUtils.databases_postgres(template_list, template_data, kind)
         if template_type == "wordpress":
-            new_file = ansibleComponents.service_wordpress(template_list, template_data, kind)  
+            new_file = ansibleUtils.service_wordpress(template_list, template_data, kind)  
         return new_file
 
     def write_file(self, edited_content, code_path: str):

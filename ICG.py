@@ -1,5 +1,5 @@
 from ansibleBuilder import *
-from doml2terraform import *
+from terraformBuilder import *
 import json
 import sys
  

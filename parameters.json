@@ -15,6 +15,13 @@
             ],
             "vm": [
                 {
+                    "id": 1,
+                    "os": "ubuntu",
+                    "ram": 1,
+                    "cpu": 1,
+                    "name": "firstvm"
+                },
+                {
                     "id": 2,
                     "os": "ubuntu",
                     "ram": 1,
