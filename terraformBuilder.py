@@ -1,6 +1,6 @@
 import json
 import yaml
-from terraforUtils import *
+from terraformUtils import *
 import sys
  
 
