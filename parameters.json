@@ -1,87 +1,91 @@
 {
-    "steps" : [{
-        "programming_language": "terraform",
-        "output_path": "Output-code/",
-        "data":{
-            "provider": "aws",
-            "network": [
-                {
-                    "id": 1,
-                    "subnetname": "piacere_subnet",
-                    "subnet_cidrblock": "10.0.1.0/24",
-                    "vpcname": "piacere_vpc",
-                    "vpc_cidr": "10.0.0.0/16"
-                }
-            ],
-            "vm": [
-                {
-                    "id": 1,
-                    "os": "ubuntu",
-                    "ram": 1,
-                    "cpu": 1,
-                    "name": "firstvm"
+    "steps": [
+        {
+            "programming_language": "terraform",
+            "output_path": "/opt/Output-code/",
+            "data": {
+                "provider": "aws",
+                "network": [
+                    {
+                        "id": 1,
+                        "subnetname": "piacere_subnet",
+                        "subnet_cidrblock": "10.0.1.0/24",
+                        "vpcname": "piacere_vpc",
+                        "vpc_cidr": "10.0.0.0/16"
+                    }
+                ],
+                "vm": [
+                    {
+                        "id": 1,
+                        "os": "ubuntu",
+                        "ram": 1,
+                        "cpu": 1,
+                        "name": "firstvm"
+                    },
+                    {
+                        "id": 2,
+                        "os": "ubuntu",
+                        "ram": 1,
+                        "cpu": 1,
+                        "name": "secondvm"
+                    }
+                ],
+                "db": [
+                    {
+                        "id": 1,
+                        "name": "Danilo",
+                        "group_name": "Molteni",
+                        "server_name": "DaniloMolteni",
+                        "email": "molteni@hpe.com"
+                    }
+                ]
+            }
+        },
+        {
+            "programming_language": "ansible",
+            "type": "database",
+            "output_path": "/opt/Output-code/",
+            "info": {
+                "name": "mysql",
+                "template_path": "/opt/Databases-templates/"
+            },
+            "data": {
+                "vars": {
+                    "DB_USER": "app1user",
+                    "DB_PASSWORD": "app1user",
+                    "DB_NAME": "app1"
                 },
-                {
-                    "id": 2,
-                    "os": "ubuntu",
-                    "ram": 1,
-                    "cpu": 1,
-                    "name": "secondvm"
+                "play": {
+                    "OS": "debian",
+                    "HOST": 1,
+                    "ADMIN_USER": "A",
+                    "ADMIN_PASSWORD": "A"
                 }
-            ],
-            "db": [
-                {
-                    "id": 1,
-                    "name": "Danilo",
-                    "group_name": "Molteni",
-                    "server_name": "DaniloMolteni",
-                    "email": "molteni@hpe.com"
-                }
-            ]
-        }
-    },{
-        "programming_language": "ansible",
-        "type":"database",
-        "output_path": "Output-code/",
-        "info" : { 
-            "name" : "mysql",
-            "template_path" : "Databases-templates/"
+            }
         },
-        "data":{
-            "vars":{
-                "DB_USER": "app1user",
-                "DB_PASSWORD": "app1user",
-                "DB_NAME": "app1"
+        {
+            "programming_language": "ansible",
+            "type": "docker-service",
+            "output_path": "Output-code/",
+            "info": {
+                "name": "wordpress",
+                "template_path": "/opt/Docker-services-templates/"
             },
-            "play":{
-                "OS": "debian",
-                "HOST": 1,
-                "ADMIN_USER": "A",
-                "ADMIN_PASSWORD": "A"
+            "data": {
+                "vars": {
+                    "WORDPRESS_DB_HOST": "10.10.10.10",
+                    "WORDPRESS_DB_USER": "app1user",
+                    "WORDPRESS_DB_PASSWORD": "app1user",
+                    "WORDPRESS_DB_NAME": "app1",
+                    "WORDPRESS_TABLE_PREFIX": "wp"
+                },
+                "play": {
+                    "OS": "debian",
+                    "HOST": 2,
+                    "ADMIN_USER": "B",
+                    "ADMIN_PASSWORD": "B"
+                }
             }
         }
-    },{
-        "programming_language": "ansible",
-        "type":"docker-service",
-        "output_path": "Output-code/",
-        "info" : { 
-            "name" : "wordpress",
-            "template_path" : "Docker-services-templates/"
-        },
-        "data":{
-            "vars": {
-                "WORDPRESS_DB_HOST": "10.10.10.10",
-                "WORDPRESS_DB_USER": "app1user",
-                "WORDPRESS_DB_PASSWORD": "app1user",
-                "WORDPRESS_DB_NAME": "app1",
-                "WORDPRESS_TABLE_PREFIX": "wp"
-            },
-            "play":{
-                "OS": "debian",
-                "HOST": 2,
-                "ADMIN_USER": "B",
-                "ADMIN_PASSWORD": "B"
-            }
-        }
-    }]
+    ]
 }
