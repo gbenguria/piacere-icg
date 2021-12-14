@@ -4,7 +4,7 @@ from aws import *
 
 def awsvm(parametri):
     finalString = ""
-    jinjaTemplate = Template(open("/opt/VM-templates/AWStemplateVM.tpl", "r").read())
+    jinjaTemplate = Template(open("VM-templates/AWStemplateVM.tpl", "r").read())
     for parameter in parametri:
         my_dict = {'vm':'aws_ami',
                     'id': '1', 
@@ -61,7 +61,7 @@ def awsvm(parametri):
 
 def gcpvm(parametri):
     finalString = ""
-    jinjaTemplate = Template(open("/opt/VM-templates/GCPtemplateVM.tpl", "r").read())
+    jinjaTemplate = Template(open("VM-templates/GCPtemplateVM.tpl", "r").read())
     for parameter in parametri:
         my_dict = {'default': 'default', 'name': 'test', 'machine_type': 'e2-medium', 'zone': 'us-central1-a'}
         if 'default' in parameter:
@@ -82,7 +82,7 @@ def gcpvm(parametri):
 
 def azurevm(parametri):
     finalString = ""
-    jinjaTemplate = Template(open("/opt/VM-templates/AZUREtemplateVM.tpl", "r").read())
+    jinjaTemplate = Template(open("VM-templates/AZUREtemplateVM.tpl", "r").read())
     for parameter in parametri:
         my_dict = {'source': "hashicorp/azurerm", 'version': "~>2.0", 'name': "<resource_group_name>", 'location': "<location>"}
         if 'source' in parameter:
@@ -103,7 +103,7 @@ def azurevm(parametri):
 
 def networkaws(parametri):
     finalString = ""
-    jinjaTemplate = Template(open("/opt/Network-templates/AWStemplateNetwork.tpl", "r").read())
+    jinjaTemplate = Template(open("Network-templates/AWStemplateNetwork.tpl", "r").read())
     for parameter in parametri:
         my_dict = {'subname':'subname', 'vpcname': 'vpcname', 'subnet_cidrblock':'subnet_cidrblock', 'vpc_cidr': 'vpc_cidr'}
         if 'subnet_cidrblock' in parameter:
@@ -124,7 +124,7 @@ def networkaws(parametri):
 
 def networkg(parametri):
     finalString = ""
-    jinjaTemplate = Template(open("/opt/Network-templates/GCPtemplateNetwork.tpl", "r").read())
+    jinjaTemplate = Template(open("Network-templates/GCPtemplateNetwork.tpl", "r").read())
     for parameter in parametri:
         my_dict = {'network':'terraform-network', 'subnetwork': 'terraform-subnetwork'}
         if 'network' in parameter:
@@ -141,7 +141,7 @@ def networkg(parametri):
 
 def networkaz(parametri):
     finalString = ""
-    jinjaTemplate = Template(open("/opt/Network-templates/AZUREtemplateNetwork.tpl", "r").read())
+    jinjaTemplate = Template(open("Network-templates/AZUREtemplateNetwork.tpl", "r").read())
     for parameter in parametri:
         my_dict = {'name':'my-resources', 'subnet_names': ["subnet1", "subnet2", "subnet3"]}
         if 'name' in parameter:
@@ -167,7 +167,7 @@ def networkaz(parametri):
 
 def awsdb(parametri):
     finalString = ""
-    jinjaTemplate = Template(open("/opt/DB-templates/AWStemplateDB.tpl", "r").read())
+    jinjaTemplate = Template(open("DB-templates/AWStemplateDB.tpl", "r").read())
     for parameter in parametri: 
         my_dict = {'identifier':'education', 'instance':'db.t3.micro', 'storage':'5', 'engine':'postgres', 'version':'13.1', 'username': 'edu', 'password':'var.db_password', 'subnet': 'aws_db_subnet_group.education.name', 'security': '[aws_security_group.rds.id]', 'parameter': 'aws_db_parameter_group.education.name', 'accessible': 'true', 'skip': 'true'}
         if 'identifier' in parameter:
@@ -204,7 +204,7 @@ def awsdb(parametri):
 
 def azuredb(parametri):
     finalString = ""
-    jinjaTemplate = Template(open("/opt/DB-templates/AZUREtemplateDB.tpl", "r").read())
+    jinjaTemplate = Template(open("DB-templates/AZUREtemplateDB.tpl", "r").read())
     for parameter in parametri:
         my_dict = {'name':'sqldbtf01', 'group_name':'${azurerm_resource_group.test2.name}', 'location':'North Central US', 'server_name':'${azurerm_sql_server.test2.name}', 'state':'Enabled', 'email':'["dbgrl93@gmail.com"]', 'days':'30', 'access_key':'${azurerm_storage_account.test2sa.primary_access_key}', 'endpoint':'${azurerm_storage_account.test2sa.primary_blob_endpoint}', 'default':'Enabled'}
         if 'name' in parameter:
@@ -239,7 +239,7 @@ def azuredb(parametri):
 
 def googlesql(parametri):
     finalString = ""
-    jinjaTemplate = Template(open("/opt/DB-templates/GCPtemplateDB.tpl", "r").read())
+    jinjaTemplate = Template(open("DB-templates/GCPtemplateDB.tpl", "r").read())
     for parameter in parametri:
         my_dict = {'name':'my-database', 'instance':'google_sql_database_instance.instance.name', 'instance_name':'my-database-instance','region':'us-central1', 'tier':'db-f1-micro', 'deletion_protection':'true'}
         if 'name' in parameter:
@@ -263,7 +263,7 @@ def googlesql(parametri):
     create_file.close()
 
 def postgresql(parametri):
-    jinjaTemplate = Template(open("/opt/DB-templates/AWStemplateDB.tpl", "r").read())
+    jinjaTemplate = Template(open("DB-templates/AWStemplateDB.tpl", "r").read())
     my_dict = {'name': 'my_db', 'owner': 'my_role', 'template': 'template0', 'lc_collate':'C', 'connection_limit':-1, 'allow_connections': 'true'}
     if 'name' in parametri:
         my_dict['name'] = parametri['name']

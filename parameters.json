@@ -2,7 +2,7 @@
     "steps": [
         {
             "programming_language": "terraform",
-            "output_path": "/opt/Output-code/",
+            "output_path": "Output-code/",
             "data": {
                 "provider": "aws",
                 "network": [
@@ -44,10 +44,10 @@
         {
             "programming_language": "ansible",
             "type": "database",
-            "output_path": "/opt/Output-code/",
+            "output_path": "Output-code/",
             "info": {
                 "name": "mysql",
-                "template_path": "/opt/Databases-templates/"
+                "template_path": "Databases-templates/"
             },
             "data": {
                 "vars": {
@@ -69,7 +69,7 @@
             "output_path": "Output-code/",
             "info": {
                 "name": "wordpress",
-                "template_path": "/opt/Docker-services-templates/"
+                "template_path": "Docker-services-templates/"
             },
             "data": {
                 "vars": {

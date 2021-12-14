@@ -3,7 +3,7 @@
   become: yes
 
   vars_files:
-    - vars.yml
+    - wordpress-vars.yml
 
   pre_tasks:
     - name: "Install packages"
