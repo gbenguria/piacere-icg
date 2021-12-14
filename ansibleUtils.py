@@ -25,7 +25,7 @@ def service_wordpress(template_list, template_data, kind):
         new_template_list = generic_matcher(template_list, template_data[kind])
     if kind == "play":
         if template_data[kind]["OS"] == "debian":
-            specific_data = {"OS": "apt", "OS_PACKETS": "        - docker\n        - docker.io"}
+            specific_data = {"OS": "apt", "OS_PACKETS": "        - python3\n        - python3-pip\n        - docker\n        - docker.io"}
         elif template_data[kind]["OS"] == "centos":
             specific_data = {"OS": "yum", "OS_PACKETS": "        - docker"}
         new_template_list = generic_matcher(template_list, specific_data)

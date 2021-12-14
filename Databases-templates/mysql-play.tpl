@@ -10,13 +10,38 @@
     with_items:
     - mysql-server
     - mysql-client
-    - python-mysqldb
     - python-setuptools
-    - python-pip
+    - python-mysqldb
     - libmysqlclient-dev
+    - python3-pip
 
-  - name: "Install Python packages"
-    pip: "name={{ item }}  state=present"
+  - name: Remove a symbolic link
+    ansible.builtin.file: 
+      path: /usr/bin/python
+      state: absent
+
+  - name: Create a symbolic link
+    ansible.builtin.file: 
+      src: /usr/bin/python3
+      dest: /usr/bin/python
+      state: link
+    register: result
+    retries: 3
+    delay: 5
+    until: result is not failed
+
+  - name: Create a symbolic link
+    ansible.builtin.file: 
+      src: /usr/bin/pip3
+      dest: /usr/bin/pip
+      state: link
+    register: result
+    retries: 3
+    delay: 5
+    until: result is not failed
+      
+  - name: Install Python packages
+    pip: "name={{ item }} state=present"
     with_items:
       - PyMySQL
 
@@ -33,6 +58,25 @@
       state: started
       enabled: true
 
+  - name: Creation mysql file configuration
+    file:
+      path: "/root/.my.cnf"
+      state: touch
+
+  - name: Editing configuration file
+    replace:
+      path: /etc/mysql/mysql.conf.d/mysqld.cnf
+      regexp: '(.*bind-addres.*)'
+      replace: '#\1'
+
+  - name: Restart MySQL
+    service: name=mysql state=restarted
+
+  - name: Ensure MySQL started
+    service:
+      name: mysql
+      state: started
+
   - name: update mysql password for application account
     mysql_user:
       login_unix_socket: /var/run/mysqld/mysqld.sock
@@ -46,13 +90,10 @@
       priv: "*.*:ALL,GRANT"
 
   - name: Add the application database
-    mysql_db: name="{{ db_name }}" state=present
-
-  - name: Editing configuration file
-    replace:
-      path: /etc/mysql/mysql.conf.d/mysqld.cnf
-      regexp: '(.*bind-addres.*)'
-      replace: '#\1'
+    mysql_db: 
+      name: "{{ db_name }}"
+      state: present
+      login_unix_socket: /var/run/mysqld/mysqld.sock
 
   - name: Restart MySQL
     service: name=mysql state=restarted

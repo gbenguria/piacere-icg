@@ -3,7 +3,7 @@
   become: yes
 
   vars_files:
-    - wordpress-vars.yml
+    - vars.yml
 
   pre_tasks:
     - name: "Install packages"
@@ -11,12 +11,47 @@
       with_items:
 ###OS_PACKETS###
 
+    - name: Remove a symbolic link
+      ansible.builtin.file: 
+        path: /usr/bin/python
+        state: absent
+
+    - name: Create a symbolic link
+      ansible.builtin.file: 
+        src: /usr/bin/python3
+        dest: /usr/bin/python
+        state: link
+      register: result
+      retries: 3
+      delay: 5
+      until: result is not failed
+
+    - name: Create a symbolic link
+      ansible.builtin.file: 
+        src: /usr/bin/pip3
+        dest: /usr/bin/pip
+        state: link
+      register: result
+      retries: 3
+      delay: 5
+      until: result is not failed
+    
     - name: "Install Python packages"
       pip: "name={{ item }}  state=present"
       with_items:
         - docker
 
+    - name: edit firewall
+      service:
+        name: ufw
+        state: stopped
+        enabled: false
+        
   tasks:
+    - name: Create a volume
+      community.docker.docker_volume:
+        name: mydata
+        
     - name: Start a WP container
       community.docker.docker_container:
         name: wordpress
@@ -30,5 +65,5 @@
           WORDPRESS_TABLE_PREFIX: "{{WORDPRESS_TABLE_PREFIX}}"
         ports:
           - "8080:80"
-        volumes_from:
+        volumes:
           - mydata
