@@ -44,7 +44,7 @@
         "type":"database",
         "output_path": "Output-code/",
         "info" : { 
-            "name" : "postgres",
+            "name" : "mysql",
             "template_path" : "Databases-templates/"
         },
         "data":{

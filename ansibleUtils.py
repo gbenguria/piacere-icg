@@ -20,6 +20,17 @@ def databases_postgres(template_list, template_data, kind):
         new_template_list = generic_matcher(template_list, specific_data)
     return "".join(new_template_list)
 
+def databases_mysql(template_list, template_data, kind):
+    if kind == "vars":
+        new_template_list = generic_matcher(template_list, template_data[kind])
+    if kind == "play":
+        if template_data[kind]["OS"] == "debian":
+            specific_data = {"OS": "apt", "OS_PACKETS": "    - mysql-server\n    - mysql-client\n    - python-setuptools\n    - python-mysqldb\n    - libmysqlclient-dev\n    - python3-pip"}
+        elif template_data[kind]["OS"] == "centos":
+            specific_data = {"OS": "yum", "OS_PACKETS": "        - postgresql10\n        - postgresql10-server\n        - postgresql10-contrib\n        - postgresql10-libs"}
+        new_template_list = generic_matcher(template_list, specific_data)
+    return "".join(new_template_list)
+
 def service_wordpress(template_list, template_data, kind):
     if kind == "vars":
         new_template_list = generic_matcher(template_list, template_data[kind])

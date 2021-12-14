@@ -33,6 +33,8 @@ class AnsibleModule:
     def edit_template(self, template_type, template_list, template_data, kind):
         if template_type == "postgres":
             new_file = ansibleUtils.databases_postgres(template_list, template_data, kind)
+        if template_type == "mysql":
+            new_file = ansibleUtils.databases_mysql(template_list, template_data, kind)
         if template_type == "wordpress":
             new_file = ansibleUtils.service_wordpress(template_list, template_data, kind)  
         return new_file

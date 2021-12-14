@@ -6,14 +6,9 @@
 
   pre_tasks:
   - name: Install MySQL
-    apt: name={{ item }} update_cache=yes cache_valid_time=3600 state=present
+    ###OS###: name={{ item }} update_cache=yes cache_valid_time=3600 state=present
     with_items:
-    - mysql-server
-    - mysql-client
-    - python-setuptools
-    - python-mysqldb
-    - libmysqlclient-dev
-    - python3-pip
+###OS_PACKETS###
 
   - name: Remove a symbolic link
     ansible.builtin.file: 
