@@ -2,7 +2,7 @@
 - hosts: DB
   become: yes
   vars_files:
-    - vars2.yml
+    - mysql-vars.yml
 
   pre_tasks:
   - name: Install MySQL
