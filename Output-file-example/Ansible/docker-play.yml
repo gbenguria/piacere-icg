@@ -24,12 +24,20 @@
         src: /usr/bin/python3
         dest: /usr/bin/python
         state: link
+      register: result
+      retries: 3
+      delay: 5
+      until: result is not failed
 
     - name: Create a symbolic link
       ansible.builtin.file: 
         src: /usr/bin/pip3
         dest: /usr/bin/pip
         state: link
+      register: result
+      retries: 3
+      delay: 5
+      until: result is not failed
     
     - name: "Install Python packages"
       pip: "name={{ item }}  state=present"
