@@ -1,0 +1,64 @@
+---
+- hosts: APP1
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  pre_tasks:
+    - name: "Install packages"
+      apt: "name={{ item }} state=present"
+      with_items:
+        - python3
+        - python3-pip
+        - docker
+        - docker.io
+
+    - name: Remove a symbolic link
+      ansible.builtin.file: 
+        path: /usr/bin/python
+        state: absent
+
+    - name: Create a symbolic link
+      ansible.builtin.file: 
+        src: /usr/bin/python3
+        dest: /usr/bin/python
+        state: link
+
+    - name: Create a symbolic link
+      ansible.builtin.file: 
+        src: /usr/bin/pip3
+        dest: /usr/bin/pip
+        state: link
+    
+    - name: "Install Python packages"
+      pip: "name={{ item }}  state=present"
+      with_items:
+        - docker
+
+    - name: edit firewall
+      service:
+        name: ufw
+        state: stopped
+        enabled: false
+        
+  tasks:
+    - name: Create a volume
+      community.docker.docker_volume:
+        name: mydata
+        
+    - name: Start a WP container
+      community.docker.docker_container:
+        name: wordpress
+        image: wordpress:5.8.0
+        state: started
+        env:
+          WORDPRESS_DB_HOST: "{{WORDPRESS_DB_HOST}}"
+          WORDPRESS_DB_USER: "{{WORDPRESS_DB_USER}}"
+          WORDPRESS_DB_PASSWORD: "{{WORDPRESS_DB_PASSWORD}}"
+          WORDPRESS_DB_NAME: "{{WORDPRESS_DB_NAME}}"
+          WORDPRESS_TABLE_PREFIX: "{{WORDPRESS_TABLE_PREFIX}}"
+        ports:
+          - "8080:80"
+        volumes:
+          - mydata
