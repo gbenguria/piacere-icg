@@ -21,7 +21,7 @@ def create_infrastructure_files(intermediate_representation: dict = Body(...)):
     return FileResponse(compress_file_path, media_type='application/octet-stream', filename=compress_file_name)
 
 def choose_plugin(parameters):
-    # os.system('rm -f /opt/Output-code/*')
+    # os.system('rm -f /opt/output_files_generated/*')
     for step in parameters["steps"]:
         if step["programming_language"] == "ansible":
             input_data = step["data"]

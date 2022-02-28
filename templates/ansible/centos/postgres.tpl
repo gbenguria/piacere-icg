@@ -2,14 +2,14 @@
 - hosts: DB
   become: yes
 
-  vars_files:
-    - postgres-vars.yml
-
   pre_tasks:
     - name: "Install packages"
-      apt: "name={{ item }} state=present"
+      yum: "name={{ item }} state=present"
       with_items:
-        - postgresql-10
+        - postgresql10
+        - postgresql10-server
+        - postgresql10-contrib
+        - postgresql10-libs
         - python3
         - python3-pip
 

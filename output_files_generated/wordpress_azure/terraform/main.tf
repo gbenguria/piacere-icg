@@ -29,7 +29,6 @@ resource "azurerm_subnet" "wordpress_net_subnet" {
   address_prefixes       = ["10.0.2.0/24"]
 }
 
-
 ## VIRTUAL NETWORK
 resource "azurerm_virtual_network" "mysql_net_vnetwork" {
   name                = "mysql_net"
@@ -45,5 +44,4 @@ resource "azurerm_subnet" "mysql_net_subnet" {
   virtual_network_name = azurerm_virtual_network.mysql_net_vnetwork.name
   address_prefixes       = ["10.0.2.0/24"]
 }
-
 

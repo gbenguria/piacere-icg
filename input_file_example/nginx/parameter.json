@@ -1,5 +1,5 @@
 {
-  "output_path": "output_file_example/nginx_openstack/",
+  "output_path": "output_files_generated/nginx_openstack/",
   "steps": [
     {
       "programming_language": "terraform",

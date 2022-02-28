@@ -1,12 +1,10 @@
 ---
 - hosts: DB
   become: yes
-  vars_files:
-    - mysql-vars.yml
 
   pre_tasks:
   - name: Install MySQL
-    apt: name={{ item }} update_cache=yes cache_valid_time=3600 state=present
+    apt: name= update_cache=yes cache_valid_time=3600 state=present
     with_items:
     - mysql-server
     - mysql-client
@@ -41,7 +39,7 @@
     until: result is not failed
       
   - name: Install Python packages
-    pip: "name={{ item }} state=present"
+    pip: "name= state=present"
     with_items:
       - PyMySQL
 
@@ -80,9 +78,9 @@
   - name: update mysql password for application account
     mysql_user:
       login_unix_socket: /var/run/mysqld/mysqld.sock
-      name: "{{ db_user }}"
+      name: "app1user"
       host: "%"
-      password: "{{ db_password }}"
+      password: "app1user"
       state: present
       login_user: root
       login_password: test
@@ -91,7 +89,7 @@
 
   - name: Add the application database
     mysql_db: 
-      name: "{{ db_name }}"
+      name: "app1"
       state: present
       login_unix_socket: /var/run/mysqld/mysqld.sock
 

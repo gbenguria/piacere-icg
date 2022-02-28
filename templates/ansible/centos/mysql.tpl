@@ -4,7 +4,7 @@
 
   pre_tasks:
   - name: Install MySQL
-    apt: name={{ item }} update_cache=yes cache_valid_time=3600 state=present
+    yum: name={{ item }} update_cache=yes cache_valid_time=3600 state=present
     with_items:
     - mysql-server
     - mysql-client
@@ -45,7 +45,7 @@
 
   - name: edit firewall
     service:
-      name: ufw
+      name: firewalld
       state: stopped
       enabled: false
 
@@ -77,7 +77,6 @@
 
   - name: update mysql password for application account
     mysql_user:
-      login_unix_socket: /var/run/mysqld/mysqld.sock
       name: "{{ db_user }}"
       host: "%"
       password: "{{ db_password }}"
@@ -91,7 +90,6 @@
     mysql_db: 
       name: "{{ db_name }}"
       state: present
-      login_unix_socket: /var/run/mysqld/mysqld.sock
 
   - name: Restart MySQL
     service: name=mysql state=restarted

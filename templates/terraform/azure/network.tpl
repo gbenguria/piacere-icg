@@ -1,23 +1,15 @@
-resource "azurerm_resource_group" "example" {
-  name     = "{{ name }}"
-  location = "West Europe"
+## VIRTUAL NETWORK
+resource "azurerm_virtual_network" "{{ name ~ "_vnetwork" }}" {
+  name                = "{{ name }}"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.{{ resource_group_name }}.location
+  resource_group_name = azurerm_resource_group.{{ resource_group_name }}.name
 }
 
-module "network" {
-  source              = "Azure/network/azurerm"
-  resource_group_name = azurerm_resource_group.example.name
-  address_spaces      = ["10.0.0.0/16", "10.2.0.0/16"]
-  subnet_prefixes     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  subnet_names        = {{ subnet_names }}
-
-  subnet_service_endpoints = {
-    {{ endpoints }}
-  }
-
-  tags = {
-    environment = "dev"
-    costcenter  = "it"
-  }
-
-  depends_on = [azurerm_resource_group.example]
+## SUBNET
+resource "azurerm_subnet" "{{ name ~ "_subnet" }}" {
+  name                 = "internal"
+  resource_group_name  = azurerm_resource_group.{{ resource_group_name }}.name
+  virtual_network_name = azurerm_virtual_network.{{ name ~ "_vnetwork" }}.name
+  address_prefixes       = ["10.0.2.0/24"]
 }

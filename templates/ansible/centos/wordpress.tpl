@@ -6,10 +6,7 @@
     - name: "Install packages"
       apt: "name={{ item }} state=present"
       with_items:
-        - python3
-        - python3-pip
         - docker
-        - docker.io
 
     - name: Remove a symbolic link
       ansible.builtin.file: 

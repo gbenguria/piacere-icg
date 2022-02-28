@@ -4,9 +4,9 @@
 
   pre_tasks:
     - name: "Install packages"
-      ###OS###: "name={{ item }} state=present"
+      apt: "name={{ item }} state=present"
       with_items:
-###OS_PACKETS###
+        - postgresql-10
         - python3
         - python3-pip
 

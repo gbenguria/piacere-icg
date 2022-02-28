@@ -1,5 +1,7 @@
 import configparser
 import logging
+import os
+
 import jinja2
 from jinja2 import Template
 
@@ -35,6 +37,7 @@ def read_template(template_path):
 
 
 def write_template(template, output_path_file):
+    os.makedirs(os.path.dirname(output_path_file), exist_ok=True)
     file = open(output_path_file, "w+")
     file.write(template)
     logging.info("Writing file at: '%s'", output_path_file)

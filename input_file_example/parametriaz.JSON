@@ -1,1 +1,0 @@
-{"provider": "azurerm", "network":{"subname": "Danilo", "vpcname": "Molteni"}, "vm":{"source": "hashicorp/azurerm", "version": "~>2.0"}}

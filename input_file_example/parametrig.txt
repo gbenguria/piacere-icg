@@ -1,1 +1,0 @@
-{"provider": "gcp", "anagrafica":{"nome": "Danilo", "cognome": "Molteni"},  "vm":{"name": "flask-vm-$8"}}
