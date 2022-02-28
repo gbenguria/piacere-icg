@@ -1,1 +1,0 @@
-# Google Clud Platform specific functionalities

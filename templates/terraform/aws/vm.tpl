@@ -1,4 +1,3 @@
-
 data "{{ vm }}" "ami{{ id }}" {
   #executable_users = {{ executable_users }}
   most_recent = {{ mostrecent }}
