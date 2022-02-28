@@ -2,9 +2,6 @@
 - hosts: APP1
   become: yes
 
-  vars_files:
-    - wordpress-vars.yml
-
   pre_tasks:
     - name: "Install packages"
       ###OS###: "name={{ item }} state=present"
@@ -58,11 +55,11 @@
         image: wordpress:5.8.0
         state: started
         env:
-          WORDPRESS_DB_HOST: "{{WORDPRESS_DB_HOST}}"
-          WORDPRESS_DB_USER: "{{WORDPRESS_DB_USER}}"
-          WORDPRESS_DB_PASSWORD: "{{WORDPRESS_DB_PASSWORD}}"
-          WORDPRESS_DB_NAME: "{{WORDPRESS_DB_NAME}}"
-          WORDPRESS_TABLE_PREFIX: "{{WORDPRESS_TABLE_PREFIX}}"
+          WORDPRESS_DB_HOST: "{{ wordpress_db_host }}"
+          WORDPRESS_DB_USER: "{{ wordpress_db_user }}"
+          WORDPRESS_DB_PASSWORD: "{{ wordpress_db_password }}"
+          WORDPRESS_DB_NAME: "{{ wordpress_db_name }}"
+          WORDPRESS_TABLE_PREFIX: "{{ wordpress_table_prefix }}"
         ports:
           - "8080:80"
         volumes:

@@ -2,9 +2,6 @@
 - hosts: DB
   become: yes
 
-  vars_files:
-    - postgres-vars.yml
-
   pre_tasks:
     - name: "Install packages"
       ###OS###: "name={{ item }} state=present"
