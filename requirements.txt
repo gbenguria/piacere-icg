@@ -1,5 +1,4 @@
 Jinja2==3.0.3
-flask==2.0.2
 PyYAML==6.0
 fastapi~=0.74.1
-uvicorn=0.17.5
+uvicorn==0.17.5
