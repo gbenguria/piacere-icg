@@ -98,7 +98,8 @@ def model_handler(obj, model_root, level, intermediate_repr):
 
 def concrete_infra_handler(obj, model_root, level, intermediate_repr):
     # output prefix
-    append_in_file(intermediate_repr, f'{level * spaces}{{{newline}{level * spaces}{spaces}"programming_language": "terraform",')
+    append_in_file(intermediate_repr,
+                   f'{level * spaces}{{{newline}{level * spaces}{spaces}"programming_language": "terraform",')
     # handle contents
     for x in obj.eContents:
         handle_obj(x, model_root, level + 1, intermediate_repr)
@@ -118,7 +119,8 @@ def property_handler(obj, model_root, level, intermediate_repr):
 
 def provider_handler(obj, model_root, level, intermediate_repr):
     # output prefix
-    append_in_file(intermediate_repr, f'{level * spaces}"data": {{{newline}{level * spaces}{spaces}"provider": "{obj.name}",')
+    append_in_file(intermediate_repr,
+                   f'{level * spaces}"data": {{{newline}{level * spaces}{spaces}"provider": "{obj.name}",')
     # handle contents
     for x in obj.eContents:
         handle_obj(x, model_root, level + 1, intermediate_repr)
@@ -139,7 +141,8 @@ def concrete_vm_handler(obj, model_root, level, intermediate_repr):
     append_in_file(intermediate_repr, f'{level * spaces}"image" :     "{extract_image_name(obj)}",')
     for iface in obj.maps.ifaces:
         append_in_file(intermediate_repr, f'{level * spaces}"address" :     "{iface.endPoint}",')
-        append_in_file(intermediate_repr, f'{level * spaces}"network_name" :     "{extract_concrete_network_name(iface.belongsTo)}"')
+        append_in_file(intermediate_repr,
+                       f'{level * spaces}"network_name" :     "{extract_concrete_network_name(iface.belongsTo)}"')
     # output suffix
     level = level - 1
     append_in_file(intermediate_repr, f'{level * spaces}}}]')
@@ -170,16 +173,9 @@ def handle_obj(obj, model_root, level, intermediate_repr):
 
 
 # -------------------------------------------------------------------------
-# Parse parameters
-# -------------------------------------------------------------------------
-skip_next = False
-doml_directory = "icgparser/doml"
-
-
-# -------------------------------------------------------------------------
 # Load each part of the DOML metamodel and register them
 # -------------------------------------------------------------------------
-def load_metamodel(load_split_model):
+def load_metamodel(load_split_model, doml_directory="icgparser/doml"):
     global_registry[Ecore.nsURI] = Ecore  # Load the Ecore metamodel first
     rset = ResourceSet()
     if load_split_model:
@@ -201,8 +197,7 @@ def load_metamodel(load_split_model):
 # Finally load the model and print it out
 # -------------------------------------------------------------------------
 
-def parse_model(model):
-    load_split_model = None
+def parse_model(model, load_split_model, doml_directory="icgparser/doml"):
     rset = load_metamodel(load_split_model)
     doml_model_resource = rset.get_resource(URI(model))
     doml_model = doml_model_resource.contents[0]
@@ -219,10 +214,12 @@ def parse_model(model):
     create_file("input_file_generated/ir.json")
     handle_obj(doml_model, doml_model, 0, intermediate_repr_file_path)
 
+
 def create_file(file_name):
     f = open(file_name, "w")
     f.write("")
     f.close()
+
 
 def append_in_file(file_name, data):
     f = open(file_name, "a")

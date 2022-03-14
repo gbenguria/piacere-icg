@@ -5,7 +5,6 @@ import uuid
 
 from fastapi import APIRouter, Body
 from fastapi.responses import FileResponse
-
 from controller.PluginOrchestrator import create_infrastructure_files
 from icgparser import ModelParser
 
@@ -30,7 +29,7 @@ def create_iac_from_doml(data: str = Body(..., media_type="application/xml")):
     f = open(temp_model_file_path, "w")
     f.write(data)
     f.close()
-    ModelParser.parse_model(temp_model_file_path)
+    ModelParser.parse_model(temp_model_file_path, False)
     with open("input_file_generated/ir.json") as json_file:
         data = json.load(json_file)
         template_generated_folder = create_infrastructure_files(data)

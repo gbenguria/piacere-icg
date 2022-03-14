@@ -37,3 +37,16 @@ Remove the docker container and the docker image:
 docker container rm -f icg
 docker rmi icg:0.1
 ```
+
+Usage from command line
+------------
+Usage: python main.py [-h] [-d dir] model
+- -h  prints usage
+- -d dir loads metamodel from \<dir>
+- --single or --single_mmodel   use the single (non-split) metamodel
+- model  the model to be loaded
+` py .\main.py -d <doml_folder> --single <metamodel_file_path>`
+
+Example:
+
+` py .\main.py -d icgparser/doml --single icgparser/doml/nginx-openstack_v2.domlx`
