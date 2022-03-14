@@ -20,7 +20,10 @@ Usage
 
 To use the now running ICG docker container we can call the available REST API.
 
-The API is available at http://localhost:5000/docs. You can try here the endpoint behavior (see input_file_example/nginx/parameters.json as an example body).
+The API is available at http://localhost:5000/docs. You can try here the endpoint behavior:
+
+- POST /infrastructure/files generates iac compress folder from json intermediate representation (see input_file_example/nginx/parameters.json as an example body).
+- POST /iac/files generates iac compress folder from doml model (ex. nginx-openstack_v2.domlx)
 
 Otherwise, send a POST request at this endpoint with the indicated json body (see input_file_example/nginx/parameters.json as an example body) it will respond with a .tar.gz file containing all the required IaC files:
 
