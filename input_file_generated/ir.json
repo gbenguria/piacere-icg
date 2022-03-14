@@ -1,0 +1,21 @@
+{
+    "output_path": "output_files_generated/nginx_openstack/",
+    "steps": [
+        {
+            "programming_language": "terraform",
+            "data": {
+                "provider": "openstack",
+                "vm": [{
+                    "vm_name" :     "nginx-host",
+                    "vm_flavor" :     "small",
+                    "vm_key_name" :     "user1",
+                    "ssh_user" :     "ubuntu",
+                    "ssh_key_file" :     "/home/user1/.ssh/openstack.key",
+                    "image" :     "ubuntu-20.04.3",
+                    "address" :     "16.0.0.1",
+                    "network_name" :     "ostack2"
+                }]
+            }
+        }
+    ]
+}

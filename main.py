@@ -1,6 +1,7 @@
 import logging
 from fastapi import FastAPI
 import api.InfrastructureTemplateController
+from icgparser import ModelParser
 
 fast_api = FastAPI()
 
@@ -9,3 +10,4 @@ logging.getLogger().setLevel(logging.INFO)
 
 if __name__ == '__main__':
     logging.info("Starting ICG application")
+    ModelParser.parse_model("icgparser/doml/nginx-openstack_v2.domlx")
