@@ -10,32 +10,46 @@ required_version = ">= 0.14.0"
 
 # Configure the OpenStack Provider
 provider "openstack" {
-  user_name   = "{{ user }}"           #admin
-  tenant_name = "{{ tenant }}"         #test
-  password    = "{{ password }}"       #test
-  auth_url    = "{{ url }}"            #https://127.0.0.1:5000/v3
+  user_name   = var.username
+  tenant_name = "admin"
+  password    = var.password
+  auth_url    = var.auth_url
   insecure    = true
 }
 
 resource "openstack_compute_keypair_v2" "user_key" {
   name       = "user1"
-  public_key = "{{ ssh_key }}"   #ssh-rsa xxxx
+  public_key = var.ssh_key
+}
+
+# Retrieve data
+data "openstack_networking_network_v2" "external" {
+  name = "external"
+}
+
+data "openstack_identity_project_v3" "test_tenant" {
+  name = "admin"
+}
+
+data "openstack_networking_secgroup_v2" "default" {
+  name = "default"
+  tenant_id = data.openstack_identity_project_v3.test_tenant.id
 }
 
 # Router creation. UUID external gateway
 resource "openstack_networking_router_v2" "generic" {
   name                = "router-generic"
-  external_network_id = "${openstack_networking_network_v2.external.id}"    #External network id
+  external_network_id = data.openstack_networking_network_v2.external.id    #External network id
 }
 
 # Network creation
 resource "openstack_networking_network_v2" "generic" {
-  name = "ostack2"
+  name = " "
 }
 
 #### HTTP SUBNET ####
 
-# Subnet http configuration
+# Subnet configuration
 resource "openstack_networking_subnet_v2" "nginx" {
   name            = "subnet-nginx"
   network_id      = openstack_networking_network_v2.generic.id
@@ -90,7 +104,7 @@ resource "openstack_networking_port_v2" "nginx" {
   network_id     = openstack_networking_network_v2.generic.id
   admin_state_up = true
   security_group_ids = [
-    "${openstack_compute_flavor_v2.default.id}"        #default flavour id
+    data.openstack_networking_secgroup_v2.default.id        #default flavour id
   ]
   fixed_ip {
     subnet_id = openstack_networking_subnet_v2.nginx.id
@@ -99,10 +113,7 @@ resource "openstack_networking_port_v2" "nginx" {
 
 # Create floating ip
 resource "openstack_networking_floatingip_v2" "nginx" {
-#  pool = "ostack2"
-#  port_id = openstack_networking_port_v2.nginx.id
   pool = "external"
-#  fixed_ip = "16.0.0.1"
 }
 
 # Attach floating ip to instance

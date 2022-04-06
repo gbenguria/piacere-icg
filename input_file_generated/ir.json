@@ -1,21 +1,90 @@
 {
-    "output_path": "output_files_generated/nginx_openstack/",
-    "steps": [
-        {
-            "programming_language": "terraform",
-            "data": {
-                "provider": "openstack",
-                "vm": [{
-                    "vm_name" :     "nginx-host",
-                    "vm_flavor" :     "small",
-                    "vm_key_name" :     "user1",
-                    "ssh_user" :     "ubuntu",
-                    "ssh_key_file" :     "/home/user1/.ssh/openstack.key",
-                    "image" :     "ubuntu-20.04.3",
-                    "address" :     "16.0.0.1",
-                    "network_name" :     "ostack2"
-                }]
-            }
-        }
-    ]
+  "output_path": "output_files_generated/nginx_openstack/",
+  "steps": [
+    {
+      "data": {
+        "computingGroup": [
+          {
+            "addressRanges": [
+              "0.0.0.0/0",
+              "::/0"
+            ],
+            "kind": "EGRESS",
+            "name": "out_all",
+            "protocol": "-1"
+          },
+          {
+            "addressRanges": [
+              "0.0.0.0/0",
+              "::/0"
+            ],
+            "fromPort": 80,
+            "kind": "INGRESS",
+            "name": "http",
+            "protocol": "tcp",
+            "toPort": 80
+          },
+          {
+            "addressRanges": [
+              "0.0.0.0/0",
+              "::/0"
+            ],
+            "fromPort": 443,
+            "kind": "INGRESS",
+            "name": "https",
+            "protocol": "tcp",
+            "toPort": 443
+          },
+          {
+            "addressRanges": [
+              "0.0.0.0/0",
+              "::/0"
+            ],
+            "fromPort": 22,
+            "kind": "INGRESS",
+            "name": "ssh",
+            "protocol": "tcp",
+            "toPort": 22
+          }
+        ],
+        "networks": [
+          {
+            "addressRange": "16.0.0.0/24",
+            "infra_element_name": "net1",
+            "name": "concrete_net",
+            "protocol": "tcp/ip"
+          }
+        ],
+        "provider": "openstack",
+        "vmImages": [
+          {
+            "infra_element_name": "v_img",
+            "kind": "SCRIPT",
+            "name": "concrete_vm_image"
+          }
+        ],
+        "vms": [
+          {
+            "credentials": "ssh_key",
+            "generatedFrom": "v_img",
+            "group": "sg",
+            "i1": {
+              "associated": "sg",
+              "belongsTo": "net1",
+              "endPoint": "16.0.0.1",
+              "name": "i1"
+            },
+            "infra_element_name": "vm1",
+            "name": "concrete_vm",
+            "ssh_key_file": "/home/user1/.ssh/openstack.key",
+            "ssh_user": "ubuntu",
+            "vm_flavor": "small",
+            "vm_key_name": "user1",
+            "vm_name": "nginx-host"
+          }
+        ]
+      },
+      "programming_language": "terraform"
+    }
+  ]
 }

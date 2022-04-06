@@ -10,9 +10,28 @@ required_version = ">= 0.14.0"
 
 # Configure the OpenStack Provider
 provider "openstack" {
-  user_name   = "admin"
-  tenant_name = "test"
-  password    = "wRpuXgVqBzQqGwx8Bu0sylEeb8FgjSYG"
-  auth_url    = "https://127.0.0.1:5000/v3"
+  user_name   = var.username
+  tenant_name = "admin"
+  password    = var.password
+  auth_url    = var.auth_url
   insecure    = true
+}
+
+resource "openstack_compute_keypair_v2" "user_key" {
+  name       = "user1"
+  public_key = var.ssh_key
+}
+
+# Retrieve data
+data "openstack_networking_network_v2" "external" {
+  name = "external"
+}
+
+data "openstack_identity_project_v3" "test_tenant" {
+  name = "admin"
+}
+
+data "openstack_networking_secgroup_v2" "default" {
+  name = "default"
+  tenant_id = data.openstack_identity_project_v3.test_tenant.id
 }
