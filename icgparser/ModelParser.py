@@ -88,4 +88,5 @@ def parse_model(model_path, is_multiecore_metamodel, metamodel_directory):
     rset = DomlParserUtilities.load_metamodel(metamodel_directory=metamodel_directory,
                                               is_multiecore=is_multiecore_metamodel)
     doml_model = DomlParserUtilities.load_model(model_path, rset)
-    create_intermediate_representation(doml_model)
+    intermediate_representation = create_intermediate_representation(doml_model)
+    return intermediate_representation

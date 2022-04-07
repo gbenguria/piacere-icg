@@ -35,72 +35,33 @@ data "openstack_networking_secgroup_v2" "default" {
   name = "default"
   tenant_id = data.openstack_identity_project_v3.test_tenant.id
 }
-resource "openstack_compute_secgroup_v2" "out_all" {
-  name        = "out_all"
-  description  = "Security group rule for port -"
-  rule {
-    from_port   = 
-    to_port     = 
-    ip_protocol = "-1"
-    cidr        = [
-        
-        0.0.0.0/0,
-        
-        ::/0,
-        
-    ]
+# Create virtual machine
+resource "openstack_compute_instance_v2" "vm1" {
+  name        = "nginx-host"
+  image_name  = "i1"
+  flavor_name = "small"
+  key_pair    = openstack_compute_keypair_v2.ssh_key.name
+  network {
+    port = openstack_networking_port_v2.net1.id
   }
 }
 
-resource "openstack_compute_secgroup_v2" "http" {
-  name        = "http"
-  description  = "Security group rule for port -"
-  rule {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr        = [
-        
-        0.0.0.0/0,
-        
-        ::/0,
-        
-    ]
-  }
+# Create ssh keys
+resource "openstack_compute_keypair_v2" "ssh_key" {
+  name       = "ubuntu"
+  public_key = "/home/user1/.ssh/openstack.key"
 }
 
-resource "openstack_compute_secgroup_v2" "https" {
-  name        = "https"
-  description  = "Security group rule for port -"
-  rule {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr        = [
-        
-        0.0.0.0/0,
-        
-        ::/0,
-        
-    ]
-  }
+# Create floating ip
+resource "openstack_networking_floatingip_v2" "vm1_floating_ip" {
+  pool = "external"
+  # fixed_ip = ""
 }
 
-resource "openstack_compute_secgroup_v2" "ssh" {
-  name        = "ssh"
-  description  = "Security group rule for port -"
-  rule {
-    from_port   = 22
-    to_port     = 22
-    ip_protocol = "tcp"
-    cidr        = [
-        
-        0.0.0.0/0,
-        
-        ::/0,
-        
-    ]
-  }
+# Attach floating ip to instance
+resource "openstack_compute_floatingip_associate_v2" "vm1_floating_ip_association" {
+  floating_ip = openstack_networking_floatingip_v2.vm1_floating_ip.address
+  instance_id = openstack_compute_instance_v2.vm1.id
 }
 
 ## Network
@@ -140,34 +101,5 @@ resource "openstack_networking_router_v2" "net1_router" {
 resource "openstack_networking_router_interface_v2" "net1_router_interface" {
   router_id = openstack_networking_router_v2.net1_router.id
   subnet_id = openstack_networking_subnet_v2.net1_subnet.id
-}
-
-# Create virtual machine
-resource "openstack_compute_instance_v2" "vm1" {
-  name        = "nginx-host"
-  image_name  = "i1"
-  flavor_name = "small"
-  key_pair    = openstack_compute_keypair_v2.ssh_key.name
-  network {
-    port = openstack_networking_port_v2.net1.id
-  }
-}
-
-# Create ssh keys
-resource "openstack_compute_keypair_v2" "ssh_key" {
-  name       = "ubuntu"
-  public_key = "/home/user1/.ssh/openstack.key"
-}
-
-# Create floating ip
-resource "openstack_networking_floatingip_v2" "vm1_floating_ip" {
-  pool = "external"
-  # fixed_ip = ""
-}
-
-# Attach floating ip to instance
-resource "openstack_compute_floatingip_associate_v2" "vm1_floating_ip_association" {
-  floating_ip = openstack_networking_floatingip_v2.vm1_floating_ip.address
-  instance_id = openstack_compute_instance_v2.vm1.id
 }
 
