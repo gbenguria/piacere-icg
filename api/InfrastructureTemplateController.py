@@ -21,6 +21,5 @@ def create_iac_from_doml(data: str = Body(..., media_type="application/xml")):
     logging.info("Received create_iac_from_doml request")
     compress_folder_info = Orchestrator.create_iac_from_doml(model=data, metamodel_directory="icgparser/doml",
                                                              is_multiecore_metamodel=False)
-    logging.info(f"file_path: {compress_folder_info.file_path}, filename: {compress_folder_info.filename}")
-    return FileResponse(path=compress_folder_info.filename, media_type='application/octet-stream', ## TODO change path into compress_folder_info.file_path
+    return FileResponse(path=compress_folder_info.file_path, media_type='application/octet-stream',
                         filename=compress_folder_info.filename)

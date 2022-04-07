@@ -8,8 +8,9 @@ from plugin import AnsiblePlugin, TerraformPlugin
 
 class CompressFolder:
     def __init__(self, file_path, filename):
-        self.file_path = file_path,
+        self.file_path = file_path
         self.filename = filename
+
 
 def create_infrastructure_files(intermediate_representation: dict):
     template_generated_folder = intermediate_representation["output_path"]
@@ -98,7 +99,6 @@ def compress_iac_folder(template_generated_folder):
     compress_file_folder_path = compress_file(template_generated_folder, compress_file_name)
     logging.info(f"Successfully created iac files, available at {compress_file_folder_path}")
     compress_folder_info = CompressFolder(file_path=compress_file_folder_path, filename=compress_file_name)
-    logging.info(f"######################### {compress_folder_info.file_path}") ## TODO fix, is tuple instead of string
     return compress_folder_info
 
 def create_iac_from_intermediate_representation(intermediate_representation):
