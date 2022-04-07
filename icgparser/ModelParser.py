@@ -14,32 +14,13 @@
 #		© Copyright 2022 Hewlett Packard Enterprise Development LP
 # -------------------------------------------------------------------------
 import logging
-from pyecore.resources import ResourceSet, URI, global_registry
-import pyecore.ecore as Ecore  # This gets a reference to the Ecore metamodel implementation
-
 from icgparser import DomlParserUtilities
 from icgparser.DomlParserUtilities import get_reference_list_if_exists
 
-
 OUTPUT_BASE_DIR_PATH = "output_files_generated/"
-DOML_PATH = "icgparser/doml/doml.ecore"
-
 doml_layers = {
     "active_infrastructure_layer": "activeInfrastructure",
 }
-
-
-def load_model(doml_path, model_path):
-    global_registry[Ecore.nsURI] = Ecore  # Load the Ecore metamodel first
-    rset = ResourceSet()
-    resource = rset.get_resource(URI(f"{doml_path}"))
-    mm_root = resource.contents[0]  # Get the root of the MetaModel (EPackage)
-    rset.metamodel_registry[mm_root.nsURI] = mm_root
-    for subp in mm_root.eSubpackages:
-        rset.metamodel_registry[subp.nsURI] = subp
-    doml_model_resource = rset.get_resource(URI(model_path))
-    return doml_model_resource.contents[0]
-
 
 def to_camel_case(content):
     return content[0].lower() + content[1:]
@@ -89,15 +70,22 @@ def parse_infrastructural_objects(doml_model):
         infra_object_step = include_missing_objects_from_infrastructure_layer(infra_object_step)
     return infra_object_step
 
-def parse_model(model_path):
-    doml_model = load_model(DOML_PATH, model_path)
-    model_name = doml_model.name
+
+def create_intermediate_representation(model_loaded):
+    model_name = model_loaded.name
     output_path = OUTPUT_BASE_DIR_PATH + model_name + "/"
     intermediate_representation_steps = []
-    infra_object_step = parse_infrastructural_objects(doml_model)
+    infra_object_step = parse_infrastructural_objects(model_loaded)
     intermediate_representation_steps.append(infra_object_step)
     intermediate_representation = {
         "output_path": output_path,
         "steps": intermediate_representation_steps
     }
     return intermediate_representation
+
+
+def parse_model(model_path, is_multiecore_metamodel, metamodel_directory):
+    rset = DomlParserUtilities.load_metamodel(metamodel_directory=metamodel_directory,
+                                              is_multiecore=is_multiecore_metamodel)
+    doml_model = DomlParserUtilities.load_model(model_path, rset)
+    create_intermediate_representation(doml_model)

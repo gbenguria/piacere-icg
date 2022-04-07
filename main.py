@@ -7,7 +7,7 @@ from fastapi import FastAPI
 import api.InfrastructureTemplateController
 from api.InfrastructureTemplateController import compress_file
 from controller.PluginOrchestrator import create_infrastructure_files
-from icgparser import ModelParser
+from icgparser import ModelParser, ModelPrinter
 
 fast_api = FastAPI()
 
@@ -56,8 +56,11 @@ for i, param in enumerate(paramlist):
         model_filename = param
 
 if __name__ == '__main__':
-    ModelParser.parse_model(model_filename, load_split_model, doml_directory)
-    with open("input_file_generated/ir.json") as json_file:
-        data = json.load(json_file)
-        template_generated_folder = create_infrastructure_files(data)
-        compress_file_folder = compress_file(template_generated_folder, output_file_name)
+    ModelPrinter.print_model(model_path=model_filename, is_multiecore_metamodel=load_split_model,
+                            metamodel_directory=doml_directory)
+    # ModelParser.parse_model(model_path=model_filename, is_multiecore_metamodel=load_split_model,
+    #                         metamodel_directory=doml_directory)
+    # with open("input_file_generated/ir.json") as json_file:
+    #     data = json.load(json_file)
+    #     template_generated_folder = create_infrastructure_files(data)
+    #     compress_file_folder = compress_file(template_generated_folder, output_file_name)

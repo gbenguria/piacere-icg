@@ -30,7 +30,7 @@ def create_iac_from_doml(data: str = Body(..., media_type="application/xml")):
     f = open(temp_model_file_path, "w")
     f.write(data)
     f.close()
-    intermediate_representation = ModelParser.parse_model(temp_model_file_path)
+    intermediate_representation = ModelParser.parse_model(model_path=temp_model_file_path)
     intermediate_representation = reorganize_info(intermediate_representation)
     save(intermediate_representation, "input_file_generated/ir.json")
     template_generated_folder = create_infrastructure_files(intermediate_representation)

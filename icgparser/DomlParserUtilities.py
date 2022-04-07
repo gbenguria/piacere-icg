@@ -1,8 +1,13 @@
 import logging
 
 from pyecore.ecore import EOrderedSet, EEnumLiteral
+from pyecore.resources import ResourceSet, URI, global_registry
+import pyecore.ecore as Ecore  # This gets a reference to the Ecore metamodel implementation
 
 TO_BE_PARSED_RESOURCES = {}
+METAMODEL_SECTIONS = ["doml", "commons", "application", "infrastructure", "concrete", "optimization"]
+METAMODEL_DIRECTORY = "icgparser/doml"
+
 
 def extract_value_from(ecore_object_value):
     if isinstance(ecore_object_value, EOrderedSet):
@@ -63,7 +68,7 @@ def update_missing_parsed_resources(resource, reference, is_to_be_parsed):
         print(f'update_missing_parsed_resources: skipping {resource_name}')
 
 
-def save_references_info(from_object, to_object): ## TODO refactoring
+def save_references_info(from_object, to_object):  ## TODO refactoring
     refs = from_object.eClass.eAllReferences()
     for ref in refs:
         if get_reference_list_if_exists(from_object, ref):
@@ -99,3 +104,27 @@ def add_infrastructure_information(infrastructure_element, to_object):
 
 def retrieve_missing_parsed_resources():
     return TO_BE_PARSED_RESOURCES
+
+
+def load_metamodel(metamodel_directory=METAMODEL_DIRECTORY, is_multiecore=False):
+    global_registry[Ecore.nsURI] = Ecore
+    rset = ResourceSet()
+    if is_multiecore:
+        logging.info(f"Loading multiecore metamodel from {metamodel_directory}")
+        for mm_filename in METAMODEL_SECTIONS:
+            resource = rset.get_resource(URI(f"{metamodel_directory}/{mm_filename}.ecore"))
+            mm_root = resource.contents[0]  # Get the root of the MetaModel (EPackage)
+            rset.metamodel_registry[mm_root.nsURI] = mm_root
+    else:
+        logging.info(f"Loading multiecore metamodel from {metamodel_directory}/doml.ecore")
+        resource = rset.get_resource(URI(f"{metamodel_directory}/doml.ecore"))
+        mm_root = resource.contents[0]  # Get the root of the MetaModel (EPackage)
+        rset.metamodel_registry[mm_root.nsURI] = mm_root
+        for subp in mm_root.eSubpackages:
+            rset.metamodel_registry[subp.nsURI] = subp
+    return rset
+
+
+def load_model(model_path, rset):
+    doml_model_resource = rset.get_resource(URI(model_path))
+    return doml_model_resource.contents[0]
