@@ -1,7 +1,7 @@
 # Create virtual machine
 resource "openstack_compute_instance_v2" "{{ infra_element_name }}" {
   name        = "{{ vm_name }}"
-  image_name  = "{{ i1.name }}"
+  image_name  = "{{ os }}"
   flavor_name = "{{ vm_flavor }}"
   key_pair    = openstack_compute_keypair_v2.{{ credentials }}.name
   network {

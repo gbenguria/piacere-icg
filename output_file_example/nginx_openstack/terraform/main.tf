@@ -17,11 +17,6 @@ provider "openstack" {
   insecure    = true
 }
 
-resource "openstack_compute_keypair_v2" "user_key" {
-  name       = "user1"
-  public_key = var.ssh_key
-}
-
 # Retrieve data
 data "openstack_networking_network_v2" "external" {
   name = "external"
@@ -35,21 +30,43 @@ data "openstack_networking_secgroup_v2" "default" {
   name = "default"
   tenant_id = data.openstack_identity_project_v3.test_tenant.id
 }
-
-# Router creation. UUID external gateway
-resource "openstack_networking_router_v2" "generic" {
-  name                = "router-generic"
-  external_network_id = data.openstack_networking_network_v2.external.id    #External network id
+# Create virtual machine
+resource "openstack_compute_instance_v2" "nginx" {
+  name        = "nginx-host"
+  image_name  = "cirros"
+  flavor_name = "m1.tiny"
+  key_pair    = openstack_compute_keypair_v2.user_key.name
+  network {
+    port = openstack_networking_port_v2.nginx.id
+  }
 }
 
-# Network creation
+# Create ssh keys
+resource "openstack_compute_keypair_v2" "user_key" {
+  name       = "user1"
+  public_key = var.ssh_key
+}
+
+# Create floating ip
+resource "openstack_networking_floatingip_v2" "nginx" {
+  pool = "external"
+
+}
+
+# Attach floating ip to instance
+resource "openstack_compute_floatingip_associate_v2" "nginx" {
+  floating_ip = openstack_networking_floatingip_v2.nginx.address
+  instance_id = openstack_compute_instance_v2.nginx.id
+}
+
+## Network
+
+# Create Network
 resource "openstack_networking_network_v2" "generic" {
   name = " "
 }
 
-#### HTTP SUBNET ####
-
-# Subnet configuration
+# Create Subnet
 resource "openstack_networking_subnet_v2" "nginx" {
   name            = "subnet-nginx"
   network_id      = openstack_networking_network_v2.generic.id
@@ -57,6 +74,24 @@ resource "openstack_networking_subnet_v2" "nginx" {
   dns_nameservers = ["8.8.8.8", "8.8.8.4"]
 }
 
+# Attach networking port
+resource "openstack_networking_port_v2" "nginx" {
+  name           = "nginx"
+  network_id     = openstack_networking_network_v2.generic.id
+  admin_state_up = true
+  security_group_ids = [
+    data.openstack_networking_secgroup_v2.default.id        #default flavour id
+  ]
+  fixed_ip {
+    subnet_id = openstack_networking_subnet_v2.nginx.id
+  }
+}
+
+# Router creation. UUID external gateway
+resource "openstack_networking_router_v2" "generic" {
+  name                = "router-generic"
+  external_network_id = data.openstack_networking_network_v2.external.id    #External network id
+}
 # Router interface configuration
 resource "openstack_networking_router_interface_v2" "nginx" {
   router_id = openstack_networking_router_v2.generic.id
@@ -83,41 +118,4 @@ resource "openstack_compute_secgroup_v2" "ssh" {
     ip_protocol = "tcp"
     cidr        = "0.0.0.0/0"
   }
-}
-
-#
-# Create instance
-#
-resource "openstack_compute_instance_v2" "nginx" {
-  name        = "nginx-host"
-  image_name  = "cirros"
-  flavor_name = "m1.tiny"
-  key_pair    = openstack_compute_keypair_v2.user_key.name
-  network {
-    port = openstack_networking_port_v2.nginx.id
-  }
-}
-
-# Create network port
-resource "openstack_networking_port_v2" "nginx" {
-  name           = "nginx"
-  network_id     = openstack_networking_network_v2.generic.id
-  admin_state_up = true
-  security_group_ids = [
-    data.openstack_networking_secgroup_v2.default.id        #default flavour id
-  ]
-  fixed_ip {
-    subnet_id = openstack_networking_subnet_v2.nginx.id
-  }
-}
-
-# Create floating ip
-resource "openstack_networking_floatingip_v2" "nginx" {
-  pool = "external"
-}
-
-# Attach floating ip to instance
-resource "openstack_compute_floatingip_associate_v2" "nginx" {
-  floating_ip = openstack_networking_floatingip_v2.nginx.address
-  instance_id = openstack_compute_instance_v2.nginx.id
 }

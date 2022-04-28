@@ -17,11 +17,6 @@ provider "openstack" {
   insecure    = true
 }
 
-resource "openstack_compute_keypair_v2" "user_key" {
-  name       = "user1"
-  public_key = var.ssh_key
-}
-
 # Retrieve data
 data "openstack_networking_network_v2" "external" {
   name = "external"
