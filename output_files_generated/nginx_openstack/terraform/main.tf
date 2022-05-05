@@ -63,12 +63,12 @@ resource "openstack_compute_floatingip_associate_v2" "vm1_floating_ip_associatio
 
 # Create Network
 resource "openstack_networking_network_v2" "net1" {
-  name = "ostack2"
+  name = "concrete_net"
 }
 
 # Create Subnet
 resource "openstack_networking_subnet_v2" "net1_subnet" {
-  name            = "ostack2_subnet"
+  name            = "concrete_net_subnet"
   network_id      = openstack_networking_network_v2.net1.id
   cidr            = "16.0.0.0/24"
   dns_nameservers = ["8.8.8.8", "8.8.8.4"]
@@ -76,7 +76,7 @@ resource "openstack_networking_subnet_v2" "net1_subnet" {
 
 # Attach networking port
 resource "openstack_networking_port_v2" "net1" {
-  name           = "ostack2"
+  name           = "concrete_net"
   network_id     = openstack_networking_network_v2.net1.id
   admin_state_up = true
   security_group_ids = [

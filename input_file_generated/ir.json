@@ -7,42 +7,40 @@
           {
             "algorithm": "RSA",
             "bits": 4096,
-            "concrete_element_name": "ssh_key",
             "keyfile": "/home/user1/.ssh/openstack.key",
+            "name": "ssh_key",
             "user": "ubuntu"
           }
         ],
         "networks": [
           {
             "addressRange": "16.0.0.0/24",
-            "concrete_element_name": "concrete_net",
             "infra_element_name": "net1",
-            "name": "ostack2",
+            "name": "concrete_net",
             "protocol": "tcp/ip"
           }
         ],
         "provider": "openstack",
         "vmImages": [
           {
-            "concrete_element_name": "concrete_vm_image",
             "infra_element_name": "v_img",
             "kind": "SCRIPT",
-            "name": "ubuntu-20.04.3"
+            "name": "concrete_vm_image"
           }
         ],
         "vms": [
           {
-            "concrete_element_name": "concrete_vm",
             "credentials": "ssh_key",
             "generatedFrom": "v_img",
             "group": "sg",
             "i1": {
               "associated": "sg",
               "belongsTo": "net1",
-              "concrete_element_name": "i1",
-              "endPoint": "16.0.0.1"
+              "endPoint": "16.0.0.1",
+              "name": "i1"
             },
             "infra_element_name": "vm1",
+            "name": "concrete_vm",
             "os": "ubuntu-20.04.3",
             "vm_flavor": "small",
             "vm_key_name": "user1",
