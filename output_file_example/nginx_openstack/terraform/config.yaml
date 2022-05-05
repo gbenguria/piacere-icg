@@ -1,5 +1,8 @@
 ---
-input: ~
+input:
+  - openstack_username
+  - openstack_password
+  - openstack_auth_url
 output: ~
 engine: terraform
 ...
