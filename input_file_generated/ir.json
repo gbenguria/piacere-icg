@@ -3,91 +3,50 @@
   "steps": [
     {
       "data": {
-        "computingGroup": [
+        "credentials": [
           {
-            "cidr": [
-              "0.0.0.0/0"
-            ],
-            "fromPort": -1,
-            "kind": "EGRESS",
-            "name": "out_all",
-            "protocol": "-1",
-            "toPort": -1
-          },
-          {
-            "cidr": [
-              "0.0.0.0/0"
-            ],
-            "fromPort": 80,
-            "kind": "INGRESS",
-            "name": "http",
-            "protocol": "tcp",
-            "toPort": 80
-          },
-          {
-            "cidr": [
-              "0.0.0.0/0"
-            ],
-            "fromPort": 443,
-            "kind": "INGRESS",
-            "name": "https",
-            "protocol": "tcp",
-            "toPort": 443
-          },
-          {
-            "cidr": [
-              "0.0.0.0/0"
-            ],
-            "fromPort": 22,
-            "kind": "INGRESS",
-            "name": "ssh",
-            "protocol": "tcp",
-            "toPort": 22
+            "algorithm": "RSA",
+            "bits": 4096,
+            "concrete_element_name": "ssh_key",
+            "keyfile": "/home/user1/.ssh/openstack.key",
+            "user": "ubuntu"
           }
         ],
         "networks": [
           {
             "addressRange": "16.0.0.0/24",
+            "concrete_element_name": "concrete_net",
             "infra_element_name": "net1",
-            "name": "concrete_net",
+            "name": "ostack2",
             "protocol": "tcp/ip"
           }
         ],
         "provider": "openstack",
         "vmImages": [
           {
+            "concrete_element_name": "concrete_vm_image",
             "infra_element_name": "v_img",
             "kind": "SCRIPT",
-            "name": "concrete_vm_image"
+            "name": "ubuntu-20.04.3"
           }
         ],
         "vms": [
           {
+            "concrete_element_name": "concrete_vm",
             "credentials": "ssh_key",
             "generatedFrom": "v_img",
             "group": "sg",
             "i1": {
               "associated": "sg",
               "belongsTo": "net1",
-              "endPoint": "16.0.0.1",
-              "name": "i1"
+              "concrete_element_name": "i1",
+              "endPoint": "16.0.0.1"
             },
             "infra_element_name": "vm1",
-            "name": "concrete_vm",
             "os": "ubuntu-20.04.3",
-            "vm_Availability": 98,
-            "vm_Cost_Currency": 4.53,
-            "vm_Frequency_per_Core": 1500,
-            "vm_Instance_Storage": 40,
-            "vm_Memory": 0.5,
-            "vm_Optimized_for": "GEPU",
-            "vm_Region": "00EU",
-            "vm_Response_time_Virtual_Machine_Performance": 3,
-            "vm_Virtual_CPU_Cores": 1,
-            "vm_Zone": "IEEU",
-            "vm_flavor": "t2.nano",
-            "vm_provider_OU": "AMAZ",
-            "vm_public_IP_type": "IPV4"
+            "vm_flavor": "small",
+            "vm_key_name": "user1",
+            "vm_name": "nginx-host"
           }
         ]
       },

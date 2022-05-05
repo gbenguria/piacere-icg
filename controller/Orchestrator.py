@@ -2,6 +2,8 @@ import json
 import logging
 import tarfile
 import uuid
+import yaml
+
 from icgparser import ModelParser
 from plugin import AnsiblePlugin, TerraformPlugin
 
@@ -22,24 +24,31 @@ def create_infrastructure_files(intermediate_representation: dict):
 def choose_plugin(parameters, template_generated_folder):
     # os.system('rm -f /opt/output_files_generated/*')
     logging.info("Choosing plugin")
+    metadata_root_folder = {"iac": []}
     for step in parameters["steps"]:
         if step["programming_language"] == "ansible":
             logging.info("Ansible Plugin chosen")
+            metadata_root_folder["iac"].append("ansible")
             input_data = step["data"]
             AnsiblePlugin.create_files(input_data, template_generated_folder)
         elif step["programming_language"] == "terraform":
             logging.info("Terraform Plugin chosen")
+            metadata_root_folder["iac"].append("terraform")
             input_data = step["data"]
-            TerraformPlugin.create_files(input_data, template_generated_folder)
+            iac_output_folder = template_generated_folder + "terraform"
+            plugin_metadata = {"input": ["openstack_username", "openstack_password", "openstack_auth_url"],
+                               "output": [], "engine": "terraform"}
+            save_file(plugin_metadata, iac_output_folder + "/config.yaml", output_extensions="YAML")
+            TerraformPlugin.create_files(input_data, iac_output_folder)
+    save_file(metadata_root_folder, template_generated_folder + "/config.yaml", output_extensions="YAML")
 
 
-def create_temp_file_for_model(model, output_folder):
-    logging.info(f"Writing model file in temp folder at {output_folder} for parsing")
-
-
-def save_file(data, file_path):
+def save_file(data, file_path, output_extensions="json"):
+    logging.debug(f"Saving data: {data} at {file_path}")
     logging.info(f"Saving data at: {file_path}")
     file = open(file_path, "w")
+    if isinstance(data, dict) and output_extensions == "YAML":
+        data = yaml.dump(data)
     if isinstance(data, dict):
         data = json.dumps(data, indent=2, sort_keys=True)
     print(data)
@@ -124,7 +133,7 @@ def create_iac_from_doml(model, is_multiecore_metamodel, metamodel_directory):
     """
     logging.info("Creating iac files: parse and plugins will be called")
     model_path = create_temp_model_file(model_xml=model)
-    ## TODO: same as create_iac_from_doml_path a part from the model storage in xml
+    ## TODO: same as def create_iac_from_doml_path a part from the model storage in xml
     intermediate_representation = create_intermediate_representation(model_path, is_multiecore_metamodel,
                                                                      metamodel_directory)
     template_generated_folder = create_iac_from_intermediate_representation(intermediate_representation)

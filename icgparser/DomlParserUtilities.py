@@ -46,6 +46,9 @@ def save_attributes(from_object, to_object, skip_component_name=False):
             if skip_component_name and attribute.name == "name":
                 key = "infra_element_name"
                 print(f'Renaming attributes {attribute.name} from {from_object.name} into {key}')
+            elif attribute.name == "name":
+                key = "concrete_element_name"
+                print(f'Renaming attributes {attribute.name} from {from_object.name} into {key}')
             value = from_object.eGet(attribute.name)
             if isinstance(value, EOrderedSet):
                 value = list(value)

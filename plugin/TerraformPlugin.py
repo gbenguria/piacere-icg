@@ -16,7 +16,7 @@ def create_files(parameters, output_path):
                 # resource = parameters[resource_name]
                 template_filled = TemplateUtils.edit_template(template, resource_params)
                 terraform_file = terraform_file + template_filled + "\n"
-    output_file_path = output_path + "/".join([language, "main.tf"])
+    output_file_path = output_path + "/main.tf"
     TemplateUtils.write_template(terraform_file, output_file_path)
     logging.info("File available at: {}".format(output_path))
 
