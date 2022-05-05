@@ -80,6 +80,7 @@ def create_temp_model_file(model_xml):
     logging.info(f"Successfully saved model in temp file at {temp_model_file_path}")
     return temp_model_file_path
 
+
 def create_intermediate_representation(model_path, is_multiecore_metamodel, metamodel_directory):
     logging.info("Calling ICG Parser for creating intermediate representation")
     intermediate_representation = ModelParser.parse_model(model_path=model_path,
@@ -101,21 +102,49 @@ def compress_iac_folder(template_generated_folder):
     compress_folder_info = CompressFolder(file_path=compress_file_folder_path, filename=compress_file_name)
     return compress_folder_info
 
+
 def create_iac_from_intermediate_representation(intermediate_representation):
     logging.info("Creating iac files")
     template_generated_folder = create_infrastructure_files(intermediate_representation)
     return template_generated_folder
 
+
 def create_iac_from_doml(model, is_multiecore_metamodel, metamodel_directory):
+    """ Create IaC files storing the model domlx in a temp file and then parsing it
+
+    :param model: the model xml file
+    :type model: xml
+    :param is_multiecore_metamodel: true if the metamodel is composed by multiecore files, false is it is a single ecore file
+    :type is_multiecore_metamodel: bool
+    :param metamodel_directory: the path of the metamodel directory
+    :type metamodel_directory: str
+
+    :returns: path to the zip folder containing the IaC files
+    :type: str
+    """
     logging.info("Creating iac files: parse and plugins will be called")
     model_path = create_temp_model_file(model_xml=model)
+    ## TODO: same as create_iac_from_doml_path a part from the model storage in xml
     intermediate_representation = create_intermediate_representation(model_path, is_multiecore_metamodel,
                                                                      metamodel_directory)
     template_generated_folder = create_iac_from_intermediate_representation(intermediate_representation)
     compress_folder_info = compress_iac_folder(template_generated_folder)
     return compress_folder_info
 
+
 def create_iac_from_doml_path(model_path, is_multiecore_metamodel, metamodel_directory):
+    """ Create IaC files from existing file model domlx
+
+    :param model_path: the model xml file location
+    :type model_path: str
+    :param is_multiecore_metamodel: true if the metamodel is composed by multiecore files, false is it is a single ecore file
+    :type is_multiecore_metamodel: bool
+    :param metamodel_directory: the path of the metamodel directory
+    :type metamodel_directory: str
+
+    :returns: path to the zip folder containing the IaC files
+    :type: str
+    """
     intermediate_representation = create_intermediate_representation(model_path, is_multiecore_metamodel,
                                                                      metamodel_directory)
     template_generated_folder = create_iac_from_intermediate_representation(intermediate_representation)
