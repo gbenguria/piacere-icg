@@ -98,3 +98,47 @@ resource "openstack_networking_router_interface_v2" "net1_router_interface" {
   subnet_id = openstack_networking_subnet_v2.net1_subnet.id
 }
 
+resource "openstack_compute_secgroup_v2" "out_all" {
+  name        = "out_all"
+  description  = "Security group rule for port -1"
+  rule {
+    from_port   = -1
+    to_port     = -1
+    ip_protocol = "-1"
+    cidr        = "0.0.0.0/0"
+  }
+}
+
+resource "openstack_compute_secgroup_v2" "http" {
+  name        = "http"
+  description  = "Security group rule for port 80"
+  rule {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
+}
+
+resource "openstack_compute_secgroup_v2" "https" {
+  name        = "https"
+  description  = "Security group rule for port 443"
+  rule {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
+}
+
+resource "openstack_compute_secgroup_v2" "ssh" {
+  name        = "ssh"
+  description  = "Security group rule for port 22"
+  rule {
+    from_port   = 22
+    to_port     = 22
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
+}
+
