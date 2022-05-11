@@ -36,8 +36,8 @@ def choose_plugin(parameters, template_generated_folder):
             metadata_root_folder["iac"].append("terraform")
             input_data = step["data"]
             iac_output_folder = template_generated_folder + "terraform"
-            plugin_metadata = {"input": ["openstack_username", "openstack_password", "openstack_auth_url"],
-                               "output": [], "engine": "terraform"}
+            # plugin_metadata = {"input": ["openstack_username", "openstack_password", "openstack_auth_url"],
+            plugin_metadata = {"input": [], "output": [], "engine": "terraform"}
             save_file(plugin_metadata, iac_output_folder + "/config.yaml", output_extensions="YAML")
             TerraformPlugin.create_files(input_data, iac_output_folder)
     save_file(metadata_root_folder, template_generated_folder + "/config.yaml", output_extensions="YAML")
@@ -49,6 +49,7 @@ def save_file(data, file_path, output_extensions="json"):
     file = open(file_path, "w")
     if isinstance(data, dict) and output_extensions == "YAML":
         data = yaml.dump(data)
+        data = "---\n" + data + "..."
     if isinstance(data, dict):
         data = json.dumps(data, indent=2, sort_keys=True)
     print(data)
