@@ -3,7 +3,7 @@
   gather_facts: no
   become: yes
   vars:
-    ansible_ssh_private_key_file: "{{instance_server_public_key}}"
+    ansible_ssh_private_key_file: "/home/user1/.ssh/openstack.key"
     ansible_ssh_user: "ubuntu"
   tasks:
     - name: Update repositories

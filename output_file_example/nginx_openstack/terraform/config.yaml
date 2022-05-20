@@ -1,5 +1,7 @@
 ---
 engine: terraform
 input: []
-output: []
+output:
+  - instance_server_public_key
+  - instance_server_private_key
 ...

@@ -1,5 +1,6 @@
 ---
-input: []
+input:
+  - instance_server_public_key
 output: []
 engine: ansible
 ...

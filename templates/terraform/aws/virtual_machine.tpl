@@ -13,3 +13,15 @@ resource "aws_instance" "instance{{ id }}" {
      Name = "{{ name }}"
    }
 }
+
+resource "aws_instance" "nginx-app" {
+  ami = {{ os }}
+  instance_type = {{ instance_type }}
+  key_name = "{{ssh_key_name}}"
+
+  network_interface {
+    network_interface_id = aws_network_interface.nginx-network_interface.id
+    device_index = 0
+  }
+}
+
