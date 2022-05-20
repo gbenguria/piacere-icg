@@ -44,7 +44,6 @@ resource "openstack_compute_instance_v2" "nginx" {
 # Create ssh keys
 resource "openstack_compute_keypair_v2" "user_key" {
   name       = "user1"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAsRO3dcuZVB0but7Ti9eN+Ti4FvRzQfZT6DugkOnasGSwQkuBUxr0RGHYG2O+C/ul4bN4wcM8VZ4aX9bk9vwkvBkk2uJhy0ZHqIzuwzTOmRPScHWApkxGEANO4QYiYdPYdjmGgAVuKhdqPYOJc5Spkf3n4sYrU89rhC4rLyRs7doYofxpwBVaDfUExPLAtwFb2UGGzC6c0SJzqX4ZFq72NC0zs"
 }
 
 # Create floating ip
