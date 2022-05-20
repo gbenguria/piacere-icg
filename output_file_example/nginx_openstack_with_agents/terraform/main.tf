@@ -10,10 +10,6 @@ required_version = ">= 0.14.0"
 
 # Configure the OpenStack Provider
 provider "openstack" {
-  user_name   = var.openstack_username
-  tenant_name = "admin"
-  password    = var.openstack_password
-  auth_url    = var.openstack_auth_url
   insecure    = true
 }
 
@@ -33,7 +29,7 @@ data "openstack_networking_secgroup_v2" "default" {
 # Create virtual machine
 resource "openstack_compute_instance_v2" "nginx" {
   name        = "nginx-host"
-  image_name  = "cirros"
+  image_name  = "ubuntu-18.04"
   flavor_name = "m1.tiny"
   key_pair    = openstack_compute_keypair_v2.user_key.name
   network {
