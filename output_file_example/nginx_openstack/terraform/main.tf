@@ -29,8 +29,8 @@ data "openstack_networking_secgroup_v2" "default" {
 # Create virtual machine
 resource "openstack_compute_instance_v2" "nginx" {
   name        = "nginx-host"
-  image_name  = "ubuntu-18.04"
-  flavor_name = "m1.tiny"
+  image_name  = "Ubuntu-Focal-20.04-Daily-2022-04-19"
+  flavor_name = "ubuntu"
   key_pair    = openstack_compute_keypair_v2.user_key.name
   network {
     port = openstack_networking_port_v2.nginx.id

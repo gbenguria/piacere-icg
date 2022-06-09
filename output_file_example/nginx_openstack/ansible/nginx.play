@@ -1,5 +1,5 @@
 ---
-- hosts: 16.0.0.1
+- hosts: "{{instance_server_public_key}}"
   gather_facts: no
   become: yes
   vars:

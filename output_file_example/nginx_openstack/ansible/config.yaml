@@ -1,6 +1,7 @@
 ---
 input:
   - instance_server_public_key
+  - instance_ip
 output: []
 engine: ansible
 ...
