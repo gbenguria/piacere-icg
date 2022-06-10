@@ -90,10 +90,15 @@ def save_inner_components(from_object, to_object):
     inner_components = from_object.eAllContents()
     for obj in inner_components:
         if not isinstance(obj, EOrderedSet):  # TODO espandere info
-            print(f'Saving information from object {obj.name}')
+            if obj.name is not None:
+                object_name = obj.name
+            else:
+                logging.warning(f'Object name not available, changing it using class name: {obj.eClass.name}')
+                object_name = obj.eClass.name
+            print(f'Saving information from object {object_name}')
             inner_component = save_attributes(obj, {})
             save_references_info(obj, inner_component)
-            to_object[obj.name] = inner_component
+            to_object[object_name] = inner_component
     return to_object
 
 

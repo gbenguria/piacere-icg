@@ -10,10 +10,10 @@ required_version = ">= 0.14.0"
 
 # Configure the OpenStack Provider
 provider "openstack" {
-  user_name   = var.openstack_username
-  tenant_name = "admin"
-  password    = var.openstack_password
-  auth_url    = var.openstack_auth_url
+  #user_name   = var.openstack_username
+  #tenant_name = "admin"
+  #password    = var.openstack_password
+  #auth_url    = var.openstack_auth_url
   insecure    = true
 }
 

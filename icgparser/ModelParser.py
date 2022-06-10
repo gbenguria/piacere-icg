@@ -22,6 +22,7 @@ doml_layers = {
     "active_infrastructure_layer": "activeInfrastructure",
 }
 
+
 def to_camel_case(content):
     return content[0].lower() + content[1:]
 
@@ -30,9 +31,12 @@ def include_missing_objects_from_infrastructure_layer(to_step):
     for obj_name in DomlParserUtilities.retrieve_missing_parsed_resources():
         obj = DomlParserUtilities.retrieve_missing_parsed_resources()[obj_name]
         infra_object_representation = {}
-        infra_object_representation = DomlParserUtilities.save_attributes(obj["resource"], infra_object_representation)
+        infra_object_representation = DomlParserUtilities.save_attributes(obj["resource"], infra_object_representation,
+                                                                          skip_component_name=True)
         infra_object_representation = DomlParserUtilities.save_inner_components(obj["resource"],
                                                                                 infra_object_representation)
+        infra_object_representation = DomlParserUtilities.add_infrastructure_information(obj["resource"],
+                                                                                         infra_object_representation)
         ## TODO fix attenzione che sovrascrive
         ir_key_name = to_camel_case(obj["reference"].eType.name)
         to_step["data"][ir_key_name] = [infra_object_representation]

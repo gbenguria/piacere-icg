@@ -1,14 +1,23 @@
-resource "aws_subnet" "aws_subnet" {
-  vpc_id = aws_vpc.aws_vpc.id
-  cidr_block = "{{ subnet_cidrblock }}"
+resource "aws_vpc" "{{infra_element_name}}" {
+  cidr_block = "{{ addressRange }}"
   tags = {
-    Name = "{{ subnetname }}"
+    Name = "{{name}}"
   }
-
 }
-resource "aws_vpc" "aws_vpc" {
-  cidr = "{{ vpc_cidr }}"
+
+resource "aws_subnet" "{{infra_element_name ~ "_subnet"}}" {
+  vpc_id = aws_vpc.{{infra_element_name}}.id
+  cidr_block = "{{vpc_subnet.addressRange}}"
+  # map_public_ip_on_launch = true
   tags = {
-    Name = "{{ vpcname }}"
+    Name = "{{name}}"
+  }
+}
+
+resource "aws_network_interface" {{infra_element_name ~ "_network_interface"}} {
+  subnet_id = aws_subnet.{{infra_element_name ~ "_subnet"}}.id
+  security_groups = [aws_security_group.{{ name ~ "_security_group_rule" }}.id] ##TOBECHANGED
+  tags = {
+    Name = "{{infra_element_name ~ "_network_interface"}}"
   }
 }

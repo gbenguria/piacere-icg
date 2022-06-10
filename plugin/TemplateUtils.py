@@ -6,6 +6,10 @@ import jinja2
 from jinja2 import Template
 
 
+@jinja2.pass_context
+def get_context(c):
+    return c
+
 def find_template_path(iac_language, key, resource_name):
     try:
         properties_reader = configparser.ConfigParser()
@@ -20,6 +24,8 @@ def find_template_path(iac_language, key, resource_name):
 
 def edit_template(template, parameters: dict):
     logging.info("Starting editing template")
+    template.globals['context'] = get_context
+    template.globals['callable'] = callable
     render = template.render(parameters)
     template_with_custom_params = ""+render+"\n"
     return template_with_custom_params

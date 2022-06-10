@@ -1,11 +1,13 @@
 import json
 import logging
 import tarfile
+import time
 import uuid
 import yaml
 
 from icgparser import ModelParser
 from plugin import AnsiblePlugin, TerraformPlugin
+from utility.FileParsingUtility import replace_none_with_empty_str
 
 
 class CompressFolder:
@@ -48,11 +50,13 @@ def save_file(data, file_path, output_extensions="json"):
     logging.info(f"Saving data at: {file_path}")
     file = open(file_path, "w")
     if isinstance(data, dict) and output_extensions == "YAML":
+        logging.info("Converting python dict into yaml data")
         data = yaml.dump(data)
         data = "---\n" + data + "..."
     if isinstance(data, dict):
-        data = json.dumps(data, indent=2, sort_keys=True)
-    print(data)
+        data_without_none_value = replace_none_with_empty_str(data)
+        logging.info("Converting python dict into json data")
+        data = json.dumps(data_without_none_value, indent=2, sort_keys=True)
     file.write(data)
     file.close()
 
@@ -96,8 +100,13 @@ def create_intermediate_representation(model_path, is_multiecore_metamodel, meta
     intermediate_representation = ModelParser.parse_model(model_path=model_path,
                                                           is_multiecore_metamodel=is_multiecore_metamodel,
                                                           metamodel_directory=metamodel_directory)
-    intermediate_representation = reorganize_info(intermediate_representation)
-    logging.info("Successfully created intermediate representation")
+    ## TODO remove, introduced because sg sometimes not created
+    if "computingGroup" in intermediate_representation["steps"][0]["data"].keys():## TODO remove
+        logging.debug("security group found")## TODO remove
+    else:
+        logging.debug("no security group found!")
+    # intermediate_representation = reorganize_info(intermediate_representation)
+    logging.info(f"Successfully created intermediate representation {intermediate_representation}")
     intermediate_representation_path = "input_file_generated/ir.json"
     save_file(intermediate_representation, intermediate_representation_path)
     logging.info(f"Saved intermediate representation at {intermediate_representation_path}")
