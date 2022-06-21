@@ -100,11 +100,6 @@ def create_intermediate_representation(model_path, is_multiecore_metamodel, meta
     intermediate_representation = ModelParser.parse_model(model_path=model_path,
                                                           is_multiecore_metamodel=is_multiecore_metamodel,
                                                           metamodel_directory=metamodel_directory)
-    ## TODO remove, introduced because sg sometimes not created
-    if "computingGroup" in intermediate_representation["steps"][0]["data"].keys():## TODO remove
-        logging.debug("security group found")## TODO remove
-    else:
-        logging.debug("no security group found!")
     # intermediate_representation = reorganize_info(intermediate_representation)
     logging.info(f"Successfully created intermediate representation {intermediate_representation}")
     intermediate_representation_path = "input_file_generated/ir.json"
