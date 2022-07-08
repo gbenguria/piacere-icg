@@ -35,7 +35,7 @@ resource "openstack_compute_instance_v2" "vm1" {
   name        = "nginx-host"
   image_name  = "ubuntu-20.04.3"
   flavor_name = "small"
-  key_pair    = openstack_compute_keypair_v2.ssh_key.name
+  key_pair    = openstack_compute_keypair_v2.user1.name
   network {
     port = openstack_networking_port_v2.net1.id
   }
@@ -53,15 +53,15 @@ resource "openstack_compute_instance_v2" "vm1" {
 
   # secrets can be taken from environment variables at IEM but these security issues I will leave them to y2, the user can also be problematic ubuntu/root/centos/...
   provisioner "local-exec" {
-    command = "ansible-playbook -u root -i '${openstack_networking_floatingip_v2.vm1_floating_ip_association.address},' ansible/playbooks/pma/site.yaml --extra-vars '{\"pma_deployment_id\": \"123e4567-e89b-12d3-a456-426614174002\", \"pma_influxdb_bucket\": \"bucket\", \"pma_influxdb_token\": \"piacerePassword\", \"pma_influxdb_org\": \"piacere\", \"pma_influxdb_addr\": \"https://influxdb.pm.ci.piacere.digital.tecnalia.dev\" }'"
+    command = "ansible-playbook -u root -i '${openstack_networking_floatingip_v2.vm1_floating_ip.address},' ansible/playbooks/pma/site.yaml --extra-vars '{\"pma_deployment_id\": \"123e4567-e89b-12d3-a456-426614174002\", \"pma_influxdb_bucket\": \"bucket\", \"pma_influxdb_token\": \"piacerePassword\", \"pma_influxdb_org\": \"piacere\", \"pma_influxdb_addr\": \"https://influxdb.pm.ci.piacere.digital.tecnalia.dev\" }'"
   }
 
 }
 
 # Create ssh keys
-resource "openstack_compute_keypair_v2" "ssh_key" {
-  name       = ""
-  public_key = ""
+resource "openstack_compute_keypair_v2" "user1" {
+  name       = "user1"
+  # public_key = ""
 }
 
 # Create floating ip
