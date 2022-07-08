@@ -11,7 +11,7 @@ variables:
 stages:
 #  - quality TODO
   - build
-  - tests TODO
+  - tests
   - deploy
 
 # Jobs templates ------------------
