@@ -125,7 +125,7 @@ def load_metamodel(metamodel_directory=METAMODEL_DIRECTORY, is_multiecore=False)
             mm_root = resource.contents[0]  # Get the root of the MetaModel (EPackage)
             rset.metamodel_registry[mm_root.nsURI] = mm_root
     else:
-        logging.info(f"Loading multiecore metamodel from {metamodel_directory}/doml.ecore")
+        logging.info(f"Loading ecore metamodel from {metamodel_directory}/doml.ecore")
         resource = rset.get_resource(URI(f"{metamodel_directory}/doml.ecore"))
         mm_root = resource.contents[0]  # Get the root of the MetaModel (EPackage)
         rset.metamodel_registry[mm_root.nsURI] = mm_root

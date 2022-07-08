@@ -3,12 +3,57 @@
   "steps": [
     {
       "data": {
+        "computingGroup": [
+          {
+            "http": {
+              "cidr": [
+                "0.0.0.0/0"
+              ],
+              "fromPort": 80,
+              "kind": "INGRESS",
+              "name": "http",
+              "protocol": "tcp",
+              "toPort": 80
+            },
+            "https": {
+              "cidr": [
+                "0.0.0.0/0"
+              ],
+              "fromPort": 443,
+              "kind": "INGRESS",
+              "name": "https",
+              "protocol": "tcp",
+              "toPort": 443
+            },
+            "icmp": {
+              "cidr": [
+                "0.0.0.0/0"
+              ],
+              "fromPort": -1,
+              "kind": "EGRESS",
+              "name": "icmp",
+              "protocol": "icmp",
+              "toPort": -1
+            },
+            "infra_element_name": "sg",
+            "ssh": {
+              "cidr": [
+                "0.0.0.0/0"
+              ],
+              "fromPort": 22,
+              "kind": "INGRESS",
+              "name": "ssh",
+              "protocol": "tcp",
+              "toPort": 22
+            }
+          }
+        ],
         "credentials": [
           {
             "algorithm": "RSA",
             "bits": 4096,
+            "infra_element_name": "ssh_key",
             "keyfile": "/home/user1/.ssh/openstack.key",
-            "name": "ssh_key",
             "user": "ubuntu"
           }
         ],

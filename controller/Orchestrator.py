@@ -89,7 +89,7 @@ def compress_file(source_folder, dest_file_name):
 
 def create_temp_model_file(model_xml):
     logging.info("Saving model in temp file")
-    temp_model_file_path = "icgparser/doml/nginx-openstack.domlx"
+    temp_model_file_path = "icgparser/doml/v1/nginx-openstack_v1.domlx"
     save_file(model_xml, temp_model_file_path)
     logging.info(f"Successfully saved model in temp file at {temp_model_file_path}")
     return temp_model_file_path
