@@ -27,9 +27,9 @@ resource "openstack_compute_instance_v2" "{{ infra_element_name }}" {
 }
 
 # Create ssh keys
-resource "openstack_compute_keypair_v2" "{{ credentials }}" {
-  name       = "{{ ssh_user }}"
-  public_key = "{{ ssh_key_file }}"
+resource "openstack_compute_keypair_v2" "{{ vm_key_name }}" {
+  name       = "{{ vm_key_name }}"
+  # public_key = "{{ ssh_key_file }}"
 }
 
 # Create floating ip
