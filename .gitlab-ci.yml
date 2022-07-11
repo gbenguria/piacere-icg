@@ -2,11 +2,11 @@ variables:
   DOCKER_IMAGE: "docker:20.10.14"
   DOCKER_DIND_IMAGE: "${DOCKER_IMAGE}-dind"
 
-  WP: wp3
-  COMPONENT_NAME: icg
+  COMPONENT_WP: wp3
+  COMPONENT_IMAGE_NAME: icg
   
-  TMP_IMAGE: ${CI_REGISTRY_HOST}/temp/${COMPONENT_NAME}:${CI_PIPELINE_ID}
-  TARGET_IMAGE: ${CI_REGISTRY_HOST}/${WP}/${COMPONENT_NAME}:${CI_COMMIT_BRANCH}
+  TMP_IMAGE: ${CI_REGISTRY_HOST}/temp/${COMPONENT_IMAGE_NAME}:${CI_PIPELINE_ID}
+  TARGET_IMAGE: ${CI_REGISTRY_HOST}/${COMPONENT_WP}/${COMPONENT_IMAGE_NAME}:${CI_COMMIT_BRANCH}
 
 stages:
 #  - quality TODO
@@ -77,7 +77,7 @@ security-trivy-icg:
   services:
     - name: $DOCKER_DIND_IMAGE
   variables:
-    REPORT_FILENAME: ${COMPONENT_NAME}-container-scanning-report.json
+    REPORT_FILENAME: ${COMPONENT_IMAGE_NAME}-container-scanning-report.json
   before_script:
     - *artifactory-login
     - export TRIVY_VERSION=$(wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
