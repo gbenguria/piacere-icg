@@ -6,19 +6,34 @@ def create_files(parameters, output_path):
     language = "terraform"
     provider = parameters["provider"]
     resources = parameters.keys()
-    terraform_file = create_init_file(language, provider)
+    terraform_main_file = create_init_file(language, provider)
+    terraform_out_file = ""
     for resource_name in resources:
-        logging.info("Creating template for resource '%s'", resource_name)
-        template_path = TemplateUtils.find_template_path(language, provider, resource_name)
-        if template_path:
+        logging.info("Creating output and main terraform template for resource '%s'", resource_name)
+
+        template_for_main_path = TemplateUtils.find_template_path(language, provider, resource_name)
+        template_for_output_path = TemplateUtils.find_template_path(language, provider,
+                                                                    get_resource_out_path(resource_name))
+        if template_for_main_path:
             for resource_params in parameters[resource_name]:
-                template = TemplateUtils.read_template(template_path)
+                template = TemplateUtils.read_template(template_for_main_path)
                 # resource = parameters[resource_name]
                 template_filled = TemplateUtils.edit_template(template, resource_params)
-                terraform_file = terraform_file + template_filled + "\n"
-    output_file_path = output_path + "/main.tf"
-    TemplateUtils.write_template(terraform_file, output_file_path)
-    logging.info("File available at: {}".format(output_path))
+                terraform_main_file = terraform_main_file + template_filled + "\n"
+
+        if template_for_output_path:
+            for resource_params in parameters[resource_name]:
+                template_out = TemplateUtils.read_template(template_for_output_path)
+                # resource = parameters[resource_name]
+                template_out_filled = TemplateUtils.edit_template(template_out, resource_params)
+                terraform_out_file = terraform_out_file + template_out_filled + "\n"
+
+    main_file_stored_path = output_path + "/main.tf"
+    TemplateUtils.write_template(terraform_main_file, main_file_stored_path)
+    output_file_stored_path = output_path + "/output.tf"
+    TemplateUtils.write_template(terraform_out_file, output_file_stored_path)
+    logging.info("Terraform main file available at: {}".format(main_file_stored_path))
+    logging.info(f"Terraform output file available at {output_file_stored_path}")
 
 
 def create_init_file(language, provider):
@@ -26,3 +41,8 @@ def create_init_file(language, provider):
     template_path = TemplateUtils.find_template_path(language, provider, "init")
     template = TemplateUtils.read_template(template_path)
     return template.render() + "\n"
+
+## TODO spostare i template di out in una cartella?? es. cartella vms&vms_out? altrimenti come prendo nome di out?
+## non è nel doml
+def get_resource_out_path(resource_name):
+    return resource_name + "_out"
