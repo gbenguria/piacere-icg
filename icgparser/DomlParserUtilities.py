@@ -85,6 +85,9 @@ def save_references_info(from_object, to_object):  ## TODO refactoring
             update_missing_parsed_resources(reference_object, reference=ref, is_to_be_parsed=True)
     return to_object
 
+def get_references(from_object):
+    refs = from_object.eClass.eAllReferences()
+    return list(refs)
 
 def save_inner_components(from_object, to_object):
     inner_components = from_object.eAllContents()

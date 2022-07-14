@@ -23,7 +23,7 @@ def find_template_path(iac_language, key, resource_name):
 
 
 def edit_template(template, parameters: dict):
-    logging.info("Starting editing template")
+    logging.info(f"Starting editing template '{template}'")
     template.globals['context'] = get_context
     template.globals['callable'] = callable
     render = template.render(parameters)

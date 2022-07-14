@@ -30,9 +30,9 @@ def choose_plugin(parameters, template_generated_folder):
     for step in parameters["steps"]:
         if step["programming_language"] == "ansible":
             logging.info("Ansible Plugin chosen")
-            metadata_root_folder["iac"].append("ansible")
-            input_data = step["data"]
-            AnsiblePlugin.create_files(input_data, template_generated_folder)
+        #     metadata_root_folder["iac"].append("ansible")
+        #     input_data = step["data"]
+        #     AnsiblePlugin.create_files(input_data, template_generated_folder)
         elif step["programming_language"] == "terraform":
             logging.info("Terraform Plugin chosen")
             metadata_root_folder["iac"].append("terraform")

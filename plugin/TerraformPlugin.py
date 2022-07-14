@@ -1,10 +1,13 @@
 import logging
-from plugin import TemplateUtils
+from plugin import TemplateUtils, PluginUtility
 
 
 def create_files(parameters, output_path):
     language = "terraform"
     provider = parameters["provider"]
+
+    config_file = PluginUtility.createExecutionFileInstructions(language, provider, parameters)
+
     resources = parameters.keys()
     terraform_main_file = create_init_file(language, provider)
     terraform_out_file = ""
@@ -27,11 +30,12 @@ def create_files(parameters, output_path):
                 # resource = parameters[resource_name]
                 template_out_filled = TemplateUtils.edit_template(template_out, resource_params)
                 terraform_out_file = terraform_out_file + template_out_filled + "\n"
-
     main_file_stored_path = output_path + "/main.tf"
     TemplateUtils.write_template(terraform_main_file, main_file_stored_path)
     output_file_stored_path = output_path + "/output.tf"
     TemplateUtils.write_template(terraform_out_file, output_file_stored_path)
+    config_file_stored_path = output_path + "/config.yaml"
+    TemplateUtils.write_template(config_file, config_file_stored_path)
     logging.info("Terraform main file available at: {}".format(main_file_stored_path))
     logging.info(f"Terraform output file available at {output_file_stored_path}")
 

@@ -94,6 +94,21 @@
         ]
       },
       "programming_language": "terraform"
+    },
+    {
+      "data": {
+        "nginx": [
+          {
+            "name": "vm1",
+            "os": "ubuntu-20.04.3"
+          },
+          {
+            "name": "nginx",
+            "source_code": "/usr/share/nginx/html/index.html"
+          }
+        ]
+      },
+      "programming_language": "ansible"
     }
   ]
 }
