@@ -5,6 +5,7 @@ from plugin import TemplateUtils, PluginUtility
 
 
 def store_monitoring_agents_folder(output_path):
+    logging.info(f"Adding monitoring agents folder in {output_path}")
     copy_tree("templates/terraform/open_stack/agents_playbook", output_path)
 
 
