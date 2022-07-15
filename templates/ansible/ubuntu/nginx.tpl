@@ -1,10 +1,7 @@
 ---
-- hosts: {{ address }}
+- hosts: {{ "servers_for_" ~ name }}
   gather_facts: no
   become: yes
-  vars:
-    ansible_ssh_private_key_file: "{{ ssh_key_file }}"
-    ansible_ssh_user: "{{ ssh_user }}"
   tasks:
     - name: Update repositories
       apt:
@@ -27,7 +24,7 @@
 
     - name: Install sample site
       copy:
-        dest: "{{ item }}"
+        dest: {% raw %}"{{ item }}"{%endraw%}
         content: |
           <!doctype html>
           <html lang="en">
@@ -41,5 +38,5 @@
           </html>
       with_items:
         - /var/www/html/index.html
-        - /usr/share/nginx/html/index.html
+        - {{ source_code }}
 

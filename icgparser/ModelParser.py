@@ -76,7 +76,8 @@ def parse_infrastructural_objects(doml_model):
         infra_object_step = include_missing_objects_from_infrastructure_layer(infra_object_step)
     return infra_object_step
 
-def parse_application_layer(doml_model):
+
+def parse_application_layer(doml_model, infra_object_step):
     logging.info("DOML parsing: getting active configuration")
     application_object_step = {"programming_language": "ansible", "data": {}}
     active_configuration = doml_model.activeConfiguration
@@ -84,24 +85,31 @@ def parse_application_layer(doml_model):
     for deployment in list(active_configuration.deployments):
         deployment_component_name = deployment.component.name
         logging.info(f'Parsing deployment for component {deployment_component_name}')
-        refs = DomlParserUtilities.get_references(deployment)
-        object_list_representation = []
-        for ref in refs:
-            object_representation = {}
-            obj = deployment.eGet(ref.name)
-            object_representation = DomlParserUtilities.save_annotations(obj, object_representation)
-            object_representation = DomlParserUtilities.save_attributes(obj, object_representation)
-            object_list_representation.append(object_representation)
+        object_representation = {}
 
-        application_object_step["data"][deployment.component.name] = object_list_representation
+        application_resource = deployment.eGet("component")
+        ## TODO refactoring
+        vm = deployment.eGet("node")
+        try:
+            for infra_vm in infra_object_step.get("data").get("vms"):
+                if infra_vm.get("infra_element_name") == vm.name:
+                    object_representation["node"] = infra_vm
+        except Exception:
+            logging.error(f"parsing error: no vm {vm.name} found for deployment {deployment_component_name}")
+
+        object_representation = DomlParserUtilities.save_annotations(application_resource, object_representation)
+        object_representation = DomlParserUtilities.save_attributes(application_resource, object_representation)
+
+        application_object_step["data"][deployment_component_name] = object_representation
     return application_object_step
+
 
 def create_intermediate_representation(model_loaded):
     model_name = model_loaded.name
     output_path = OUTPUT_BASE_DIR_PATH + model_name + "/"
     intermediate_representation_steps = []
     infra_object_step = parse_infrastructural_objects(model_loaded)
-    application_step = parse_application_layer(model_loaded)
+    application_step = parse_application_layer(model_loaded, infra_object_step)
     intermediate_representation_steps.append(infra_object_step)
     intermediate_representation_steps.append(application_step)
     intermediate_representation = {

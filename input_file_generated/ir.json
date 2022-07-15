@@ -97,16 +97,27 @@
     },
     {
       "data": {
-        "nginx": [
-          {
-            "name": "vm1",
-            "os": "ubuntu-20.04.3"
+        "nginx": {
+          "name": "nginx",
+          "node": {
+            "credentials": "ssh_key",
+            "generatedFrom": "v_img",
+            "group": "sg",
+            "i1": {
+              "associated": "sg",
+              "belongsTo": "net1",
+              "endPoint": "16.0.0.1",
+              "name": "i1"
+            },
+            "infra_element_name": "vm1",
+            "name": "concrete_vm",
+            "os": "ubuntu-20.04.3",
+            "vm_flavor": "small",
+            "vm_key_name": "user1",
+            "vm_name": "nginx-host"
           },
-          {
-            "name": "nginx",
-            "source_code": "/usr/share/nginx/html/index.html"
-          }
-        ]
+          "source_code": "/usr/share/nginx/html/index.html"
+        }
       },
       "programming_language": "ansible"
     }
