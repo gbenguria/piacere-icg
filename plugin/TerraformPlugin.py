@@ -1,5 +1,11 @@
 import logging
+from distutils.dir_util import copy_tree
+
 from plugin import TemplateUtils, PluginUtility
+
+
+def store_monitoring_agents_folder(output_path):
+    copy_tree("templates/terraform/open_stack/agents_playbook", output_path)
 
 
 def create_files(parameters, output_path):
@@ -36,6 +42,7 @@ def create_files(parameters, output_path):
     TemplateUtils.write_template(terraform_out_file, output_file_stored_path)
     config_file_stored_path = output_path + "/config.yaml"
     TemplateUtils.write_template(config_file, config_file_stored_path)
+    store_monitoring_agents_folder(output_path)
     logging.info("Terraform main file available at: {}".format(main_file_stored_path))
     logging.info(f"Terraform output file available at {output_file_stored_path}")
 
