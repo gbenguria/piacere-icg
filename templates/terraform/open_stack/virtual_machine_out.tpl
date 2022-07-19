@@ -1,9 +1,9 @@
 output "instance_server_public_key_{{ vm_key_name }}" {
-  value = openstack_compute_keypair_v2.{{ vm_key_name }}.public_key
+  value = openstack_compute_keypair_v2.{{ credentials }}.public_key
 }
 
 output "instance_server_private_key_{{ vm_key_name }}" {
-  value = openstack_compute_keypair_v2.{{ vm_key_name }}.private_key
+  value = openstack_compute_keypair_v2.{{ credentials }}.private_key
 }
 
 output "instance_ip_{{ vm_name }}" {
