@@ -1,0 +1,130 @@
+variables:
+  DOCKER_IMAGE: "docker:20.10.14"
+  DOCKER_DIND_IMAGE: "${DOCKER_IMAGE}-dind"
+
+  COMPONENT_WP: wp3
+  COMPONENT_IMAGE_NAME: icg
+  
+  TMP_IMAGE: ${CI_REGISTRY_HOST}/temp/${COMPONENT_IMAGE_NAME}:${CI_PIPELINE_ID}
+  TARGET_IMAGE: ${CI_REGISTRY_HOST}/${COMPONENT_WP}/${COMPONENT_IMAGE_NAME}:${CI_COMMIT_BRANCH}
+
+stages:
+#  - quality TODO
+  - build
+  - tests
+  - deploy
+
+# Jobs templates ------------------
+
+.install-deps-template: &install-deps
+  tags:
+    - docker
+
+.quality-template: &quality
+  <<: *install-deps
+  image: python:3.10
+  stage: quality
+  before_script:
+    - pip install tox
+
+# Artifactory login command ---------
+
+.artifactory-login: &artifactory-login
+  - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY_HOST -u "$CI_REGISTRY_USER" --password-stdin
+
+# Quality jobs ----------------------
+# TODO quality checks
+#check-bandit:
+#  <<: *quality
+#  script:
+#    - tox -e bandit
+
+#check-black:
+#  <<: *quality
+#  script:
+#    - tox -e black-check
+
+#check-flake8:
+#  <<: *quality
+#  script:
+#    - tox -e flake8
+
+#check-isort:
+#  <<: *quality
+#  script:
+#    - tox -e isort-check
+
+# Build jobs ----------------------
+
+build-temp-icg:
+  image: $DOCKER_IMAGE
+  stage: build
+  services:
+    - $DOCKER_DIND_IMAGE
+  before_script:
+    - *artifactory-login
+  script:
+    - docker build -t $TMP_IMAGE .
+    - docker push $TMP_IMAGE
+  tags:
+    - docker
+
+# Security job in tests stage------------------------
+
+security-trivy-icg:
+  stage: tests
+  image: $DOCKER_IMAGE
+  services:
+    - name: $DOCKER_DIND_IMAGE
+  variables:
+    REPORT_FILENAME: ${COMPONENT_IMAGE_NAME}-container-scanning-report.json
+  before_script:
+    - *artifactory-login
+    - export TRIVY_VERSION=$(wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+    - wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz -O - | tar -zxvf -
+  allow_failure: true
+  script:
+    - ./trivy i -o $REPORT_FILENAME $TMP_IMAGE
+  artifacts:
+    reports:
+      container_scanning: $REPORT_FILENAME
+    expire_in: 1 hour
+  tags:
+    - docker
+
+# Tests jobs ------------------------
+
+#run-unit-tests:
+#  image: $DOCKER_IMAGE
+#  stage: tests
+#  services:
+#    - $DOCKER_DIND_IMAGE
+#  before_script:
+#    - export VERSION=$(date +%Y%m%d)
+#    - *artifactory-login
+#  script:
+#    - TODO
+#   tags:
+#    - docker
+
+# Deploy job ------------------------
+
+deploy-icg:
+  stage: deploy
+  image: $DOCKER_IMAGE
+  only:
+    - y1
+  services:
+    - $DOCKER_DIND_IMAGE
+  before_script:
+    - export VERSION=$(date +%Y%m%d)
+    - export TARGET_IMAGE_VERSIONED=${TARGET_IMAGE}-${VERSION}-${CI_PIPELINE_ID}
+    - *artifactory-login
+  script:
+    - docker pull $TMP_IMAGE
+    - docker tag $TMP_IMAGE $TARGET_IMAGE
+    - docker tag $TMP_IMAGE $TARGET_IMAGE_VERSIONED
+    - docker push $TARGET_IMAGE_VERSIONED
+    - docker push $TARGET_IMAGE
+  tags:
+    - docker
