@@ -50,10 +50,7 @@
         ],
         "credentials": [
           {
-            "algorithm": "RSA",
-            "bits": 4096,
             "infra_element_name": "ssh_key",
-            "keyfile": "/home/user1/.ssh/openstack.key",
             "user": "ubuntu"
           }
         ],
@@ -66,17 +63,9 @@
           }
         ],
         "provider": "openstack",
-        "vmImages": [
-          {
-            "infra_element_name": "v_img",
-            "kind": "SCRIPT",
-            "name": "concrete_vm_image"
-          }
-        ],
         "vms": [
           {
             "credentials": "ssh_key",
-            "generatedFrom": "v_img",
             "group": "sg",
             "i1": {
               "associated": "sg",
@@ -86,9 +75,8 @@
             },
             "infra_element_name": "vm1",
             "name": "concrete_vm",
-            "os": "ubuntu-20.04.3",
+            "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
             "vm_flavor": "small",
-            "vm_key_name": "user1",
             "vm_name": "nginx-host"
           }
         ]
@@ -101,7 +89,6 @@
           "name": "nginx",
           "node": {
             "credentials": "ssh_key",
-            "generatedFrom": "v_img",
             "group": "sg",
             "i1": {
               "associated": "sg",
@@ -111,9 +98,8 @@
             },
             "infra_element_name": "vm1",
             "name": "concrete_vm",
-            "os": "ubuntu-20.04.3",
+            "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
             "vm_flavor": "small",
-            "vm_key_name": "user1",
             "vm_name": "nginx-host"
           },
           "source_code": "/usr/share/nginx/html/index.html"
