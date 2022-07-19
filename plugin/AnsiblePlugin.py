@@ -4,7 +4,9 @@ from plugin.PluginException import PluginResourceNotFoundError
 
 
 def clean_operating_system_name(operating_system):
-    if "ubuntu" in operating_system:
+    operating_system_lower_case = operating_system.lower()
+    logging.info(f"AnsiblePlugin: extracting operating system from {operating_system}")
+    if "ubuntu" in operating_system_lower_case:
         return "ubuntu"
     else:
         raise PluginResourceNotFoundError(plugin_name="AnsiblePlugin", resource_name="operating system")
