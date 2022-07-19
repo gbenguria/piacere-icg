@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import tarfile
 import time
 import uuid
@@ -48,6 +49,7 @@ def choose_plugin(parameters, template_generated_folder):
 def save_file(data, file_path, output_extensions="json"):
     logging.debug(f"Saving data: {data} at {file_path}")
     logging.info(f"Saving data at: {file_path}")
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
     file = open(file_path, "w")
     if isinstance(data, dict) and output_extensions == "YAML":
         logging.info("Converting python dict into yaml data")
