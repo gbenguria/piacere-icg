@@ -7,13 +7,12 @@
   </application>
   <infrastructure name="infra">
     <nodes xsi:type="infra:AutoScalingGroup" name="ag" deploymentNetwork="//@infrastructure/@networks.0">
-      <machineDefinition name="vm1" os="ubuntu-20.04.3" credentials="//@infrastructure/@credentials.0" group="//@infrastructure/@groups.0" generatedFrom="//@infrastructure/@generators.0">
+      <machineDefinition name="vm1" os="Ubuntu-Focal-20.04-Daily-2022-04-19" credentials="//@infrastructure/@credentials.0" group="//@infrastructure/@groups.0">
         <ifaces name="i1" endPoint="16.0.0.1" belongsTo="//@infrastructure/@networks.0" associated="//@infrastructure/@groups.0"/>
       </machineDefinition>
     </nodes>
     <networks name="net1" protocol="tcp/ip" addressRange="16.0.0.0/24" connectedIfaces="//@infrastructure/@nodes.0/@machineDefinition/@ifaces.0"/>
-    <generators xsi:type="infra:VMImage" name="v_img" generatedVMs="//@infrastructure/@nodes.0/@machineDefinition"/>
-    <credentials xsi:type="infra:KeyPair" name="ssh_key" user="ubuntu" keyfile="/home/user1/.ssh/openstack.key" algorithm="RSA" bits="4096"/>
+    <credentials xsi:type="infra:KeyPair" name="ssh_key" user="ubuntu"/>
     <groups xsi:type="infra:SecurityGroup" name="sg" groupedNodes="//@infrastructure/@nodes.0/@machineDefinition" ifaces="//@infrastructure/@nodes.0/@machineDefinition/@ifaces.0">
       <rules name="icmp" protocol="icmp" fromPort="-1" toPort="-1">
         <cidr>0.0.0.0/0</cidr>
@@ -34,11 +33,7 @@
       <vms name="concrete_vm" maps="//@infrastructure/@nodes.0/@machineDefinition">
         <annotations xsi:type="commons:SProperty" key="vm_name" value="nginx-host"/>
         <annotations xsi:type="commons:SProperty" key="vm_flavor" value="small"/>
-        <annotations xsi:type="commons:SProperty" key="vm_key_name" value="user1"/>
       </vms>
-      <vmImages name="concrete_vm_image" maps="//@infrastructure/@generators.0">
-        <annotations xsi:type="commons:SProperty" key="name" value="ubuntu-20.04.3"/>
-      </vmImages>
       <networks name="concrete_net" maps="//@infrastructure/@networks.0">
         <annotations xsi:type="commons:SProperty" key="name" value="ostack2"/>
       </networks>
