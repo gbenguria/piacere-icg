@@ -1,0 +1,16 @@
+
+
+---
+engine: terraform
+input:
+  - OS_USERNAME
+  - OS_PASSWORD
+  - OS_AUTH_URL
+  - OS_PROJECT_NAME
+output:
+
+  - instance_server_public_key_
+  - instance_server_private_key_
+  - instance_ip_nginx-host
+
+...

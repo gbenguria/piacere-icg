@@ -1,7 +1,7 @@
 .idea
 *.tar.gz
 icgparser/doml/*domlx
-output_files_generated/*
+# output_files_generated/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

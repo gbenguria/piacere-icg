@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 import configparser
 import logging
@@ -24,6 +24,7 @@ from jinja2 import Template
 @jinja2.pass_context
 def get_context(c):
     return c
+
 
 def find_template_path(iac_language, key, resource_name):
     try:
@@ -42,7 +43,7 @@ def edit_template(template, parameters: dict):
     template.globals['context'] = get_context
     template.globals['callable'] = callable
     render = template.render(parameters)
-    template_with_custom_params = ""+render+"\n"
+    template_with_custom_params = "" + render + "\n"
     return template_with_custom_params
 
 

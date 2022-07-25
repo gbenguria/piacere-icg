@@ -56,6 +56,7 @@ def create_files(parameters, output_path):
             ansible_output_file_path = output_path + "/".join([language, resource_name]) + ".yaml"
             inventory_output_file_path = output_path + "/".join([language, "inventory"]) + ".j2"
             config_output_file_path = output_path + "/".join([language, "config"]) + ".yaml"
+            ssh_key_output_file_path = output_path + "/".join([language, "ssh_key.j2"])
 
             template = TemplateUtils.read_template(ansible_template_path)
             template_filled = TemplateUtils.edit_template(template, resource_params)
@@ -66,5 +67,6 @@ def create_files(parameters, output_path):
             TemplateUtils.write_template(inventory_template_filled, inventory_output_file_path)
             TemplateUtils.write_template(template_filled, ansible_output_file_path)
             TemplateUtils.write_template(config_template_filled, config_output_file_path)
+            TemplateUtils.write_template("{{ instance_server_private_key }}", ssh_key_output_file_path)
 
     logging.info("File available at: {}".format(output_path))

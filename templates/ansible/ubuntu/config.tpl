@@ -13,7 +13,6 @@
 # limitations under the License.
 #-------------------------------------------------------------------------
 #}
-
 ---
 input:
   - instance_ip_{{ node.vm_name }}

@@ -18,19 +18,11 @@ data "openstack_networking_network_v2" "external" {
   name = "external"
 }
 
-data "openstack_identity_project_v3" "test_tenant" {
-  name = "admin"
-}
-
-data "openstack_networking_secgroup_v2" "default" {
-  name = "default"
-  tenant_id = data.openstack_identity_project_v3.test_tenant.id
-}
 # Create virtual machine
 resource "openstack_compute_instance_v2" "nginx" {
   name        = "nginx-host"
   image_name  = "Ubuntu-Focal-20.04-Daily-2022-04-19"
-  flavor_name = "ubuntu"
+  flavor_name = "łubuntu"
   key_pair    = openstack_compute_keypair_v2.user_key.name
   network {
     port = openstack_networking_port_v2.nginx.id
@@ -75,7 +67,8 @@ resource "openstack_networking_port_v2" "nginx" {
   network_id     = openstack_networking_network_v2.generic.id
   admin_state_up = true
   security_group_ids = [
-    data.openstack_networking_secgroup_v2.default.id        #default flavour id
+    openstack_compute_secgroup_v2.ssh.id,
+    openstack_compute_secgroup_v2.http.id
   ]
   fixed_ip {
     subnet_id = openstack_networking_subnet_v2.nginx.id
