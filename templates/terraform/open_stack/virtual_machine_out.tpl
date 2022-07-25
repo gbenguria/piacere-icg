@@ -14,11 +14,11 @@
 #-------------------------------------------------------------------------
 #}
 
-output "instance_server_public_key_{{ vm_key_name }}" {
+output "instance_server_public_key_{{ credentials }}" {
   value = openstack_compute_keypair_v2.{{ credentials }}.public_key
 }
 
-output "instance_server_private_key_{{ vm_key_name }}" {
+output "instance_server_private_key_{{ credentials }}" {
   value = openstack_compute_keypair_v2.{{ credentials }}.private_key
 }
 

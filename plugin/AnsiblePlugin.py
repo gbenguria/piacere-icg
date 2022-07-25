@@ -14,6 +14,8 @@
 #-------------------------------------------------------------------------
 
 import logging
+
+from icgparser.IntermediateRepresentationUtility import IntermediateRepresentationResources
 from plugin import TemplateUtils
 from plugin.PluginException import PluginResourceNotFoundError
 
@@ -43,8 +45,10 @@ def create_inventory_file(parameters, language, operating_system, template_name)
     return template_filled
 
 
-def create_files(parameters, output_path):
-    language = "ansible"
+def create_files(step, output_path):
+    language = step[IntermediateRepresentationResources.LANGUAGE.value]
+    step_name = step[IntermediateRepresentationResources.STEP_NAME.value]
+    parameters = step["data"]
     for resource_name, resource in parameters.items():
         logging.info("Creating template for resource '%s'", resource_name)
         operating_system = find_operating_system(resource)
@@ -53,10 +57,10 @@ def create_files(parameters, output_path):
             # for resource_params in parameters[resource_name]:
             resource_params = parameters[resource_name]
 
-            ansible_output_file_path = output_path + "/".join([language, resource_name]) + ".yaml"
-            inventory_output_file_path = output_path + "/".join([language, "inventory"]) + ".j2"
-            config_output_file_path = output_path + "/".join([language, "config"]) + ".yaml"
-            ssh_key_output_file_path = output_path + "/".join([language, "ssh_key.j2"])
+            ansible_output_file_path = output_path + "/".join([step_name, resource_name]) + ".yaml"
+            inventory_output_file_path = output_path + "/".join([step_name, "inventory"]) + ".j2"
+            config_output_file_path = output_path + "/".join([step_name, "config"]) + ".yaml"
+            ssh_key_output_file_path = output_path + "/".join([step_name, "ssh_key.j2"])
 
             template = TemplateUtils.read_template(ansible_template_path)
             template_filled = TemplateUtils.edit_template(template, resource_params)

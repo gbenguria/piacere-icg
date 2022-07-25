@@ -100,7 +100,7 @@ def parse_application_layer(doml_model, infra_object_step):
         object_representation = {}
 
         application_resource = deployment.eGet("component")
-        ## TODO refactoring
+        ## TODO refactoring -> far diventare lista nodi? nel monitoring sono più nodi
         vm = deployment.eGet("node")
         try:
             for infra_vm in infra_object_step.get("data").get("vms"):
@@ -113,6 +113,7 @@ def parse_application_layer(doml_model, infra_object_step):
         object_representation = DomlParserUtilities.save_attributes(application_resource, object_representation)
 
         application_object_step["data"][deployment_component_name] = object_representation
+        application_object_step["step_name"] = deployment_component_name
     return application_object_step
 
 

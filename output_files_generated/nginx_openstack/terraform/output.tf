@@ -1,10 +1,10 @@
 
 
-output "instance_server_public_key_" {
+output "instance_server_public_key_ssh_key" {
   value = openstack_compute_keypair_v2.ssh_key.public_key
 }
 
-output "instance_server_private_key_" {
+output "instance_server_private_key_ssh_key" {
   value = openstack_compute_keypair_v2.ssh_key.private_key
 }
 

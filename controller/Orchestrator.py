@@ -21,7 +21,8 @@ import time
 import uuid
 import yaml
 
-from icgparser import ModelParser
+from icgparser import ModelParser, PiacereInternalToolsIntegrator
+from icgparser.IntermediateRepresentationUtility import IntermediateRepresentationResources
 from plugin import AnsiblePlugin, TerraformPlugin
 from utility.FileParsingUtility import replace_none_with_empty_str
 
@@ -46,9 +47,10 @@ def choose_plugin(parameters, template_generated_folder):
     for step in parameters["steps"]:
         if step["programming_language"] == "ansible":
             logging.info("Ansible Plugin chosen")
-            metadata_root_folder["iac"].append("ansible")
-            input_data = step["data"]
-            AnsiblePlugin.create_files(input_data, template_generated_folder)
+            step_name = step[IntermediateRepresentationResources.STEP_NAME.value]
+            metadata_root_folder["iac"].append(step_name)
+            # input_data = step["data"]
+            AnsiblePlugin.create_files(step, template_generated_folder)
         elif step["programming_language"] == "terraform":
             logging.info("Terraform Plugin chosen")
             metadata_root_folder["iac"].append("terraform")
@@ -119,6 +121,8 @@ def create_intermediate_representation(model_path, is_multiecore_metamodel, meta
                                                           metamodel_directory=metamodel_directory)
     # intermediate_representation = reorganize_info(intermediate_representation)
     logging.info(f"Successfully created intermediate representation {intermediate_representation}")
+    logging.info("Calling ICG PiacereInternalToolsIntegrator to add info for PIACERE internal tools")
+    intermediate_representation = PiacereInternalToolsIntegrator.add_internal_tool_information(intermediate_representation)
     intermediate_representation_path = "input_file_generated/ir.json"
     save_file(intermediate_representation, intermediate_representation_path)
     logging.info(f"Saved intermediate representation at {intermediate_representation_path}")
@@ -159,6 +163,7 @@ def create_iac_from_doml(model, is_multiecore_metamodel, metamodel_directory):
     intermediate_representation = create_intermediate_representation(model_path, is_multiecore_metamodel,
                                                                      metamodel_directory)
     template_generated_folder = create_iac_from_intermediate_representation(intermediate_representation)
+    PiacereInternalToolsIntegrator.add_files_for_piacere_internal_tools(template_generated_folder)
     compress_folder_info = compress_iac_folder(template_generated_folder)
     return compress_folder_info
 
