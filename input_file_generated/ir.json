@@ -51,13 +51,19 @@
         "credentials": [
           {
             "infra_element_name": "ssh_key",
-            "user": "ubuntu"
+            "user": "user1"
           }
         ],
         "networks": [
           {
             "addressRange": "16.0.0.0/24",
             "infra_element_name": "net1",
+            "infra_sgs": [
+              "icmp",
+              "http",
+              "https",
+              "ssh"
+            ],
             "name": "concrete_net",
             "protocol": "tcp/ip"
           }
@@ -76,12 +82,35 @@
             "infra_element_name": "vm1",
             "name": "concrete_vm",
             "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
-            "vm_flavor": "small",
+            "vm_flavor": "ubuntu",
             "vm_name": "nginx-host"
           }
         ]
       },
       "programming_language": "terraform"
+    },
+    {
+      "data": {
+        "piacere_monitoring": {
+          "node": {
+            "credentials": "ssh_key",
+            "group": "sg",
+            "i1": {
+              "associated": "sg",
+              "belongsTo": "net1",
+              "endPoint": "16.0.0.1",
+              "name": "i1"
+            },
+            "infra_element_name": "vm1",
+            "name": "concrete_vm",
+            "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
+            "vm_flavor": "ubuntu",
+            "vm_name": "nginx-host"
+          }
+        }
+      },
+      "programming_language": "ansible",
+      "step_name": "piacere_monitoring"
     },
     {
       "data": {
@@ -99,7 +128,7 @@
             "infra_element_name": "vm1",
             "name": "concrete_vm",
             "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
-            "vm_flavor": "small",
+            "vm_flavor": "ubuntu",
             "vm_name": "nginx-host"
           },
           "source_code": "/usr/share/nginx/html/index.html"
@@ -107,29 +136,6 @@
       },
       "programming_language": "ansible",
       "step_name": "nginx"
-    },
-    {
-      "data": {
-        "piacere_monitoring": {
-          "node": {
-            "credentials": "ssh_key",
-            "group": "sg",
-            "i1": {
-              "associated": "sg",
-              "belongsTo": "net1",
-              "endPoint": "16.0.0.1",
-              "name": "i1"
-            },
-            "infra_element_name": "vm1",
-            "name": "concrete_vm",
-            "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
-            "vm_flavor": "small",
-            "vm_name": "nginx-host"
-          }
-        }
-      },
-      "programming_language": "ansible",
-      "step_name": "piacere_monitoring"
     }
   ]
 }

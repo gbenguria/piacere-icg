@@ -35,7 +35,8 @@ resource "openstack_networking_port_v2" "{{ infra_element_name }}" {
   network_id     = openstack_networking_network_v2.{{ infra_element_name }}.id
   admin_state_up = true
   security_group_ids = [
-    data.openstack_networking_secgroup_v2.default.id        #default flavour id
+  {% for sg in infra_sgs %}openstack_compute_secgroup_v2.{{sg}}.id,
+  {% endfor %}
   ]
   fixed_ip {
     subnet_id = openstack_networking_subnet_v2.{{ infra_element_name ~ "_subnet" }}.id

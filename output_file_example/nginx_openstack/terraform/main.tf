@@ -68,7 +68,7 @@ resource "openstack_networking_port_v2" "nginx" {
   admin_state_up = true
   security_group_ids = [
     openstack_compute_secgroup_v2.ssh.id,
-    openstack_compute_secgroup_v2.http.id
+    openstack_compute_secgroup_v2.http.id,
   ]
   fixed_ip {
     subnet_id = openstack_networking_subnet_v2.nginx.id

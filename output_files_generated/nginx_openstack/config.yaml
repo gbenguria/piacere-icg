@@ -1,6 +1,6 @@
 ---
 iac:
 - terraform
-- nginx
 - piacere_monitoring
+- nginx
 ...

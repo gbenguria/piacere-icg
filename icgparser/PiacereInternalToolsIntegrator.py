@@ -24,7 +24,8 @@ def extract_info_for_monitoring_agents(intermediate_representation):
 def add_internal_tool_information(intermediate_representation):
     monitoring_step = extract_info_for_monitoring_agents(intermediate_representation)
     intermediate_representation = IntermediateRepresentationUtility.add_step(monitoring_step,
-                                                                             intermediate_representation)
+                                                                             intermediate_representation,
+                                                                             1)
     return intermediate_representation
 
 

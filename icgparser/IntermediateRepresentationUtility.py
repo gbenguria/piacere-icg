@@ -13,6 +13,8 @@ class IntermediateRepresentationResources(NoValue):
     DATA = 'data'
     LANGUAGE = "programming_language"
     VIRTUAL_MACHINES = 'vms'
+    NETWORKS = "networks"
+    SECURITY_GROUPS = "computingGroup"
 
 
 def find_objects(object_name, intermediate_representation):
@@ -21,12 +23,26 @@ def find_objects(object_name, intermediate_representation):
     for step in steps:
         data = step[IntermediateRepresentationResources.DATA.value]
         if object_name.value in data.keys():
-            return data[IntermediateRepresentationResources.VIRTUAL_MACHINES.value]
+            return data[object_name.value]
     return []
 
 
-def add_step(step, intermediate_representation):
+def add_step(step, intermediate_representation, step_number):
     logging.info("Adding step into intermediate representation")
     steps = intermediate_representation[IntermediateRepresentationResources.STEPS.value]
-    steps.append(step)
+    if step_number:
+        steps.insert(step_number, step)
+    else:
+        steps.append(step)
+    return intermediate_representation
+
+
+def force_add_resources_name(to_resource, from_resource, intermediate_representation):
+    sec_groups = find_objects(from_resource, intermediate_representation)
+    sec_groups_names = []
+    for key, sg in sec_groups[0].items():
+        if isinstance(sg, dict) and sg["name"]:
+            sec_groups_names.append(sg["name"])
+    for resource in find_objects(to_resource, intermediate_representation):
+        resource["infra_sgs"] = sec_groups_names
     return intermediate_representation

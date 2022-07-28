@@ -21,7 +21,7 @@ import time
 import uuid
 import yaml
 
-from icgparser import ModelParser, PiacereInternalToolsIntegrator
+from icgparser import ModelParser, PiacereInternalToolsIntegrator, IntermediateRepresentationUtility
 from icgparser.IntermediateRepresentationUtility import IntermediateRepresentationResources
 from plugin import AnsiblePlugin, TerraformPlugin
 from utility.FileParsingUtility import replace_none_with_empty_str
@@ -123,6 +123,11 @@ def create_intermediate_representation(model_path, is_multiecore_metamodel, meta
     logging.info(f"Successfully created intermediate representation {intermediate_representation}")
     logging.info("Calling ICG PiacereInternalToolsIntegrator to add info for PIACERE internal tools")
     intermediate_representation = PiacereInternalToolsIntegrator.add_internal_tool_information(intermediate_representation)
+    logging.warning("Force adding sg information in network") ## TODO fix from doml
+    intermediate_representation = IntermediateRepresentationUtility.force_add_resources_name(
+        IntermediateRepresentationResources.NETWORKS,
+        IntermediateRepresentationResources.SECURITY_GROUPS,
+        intermediate_representation)
     intermediate_representation_path = "input_file_generated/ir.json"
     save_file(intermediate_representation, intermediate_representation_path)
     logging.info(f"Saved intermediate representation at {intermediate_representation_path}")
@@ -184,5 +189,6 @@ def create_iac_from_doml_path(model_path, is_multiecore_metamodel, metamodel_dir
     intermediate_representation = create_intermediate_representation(model_path, is_multiecore_metamodel,
                                                                      metamodel_directory)
     template_generated_folder = create_iac_from_intermediate_representation(intermediate_representation)
+    PiacereInternalToolsIntegrator.add_files_for_piacere_internal_tools(template_generated_folder)
     compress_folder_info = compress_iac_folder(template_generated_folder)
     return compress_folder_info

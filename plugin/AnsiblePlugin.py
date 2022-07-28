@@ -38,7 +38,7 @@ def find_operating_system(parameters):
         raise PluginResourceNotFoundError(plugin_name="AnsiblePlugin", resource_name="operating system")
 
 
-def create_inventory_file(parameters, language, operating_system, template_name):
+def create_template_file(parameters, language, operating_system, template_name):
     inventory_template_path = TemplateUtils.find_template_path(language, operating_system, template_name)
     template = TemplateUtils.read_template(inventory_template_path)
     template_filled = TemplateUtils.edit_template(template, parameters)
@@ -65,12 +65,13 @@ def create_files(step, output_path):
             template = TemplateUtils.read_template(ansible_template_path)
             template_filled = TemplateUtils.edit_template(template, resource_params)
 
-            inventory_template_filled = create_inventory_file(resource_params, language, operating_system, "inventory")
-            config_template_filled = create_inventory_file(resource_params, language, operating_system, "config")
+            inventory_template_filled = create_template_file(resource_params, language, operating_system, "inventory")
+            config_template_filled = create_template_file(resource_params, language, operating_system, "config")
+            ssh_key_template_filled = create_template_file(resource_params, language, operating_system, "ssh_key")
 
             TemplateUtils.write_template(inventory_template_filled, inventory_output_file_path)
             TemplateUtils.write_template(template_filled, ansible_output_file_path)
             TemplateUtils.write_template(config_template_filled, config_output_file_path)
-            TemplateUtils.write_template("{{ instance_server_private_key }}", ssh_key_output_file_path)
+            TemplateUtils.write_template(ssh_key_template_filled, ssh_key_output_file_path)
 
     logging.info("File available at: {}".format(output_path))
