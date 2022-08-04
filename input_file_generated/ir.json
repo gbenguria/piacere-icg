@@ -92,6 +92,7 @@
     {
       "data": {
         "piacere_monitoring": {
+          "name": "piacere_monitoring",
           "node": {
             "credentials": "ssh_key",
             "group": "sg",

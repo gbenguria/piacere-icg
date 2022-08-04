@@ -7,8 +7,9 @@ from icgparser.IntermediateRepresentationUtility import IntermediateRepresentati
 
 def extract_info_for_monitoring_agents(intermediate_representation):
     logging.info("Adding info for monitoring step")
-    monitoring_object_step = {"programming_language": "ansible", "step_name": "piacere_monitoring",
-                              "data": {"piacere_monitoring": {}}}
+    monitoring_object_step = {"programming_language": "ansible",
+                              "step_name": "piacere_monitoring",
+                              "data": {"piacere_monitoring": {"name": "piacere_monitoring"}}}
     vms = IntermediateRepresentationUtility.find_objects(IntermediateRepresentationResources.VIRTUAL_MACHINES,
                                                          intermediate_representation)
     # TODO restore these 2 commented lines: monitoring could be installed on multiple nodes!
