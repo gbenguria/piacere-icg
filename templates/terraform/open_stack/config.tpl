@@ -25,6 +25,6 @@ output:
 {% for vm in vms %}
   - instance_server_public_key_{{ vm.credentials }}
   - instance_server_private_key_{{ vm.credentials }}
-  - instance_ip_{{ vm.vm_name }}
+  - instance_ip_{{ vm.infra_element_name }}
 {% endfor %}
 ...

@@ -15,7 +15,7 @@
 #}
 
 [{{ "servers_for_" ~ name }}]
-{% raw %}{{ instance_ip_{% endraw %}{{ node.vm_name }} {% raw %}}}{% endraw %}
+{% raw %}{{ instance_ip_{% endraw %}{{ node.infra_element_name }} {% raw %}}}{% endraw %}
 
 [{{ "servers_for_" ~ name }}:vars]
 ansible_connection=ssh

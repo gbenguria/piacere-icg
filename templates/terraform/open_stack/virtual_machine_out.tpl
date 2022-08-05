@@ -22,6 +22,6 @@ output "instance_server_private_key_{{ credentials }}" {
   value = openstack_compute_keypair_v2.{{ credentials }}.private_key
 }
 
-output "instance_ip_{{ vm_name }}" {
+output "instance_ip_{{ infra_element_name }}" {
   value = openstack_compute_floatingip_associate_v2.{{ infra_element_name ~ "_floating_ip_association" }}.floating_ip
 }
