@@ -50,7 +50,7 @@
         ],
         "credentials": [
           {
-            "infra_element_name": "ssh_key",
+            "infra_element_name": "user1",
             "user": "user1"
           }
         ],
@@ -71,7 +71,7 @@
         "provider": "openstack",
         "vms": [
           {
-            "credentials": "ssh_key",
+            "credentials": "user1",
             "group": "sg",
             "i1": {
               "associated": "sg",
@@ -82,7 +82,7 @@
             "infra_element_name": "vm1",
             "name": "concrete_vm",
             "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
-            "vm_flavor": "ubuntu",
+            "vm_flavor": "small",
             "vm_name": "nginx-host"
           }
         ]
@@ -94,7 +94,7 @@
         "piacere_monitoring": {
           "name": "piacere_monitoring",
           "node": {
-            "credentials": "ssh_key",
+            "credentials": "user1",
             "group": "sg",
             "i1": {
               "associated": "sg",
@@ -105,7 +105,7 @@
             "infra_element_name": "vm1",
             "name": "concrete_vm",
             "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
-            "vm_flavor": "ubuntu",
+            "vm_flavor": "small",
             "vm_name": "nginx-host"
           }
         }
@@ -118,7 +118,7 @@
         "nginx": {
           "name": "nginx",
           "node": {
-            "credentials": "ssh_key",
+            "credentials": "user1",
             "group": "sg",
             "i1": {
               "associated": "sg",
@@ -129,7 +129,7 @@
             "infra_element_name": "vm1",
             "name": "concrete_vm",
             "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
-            "vm_flavor": "ubuntu",
+            "vm_flavor": "small",
             "vm_name": "nginx-host"
           },
           "source_code": "/usr/share/nginx/html/index.html"

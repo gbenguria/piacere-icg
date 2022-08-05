@@ -25,8 +25,8 @@ data "openstack_networking_network_v2" "external" {
 resource "openstack_compute_instance_v2" "vm1" {
   name        = "nginx-host"
   image_name  = "Ubuntu-Focal-20.04-Daily-2022-04-19"
-  flavor_name = "ubuntu"
-  key_pair    = openstack_compute_keypair_v2.ssh_key.name
+  flavor_name = "small"
+  key_pair    = openstack_compute_keypair_v2.user1.name
   network {
     port = openstack_networking_port_v2.net1.id
   }
@@ -141,7 +141,7 @@ resource "openstack_compute_secgroup_v2" "ssh" {
 
 
 # Create ssh keys
-resource "openstack_compute_keypair_v2" "ssh_key" {
+resource "openstack_compute_keypair_v2" "user1" {
   name       = "user1"
   # public_key = "user1"
 }
