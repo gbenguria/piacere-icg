@@ -57,7 +57,7 @@ def create_files(step, output_path):
             # for resource_params in parameters[resource_name]:
             resource_params = parameters[resource_name]
 
-            ansible_output_file_path = output_path + "/".join([step_name, resource_name]) + ".yaml"
+            ansible_output_file_path = output_path + "/".join([step_name, "main"]) + ".yaml"
             inventory_output_file_path = output_path + "/".join([step_name, "inventory"]) + ".j2"
             config_output_file_path = output_path + "/".join([step_name, "config"]) + ".yaml"
             ssh_key_output_file_path = output_path + "/".join([step_name, "ssh_key.j2"])

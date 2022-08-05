@@ -91,6 +91,14 @@ resource "openstack_networking_router_interface_v2" "net1_router_interface" {
 
 
 
+# Create ssh keys
+resource "openstack_compute_keypair_v2" "ssh_key" {
+  name       = "user1"
+  # public_key = "user1"
+}
+
+
+
 # CREATING SECURITY_GROUP
   
 resource "openstack_compute_secgroup_v2" "icmp" {
@@ -137,12 +145,4 @@ resource "openstack_compute_secgroup_v2" "ssh" {
   }
 }
 
-
-
-
-# Create ssh keys
-resource "openstack_compute_keypair_v2" "ssh_key" {
-  name       = "user1"
-  # public_key = "user1"
-}
 
