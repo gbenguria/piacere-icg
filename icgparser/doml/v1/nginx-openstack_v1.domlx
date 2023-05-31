@@ -1,52 +1,51 @@
 <?xml version="1.0" encoding="ASCII"?>
-<commons:DOMLModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:app="http://www.piacere-project.eu/doml/application" xmlns:commons="http://www.piacere-project.eu/doml/commons" xmlns:infra="http://www.piacere-project.eu/doml/infrastructure" xmlns:optimization="http://www.piacere-project.eu/doml/optimization" name="nginx_openstack" activeConfiguration="//@configurations.0" activeInfrastructure="//@concretizations.0">
-  <application name="app">
-    <components xsi:type="app:SoftwareComponent" name="nginx">
-      <annotations xsi:type="commons:SProperty" key="source_code" value="/usr/share/nginx/html/index.html"/>
-    </components>
-  </application>
+<commons:DOMLModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commons="http://www.piacere-project.eu/doml/commons" xmlns:infra="http://www.piacere-project.eu/doml/infrastructure" name="nio3_test_exec_env" activeInfrastructure="//@concretizations.0">
   <infrastructure name="infra">
-    <nodes xsi:type="infra:AutoScalingGroup" name="ag" deploymentNetwork="//@infrastructure/@networks.0">
-      <machineDefinition name="vm1" os="Ubuntu-Focal-20.04-Daily-2022-04-19" credentials="//@infrastructure/@credentials.0" group="//@infrastructure/@groups.0">
-        <ifaces name="i1" endPoint="16.0.0.1" belongsTo="//@infrastructure/@networks.0" associated="//@infrastructure/@groups.0"/>
-      </machineDefinition>
+    <nodes xsi:type="infra:VirtualMachine" name="vm1" os="centos7_64Guest" memory_mb="1024.0" cpu_count="2" credentials="//@infrastructure/@credentials.0" generatedFrom="//@infrastructure/@generators.0">
+      <ifaces name="i1" endPoint="10.83.18.92" belongsTo="//@infrastructure/@networks.0"/>
     </nodes>
-    <networks name="net1" protocol="tcp/ip" addressRange="16.0.0.0/24" connectedIfaces="//@infrastructure/@nodes.0/@machineDefinition/@ifaces.0"/>
-    <credentials xsi:type="infra:KeyPair" name="user1" user="user1"/>
-    <groups xsi:type="infra:SecurityGroup" name="sg" groupedNodes="//@infrastructure/@nodes.0/@machineDefinition" ifaces="//@infrastructure/@nodes.0/@machineDefinition/@ifaces.0">
-      <rules name="icmp" protocol="icmp" fromPort="-1" toPort="-1">
-        <cidr>0.0.0.0/0</cidr>
-      </rules>
-      <rules name="http" kind="INGRESS" protocol="tcp" fromPort="80" toPort="80">
-        <cidr>0.0.0.0/0</cidr>
-      </rules>
-      <rules name="https" kind="INGRESS" protocol="tcp" fromPort="443" toPort="443">
-        <cidr>0.0.0.0/0</cidr>
-      </rules>
-      <rules name="ssh" kind="INGRESS" protocol="tcp" fromPort="22" toPort="22">
-        <cidr>0.0.0.0/0</cidr>
-      </rules>
-    </groups>
+    <nodes xsi:type="infra:VirtualMachine" name="vm2" os="centos7_64Guest" memory_mb="1024.0" cpu_count="2" credentials="//@infrastructure/@credentials.0" generatedFrom="//@infrastructure/@generators.0">
+      <ifaces name="i1" endPoint="10.83.18.88" belongsTo="//@infrastructure/@networks.0"/>
+    </nodes>
+    <generators xsi:type="infra:VMImage" name="img" generatedVMs="//@infrastructure/@nodes.0 //@infrastructure/@nodes.1"/>
+    <storages name="disk0" label="disk0" size_gb="100"/>
+    <credentials xsi:type="commons:KeyPair" name="ssh_key" algorithm="RSA" bits="4096"/>
+    <networks name="net1" protocol="tcp/ip" addressRange="/24" connectedIfaces="//@infrastructure/@nodes.0/@ifaces.0 //@infrastructure/@nodes.1/@ifaces.0">
+      <gateways name="g1" address="10.83.18.65"/>
+    </networks>
   </infrastructure>
   <concretizations name="con_infra">
-    <providers name="openstack">
-      <vms name="concrete_vm" maps="//@infrastructure/@nodes.0/@machineDefinition">
-        <annotations xsi:type="commons:SProperty" key="vm_name" value="nginx-host"/>
-        <annotations xsi:type="commons:SProperty" key="vm_flavor" value="small"/>
+    <providers name="vsphere">
+      <annotations xsi:type="commons:SProperty" key="username" value="vc_username"/>
+      <annotations xsi:type="commons:SProperty" key="password" value="vc_password"/>
+      <annotations xsi:type="commons:SProperty" key="vsphere_server" value="psvc10000002.cd.sigov.si"/>
+      <annotations xsi:type="commons:BProperty" key="allow_unverified_ssl" value="true"/>
+      <resources name="dc" preexisting="true" type="vsphere_datacenter" gname="PIACDC"/>
+      <resources name="cl" preexisting="true" refs="//@concretizations.0/@providers.0/@resources.0" type="vsphere_compute_cluster" gname="PIACC"/>
+      <resources name="pool" preexisting="true" refs="//@concretizations.0/@providers.0/@resources.0" type="vsphere_resource_pool" gname="Piacere"/>
+      <vms name="con_vm1" refs="//@concretizations.0/@providers.0/@resources.2 //@concretizations.0/@providers.0/@storages.0 //@concretizations.0/@providers.0/@vmImages.0" maps="//@infrastructure/@nodes.0">
+        <annotations xsi:type="commons:SProperty" key="host_name" value="simpa-test00-piacere"/>
+        <annotations xsi:type="commons:SProperty" key="domain" value="tri.lan"/>
+        <annotations xsi:type="commons:SProperty" key="guest_id" value="centos7_64Guest"/>
+        <annotations xsi:type="commons:SProperty" key="disk" value="disk0"/>
+        <annotations xsi:type="commons:IProperty" key="disk_size" value="100"/>
       </vms>
-      <networks name="concrete_net" maps="//@infrastructure/@networks.0">
-        <annotations xsi:type="commons:SProperty" key="name" value="ostack2"/>
+      <vms name="con_vm2" refs="//@concretizations.0/@providers.0/@resources.2 //@concretizations.0/@providers.0/@storages.0 //@concretizations.0/@providers.0/@vmImages.0" maps="//@infrastructure/@nodes.1">
+        <annotations xsi:type="commons:SProperty" key="host_name" value="simpa-test00-piacere"/>
+        <annotations xsi:type="commons:SProperty" key="domain" value="tri.lan"/>
+        <annotations xsi:type="commons:SProperty" key="guest_id" value="centos7_64Guest"/>
+        <annotations xsi:type="commons:SProperty" key="disk" value="disk1"/>
+        <annotations xsi:type="commons:IProperty" key="disk_size" value="100"/>
+      </vms>
+      <vmImages name="template" preexisting="true" refs="//@concretizations.0/@providers.0/@resources.0" maps="//@infrastructure/@generators.0">
+        <annotations xsi:type="commons:SProperty" key="vsphere_virtual_machine_name" value="c7tmp"/>
+      </vmImages>
+      <networks name="network" preexisting="true" refs="//@concretizations.0/@providers.0/@resources.0" maps="//@infrastructure/@networks.0">
+        <annotations xsi:type="commons:SProperty" key="vsphere_network_name" value="Nested-ESXi"/>
       </networks>
+      <storages name="datastore" preexisting="true" refs="//@concretizations.0/@providers.0/@resources.0" maps="//@infrastructure/@storages.0">
+        <annotations xsi:type="commons:SProperty" key="vsphere_datastore_name" value="NFSShare01"/>
+      </storages>
     </providers>
   </concretizations>
-  <optimization name="opt">
-    <objectives xsi:type="optimization:MeasurableObjective" kind="min" property="cost"/>
-    <nonfunctionalRequirements xsi:type="commons:RangedRequirement" name="req1" description="Cost &lt;= 200" property="cost" max="200.0"/>
-    <nonfunctionalRequirements xsi:type="commons:EnumeratedRequirement" name="req2" description="Provider" property="provider">
-      <values>OPEN</values>
-    </nonfunctionalRequirements>
-  </optimization>
-  <configurations name="config">
-    <deployments component="//@application/@components.0" node="//@infrastructure/@nodes.0/@machineDefinition"/>
-  </configurations>
 </commons:DOMLModel>

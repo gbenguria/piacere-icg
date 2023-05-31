@@ -1,0 +1,7 @@
+---
+iac:
+- terraform
+- piacere_monitoring
+- git
+- portainer
+...

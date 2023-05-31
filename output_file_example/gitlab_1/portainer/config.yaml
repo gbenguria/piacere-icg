@@ -1,0 +1,8 @@
+---
+input:
+  - instance_ip_vm1
+  - instance_server_private_key_user1
+  - ansible/provision.yml
+output: []
+engine: ansible
+...

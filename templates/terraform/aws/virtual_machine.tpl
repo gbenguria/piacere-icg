@@ -14,13 +14,12 @@
 #-------------------------------------------------------------------------
 #}
 
-resource "aws_instance" "{{name}}" {
+resource "aws_instance" "{{infra_element_name}}" {
   ami = "{{ os }}"
-  instance_type = "{{ instance_type }}"
-  key_name = "{{ssh_key_name}}"
-
-  network_interface {
-    network_interface_id = aws_network_interface.{{i1.belongsTo ~ "_network_interface"}}.id
-    device_index = 0
+  instance_type = "{% if 'vm_flavor' in context().keys() %}{{ vm_flavor }}{% else %}{{ instance_type }}{% endif %}"
+  key_name = "{{credentials}}"
+  {% if 'group' in context().keys() %}vpc_security_group_ids = [aws_security_group.{{group ~ "_security_group"}}.id]{% endif %}
+  tags = {
+    "Name" = "{{name}}"
   }
 }

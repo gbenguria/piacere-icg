@@ -1,6 +1,7 @@
 ---
 iac:
 - terraform
-- piacere_monitoring
+- performance_monitoring
+- security_monitoring
 - nginx
 ...

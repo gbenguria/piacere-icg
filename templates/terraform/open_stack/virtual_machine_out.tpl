@@ -14,14 +14,14 @@
 #-------------------------------------------------------------------------
 #}
 
-output "instance_server_public_key_{{ credentials }}" {
+output "instance_server_public_key_{{ credentials }}_{{ infra_element_name }}" {
   value = openstack_compute_keypair_v2.{{ credentials }}.public_key
 }
 
-output "instance_server_private_key_{{ credentials }}" {
+output "instance_server_private_key_{{ credentials }}_{{ infra_element_name }}" {
   value = openstack_compute_keypair_v2.{{ credentials }}.private_key
 }
 
-output "instance_ip_{{ infra_element_name }}" {
+output "instance_server_public_ip_{{ infra_element_name }}" {
   value = openstack_compute_floatingip_associate_v2.{{ infra_element_name ~ "_floating_ip_association" }}.floating_ip
 }

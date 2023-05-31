@@ -16,12 +16,12 @@
 
 resource "google_compute_instance" "{{ default }}" {
   name         = "{{ name }}"
-  machine_type = "{{ machine_type }}"
-  zone         = "{{ zone }}"
+  machine_type = "{% if 'vm_flavor' in context().keys() %}{{ vm_flavor }}{% else %}{{ instance_type }}{% endif %}"
+  zone         = "{% if 'vm_Zone' in context().keys() %}{{ vm_Zone }}{% else %}{{ zone }}{% endif %}"
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = "{{ os }}" #"debian-cloud/debian-9"
     }
   }
 

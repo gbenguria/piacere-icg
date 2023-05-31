@@ -6,15 +6,15 @@ Requirements
 -------------
 - Docker
 
-Installation
+Installation 
 -------------
 
 To have a functional ICG application the following steps can be used.
 
-- Download the full content of this repository
+- Download the full content of this repository, there are git submodules, so add them using this command: `git submodule update --init --recursive`
 - Build the docker image launching the following command: `docker build -t icg:1.0.0 .` 
 - Run the container: `docker run --name icg -d -p 5000:5000 icg:1.0.0`
-
+ 
 Usage
 ------------
 

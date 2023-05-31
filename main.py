@@ -45,8 +45,8 @@ logging.getLogger().setLevel(logging.INFO)
 # Parse parameters
 # -------------------------------------------------------------------------
 skip_next = False
-doml_directory = "./icgparser/doml/v1"
-model_filename = "icgparser/doml/v1/nginx-openstack_v1.domlx"
+doml_directory = "./icgparser/doml/v2"
+model_filename = "icgparser/doml/v2/posidonia_openstack.domlx"
 load_split_model = False
 output_file_name = "iac_files.tar.gz"
 

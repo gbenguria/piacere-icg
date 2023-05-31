@@ -9,8 +9,8 @@ input:
   - OS_PROJECT_NAME
 output:
 
-  - instance_server_public_key_user1
-  - instance_server_private_key_user1
-  - instance_ip_vm1
+  - instance_server_public_key_ubuntu_nginx_vm
+  - instance_server_private_key_ubuntu_nginx_vm
+  - instance_server_public_ip_nginx_vm
 
 ...

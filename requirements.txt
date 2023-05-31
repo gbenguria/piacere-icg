@@ -3,3 +3,5 @@ PyYAML==6.0
 fastapi~=0.74.1
 uvicorn==0.17.5
 pyecore~=0.12.2
+aiofiles~=23.1.0
+python-multipart~=0.0.6

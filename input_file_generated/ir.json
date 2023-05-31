@@ -1,89 +1,186 @@
 {
-  "output_path": "output_files_generated/nginx_openstack/",
+  "output_path": "output_files_generated/nio3_test_exec_env/",
   "steps": [
     {
       "data": {
-        "computingGroup": [
-          {
-            "http": {
-              "cidr": [
-                "0.0.0.0/0"
-              ],
-              "fromPort": 80,
-              "kind": "INGRESS",
-              "name": "http",
-              "protocol": "tcp",
-              "toPort": 80
-            },
-            "https": {
-              "cidr": [
-                "0.0.0.0/0"
-              ],
-              "fromPort": 443,
-              "kind": "INGRESS",
-              "name": "https",
-              "protocol": "tcp",
-              "toPort": 443
-            },
-            "icmp": {
-              "cidr": [
-                "0.0.0.0/0"
-              ],
-              "fromPort": -1,
-              "kind": "EGRESS",
-              "name": "icmp",
-              "protocol": "icmp",
-              "toPort": -1
-            },
-            "infra_element_name": "sg",
-            "ssh": {
-              "cidr": [
-                "0.0.0.0/0"
-              ],
-              "fromPort": 22,
-              "kind": "INGRESS",
-              "name": "ssh",
-              "protocol": "tcp",
-              "toPort": 22
-            }
-          }
-        ],
         "credentials": [
           {
-            "infra_element_name": "user1",
-            "user": "user1"
+            "algorithm": "RSA",
+            "bits": 4096,
+            "infra_element_name": "ssh_key"
           }
         ],
         "networks": [
           {
-            "addressRange": "16.0.0.0/24",
+            "InternetGateway_g1": {
+              "address": "10.83.18.65",
+              "name": "g1"
+            },
+            "addressRange": "/24",
+            "dc": {
+              "gname": "PIACDC",
+              "name": "dc",
+              "preexisting": true,
+              "type": "vsphere_datacenter"
+            },
             "infra_element_name": "net1",
-            "infra_sgs": [
-              "icmp",
-              "http",
-              "https",
-              "ssh"
-            ],
-            "name": "concrete_net",
-            "protocol": "tcp/ip"
+            "maps": "net1",
+            "name": "network",
+            "preexisting": true,
+            "protocol": "tcp/ip",
+            "vsphere_network_name": "Nested-ESXi"
           }
         ],
-        "provider": "openstack",
+        "provider_info": [
+          {
+            "allow_unverified_ssl": true,
+            "password": "vc_password",
+            "provider_name": "vsphere",
+            "username": "vc_username",
+            "vsphere_server": "psvc10000002.cd.sigov.si"
+          }
+        ],
+        "resources": [
+          {
+            "gname": "PIACDC",
+            "name": "dc",
+            "preexisting": true,
+            "type": "vsphere_datacenter"
+          },
+          {
+            "dc": {
+              "gname": "PIACDC",
+              "name": "dc",
+              "preexisting": true,
+              "type": "vsphere_datacenter"
+            },
+            "gname": "PIACC",
+            "name": "cl",
+            "preexisting": true,
+            "type": "vsphere_compute_cluster"
+          },
+          {
+            "dc": {
+              "gname": "PIACDC",
+              "name": "dc",
+              "preexisting": true,
+              "type": "vsphere_datacenter"
+            },
+            "gname": "Piacere",
+            "name": "pool",
+            "preexisting": true,
+            "type": "vsphere_resource_pool"
+          }
+        ],
+        "storages": [
+          {
+            "dc": {
+              "gname": "PIACDC",
+              "name": "dc",
+              "preexisting": true,
+              "type": "vsphere_datacenter"
+            },
+            "infra_element_name": "disk0",
+            "label": "disk0",
+            "maps": "disk0",
+            "name": "datastore",
+            "preexisting": true,
+            "size_gb": 100,
+            "vsphere_datastore_name": "NFSShare01"
+          }
+        ],
+        "vmImages": [
+          {
+            "dc": {
+              "gname": "PIACDC",
+              "name": "dc",
+              "preexisting": true,
+              "type": "vsphere_datacenter"
+            },
+            "infra_element_name": "img",
+            "kind": "SCRIPT",
+            "maps": "img",
+            "name": "template",
+            "preexisting": true,
+            "vsphere_virtual_machine_name": "c7tmp"
+          }
+        ],
         "vms": [
           {
-            "credentials": "user1",
-            "group": "sg",
-            "i1": {
-              "associated": "sg",
+            "NetworkInterface_i1": {
               "belongsTo": "net1",
-              "endPoint": "16.0.0.1",
+              "endPoint": "10.83.18.92",
               "name": "i1"
             },
+            "cpu_count": 2,
+            "credentials": "ssh_key",
+            "datastore": {
+              "maps": "disk0",
+              "name": "datastore",
+              "preexisting": true
+            },
+            "disabledMonitorings": [],
+            "disk": "disk0",
+            "disk_size": 100,
+            "domain": "tri.lan",
+            "generatedFrom": "img",
+            "guest_id": "centos7_64Guest",
+            "host_name": "simpa-test00-piacere",
             "infra_element_name": "vm1",
-            "name": "concrete_vm",
-            "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
-            "vm_flavor": "small",
-            "vm_name": "nginx-host"
+            "maps": "vm1",
+            "memory_mb": 1024.0,
+            "name": "con_vm1",
+            "os": "centos7_64Guest",
+            "pool": {
+              "gname": "Piacere",
+              "name": "pool",
+              "preexisting": true,
+              "type": "vsphere_resource_pool"
+            },
+            "preexisting": false,
+            "template": {
+              "maps": "img",
+              "name": "template",
+              "preexisting": true
+            }
+          },
+          {
+            "NetworkInterface_i1": {
+              "belongsTo": "net1",
+              "endPoint": "10.83.18.88",
+              "name": "i1"
+            },
+            "cpu_count": 2,
+            "credentials": "ssh_key",
+            "datastore": {
+              "maps": "disk0",
+              "name": "datastore",
+              "preexisting": true
+            },
+            "disabledMonitorings": [],
+            "disk": "disk1",
+            "disk_size": 100,
+            "domain": "tri.lan",
+            "generatedFrom": "img",
+            "guest_id": "centos7_64Guest",
+            "host_name": "simpa-test00-piacere",
+            "infra_element_name": "vm2",
+            "maps": "vm2",
+            "memory_mb": 1024.0,
+            "name": "con_vm2",
+            "os": "centos7_64Guest",
+            "pool": {
+              "gname": "Piacere",
+              "name": "pool",
+              "preexisting": true,
+              "type": "vsphere_resource_pool"
+            },
+            "preexisting": false,
+            "template": {
+              "maps": "img",
+              "name": "template",
+              "preexisting": true
+            }
           }
         ]
       },
@@ -91,52 +188,183 @@
     },
     {
       "data": {
-        "piacere_monitoring": {
-          "name": "piacere_monitoring",
-          "node": {
-            "credentials": "user1",
-            "group": "sg",
-            "i1": {
-              "associated": "sg",
-              "belongsTo": "net1",
-              "endPoint": "16.0.0.1",
-              "name": "i1"
+        "performance_monitoring": {
+          "name": "performance_monitoring",
+          "nodes": [
+            {
+              "NetworkInterface_i1": {
+                "belongsTo": "net1",
+                "endPoint": "10.83.18.92",
+                "name": "i1"
+              },
+              "cpu_count": 2,
+              "credentials": "ssh_key",
+              "datastore": {
+                "maps": "disk0",
+                "name": "datastore",
+                "preexisting": true
+              },
+              "disabledMonitorings": [],
+              "disk": "disk0",
+              "disk_size": 100,
+              "domain": "tri.lan",
+              "generatedFrom": "img",
+              "guest_id": "centos7_64Guest",
+              "host_name": "simpa-test00-piacere",
+              "infra_element_name": "vm1",
+              "maps": "vm1",
+              "memory_mb": 1024.0,
+              "name": "con_vm1",
+              "os": "centos7_64Guest",
+              "pool": {
+                "gname": "Piacere",
+                "name": "pool",
+                "preexisting": true,
+                "type": "vsphere_resource_pool"
+              },
+              "preexisting": false,
+              "template": {
+                "maps": "img",
+                "name": "template",
+                "preexisting": true
+              }
             },
-            "infra_element_name": "vm1",
-            "name": "concrete_vm",
-            "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
-            "vm_flavor": "small",
-            "vm_name": "nginx-host"
-          }
+            {
+              "NetworkInterface_i1": {
+                "belongsTo": "net1",
+                "endPoint": "10.83.18.88",
+                "name": "i1"
+              },
+              "cpu_count": 2,
+              "credentials": "ssh_key",
+              "datastore": {
+                "maps": "disk0",
+                "name": "datastore",
+                "preexisting": true
+              },
+              "disabledMonitorings": [],
+              "disk": "disk1",
+              "disk_size": 100,
+              "domain": "tri.lan",
+              "generatedFrom": "img",
+              "guest_id": "centos7_64Guest",
+              "host_name": "simpa-test00-piacere",
+              "infra_element_name": "vm2",
+              "maps": "vm2",
+              "memory_mb": 1024.0,
+              "name": "con_vm2",
+              "os": "centos7_64Guest",
+              "pool": {
+                "gname": "Piacere",
+                "name": "pool",
+                "preexisting": true,
+                "type": "vsphere_resource_pool"
+              },
+              "preexisting": false,
+              "template": {
+                "maps": "img",
+                "name": "template",
+                "preexisting": true
+              }
+            }
+          ]
         }
       },
       "programming_language": "ansible",
-      "step_name": "piacere_monitoring"
+      "step_name": "performance_monitoring"
     },
     {
       "data": {
-        "nginx": {
-          "name": "nginx",
-          "node": {
-            "credentials": "user1",
-            "group": "sg",
-            "i1": {
-              "associated": "sg",
-              "belongsTo": "net1",
-              "endPoint": "16.0.0.1",
-              "name": "i1"
+        "security_monitoring": {
+          "name": "security_monitoring",
+          "nodes": [
+            {
+              "NetworkInterface_i1": {
+                "belongsTo": "net1",
+                "endPoint": "10.83.18.92",
+                "name": "i1"
+              },
+              "cpu_count": 2,
+              "credentials": "ssh_key",
+              "datastore": {
+                "maps": "disk0",
+                "name": "datastore",
+                "preexisting": true
+              },
+              "disabledMonitorings": [],
+              "disk": "disk0",
+              "disk_size": 100,
+              "domain": "tri.lan",
+              "generatedFrom": "img",
+              "guest_id": "centos7_64Guest",
+              "host_name": "simpa-test00-piacere",
+              "infra_element_name": "vm1",
+              "maps": "vm1",
+              "memory_mb": 1024.0,
+              "name": "con_vm1",
+              "os": "centos7_64Guest",
+              "pool": {
+                "gname": "Piacere",
+                "name": "pool",
+                "preexisting": true,
+                "type": "vsphere_resource_pool"
+              },
+              "preexisting": false,
+              "template": {
+                "maps": "img",
+                "name": "template",
+                "preexisting": true
+              }
             },
-            "infra_element_name": "vm1",
-            "name": "concrete_vm",
-            "os": "Ubuntu-Focal-20.04-Daily-2022-04-19",
-            "vm_flavor": "small",
-            "vm_name": "nginx-host"
-          },
-          "source_code": "/usr/share/nginx/html/index.html"
+            {
+              "NetworkInterface_i1": {
+                "belongsTo": "net1",
+                "endPoint": "10.83.18.88",
+                "name": "i1"
+              },
+              "cpu_count": 2,
+              "credentials": "ssh_key",
+              "datastore": {
+                "maps": "disk0",
+                "name": "datastore",
+                "preexisting": true
+              },
+              "disabledMonitorings": [],
+              "disk": "disk1",
+              "disk_size": 100,
+              "domain": "tri.lan",
+              "generatedFrom": "img",
+              "guest_id": "centos7_64Guest",
+              "host_name": "simpa-test00-piacere",
+              "infra_element_name": "vm2",
+              "maps": "vm2",
+              "memory_mb": 1024.0,
+              "name": "con_vm2",
+              "os": "centos7_64Guest",
+              "pool": {
+                "gname": "Piacere",
+                "name": "pool",
+                "preexisting": true,
+                "type": "vsphere_resource_pool"
+              },
+              "preexisting": false,
+              "template": {
+                "maps": "img",
+                "name": "template",
+                "preexisting": true
+              }
+            }
+          ]
         }
       },
       "programming_language": "ansible",
-      "step_name": "nginx"
+      "step_name": "security_monitoring"
+    },
+    {
+      "data": {
+        "containerImages": []
+      },
+      "programming_language": "docker-compose"
     }
   ]
 }

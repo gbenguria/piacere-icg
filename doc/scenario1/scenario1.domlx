@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ASCII"?>
+<commons:DOMLModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commons="http://www.piacere-project.eu/doml/commons" xmlns:infra="http://www.piacere-project.eu/doml/infrastructure" name="scenario1" activeInfrastructure="//@concretizations.0">
+  <infrastructure name="infra">
+    <nodes xsi:type="infra:VirtualMachine" name="vm1" os="CentOS-7-2111" memory_mb="8192.0" cpu_count="2" credentials="//@infrastructure/@credentials.0">
+      <ifaces name="i1" belongsTo="//@infrastructure/@networks.0/@subnets.0" associated="//@infrastructure/@securityGroups.0"/>
+    </nodes>
+    <nodes xsi:type="infra:VirtualMachine" name="vm2" os="CentOS-7-2111" cpu_count="2" credentials="//@infrastructure/@credentials.1">
+      <ifaces name="i1" belongsTo="//@infrastructure/@networks.0/@subnets.1"/>
+    </nodes>
+    <credentials xsi:type="infra:KeyPair" name="VM1SshKey" user="vm1user" keyfile="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 email@example.com"/>
+    <credentials xsi:type="infra:KeyPair" name="VM2SshKey" user="vm2user" keyfile="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 email@example.com"/>
+    <securityGroups name="sg" ifaces="//@infrastructure/@nodes.0/@ifaces.0">
+      <rules name="out" protocol="-1" fromPort="0" toPort="0">
+        <cidr>0.0.0.0/0</cidr>
+      </rules>
+      <rules name="ssh" kind="INGRESS" protocol="tcp" fromPort="22" toPort="22">
+        <cidr>10.100.1.0/24</cidr>
+      </rules>
+    </securityGroups>
+    <networks name="net1" protocol="tcp/ip" addressRange="10.100.0.0/16">
+      <subnets name="subnet1" protocol="tcp/ip" addressRange="10.100.1.0/24" connectedIfaces="//@infrastructure/@nodes.0/@ifaces.0"/>
+      <subnets name="subnet2" protocol="tcp/ip" addressRange="10.100.2.0/24" connectedIfaces="//@infrastructure/@nodes.1/@ifaces.0"/>
+    </networks>
+  </infrastructure>
+  <concretizations name="con_infra">
+    <providers name="openstack">
+      <vms name="concrete_vm" maps="//@infrastructure/@nodes.0">
+        <annotations xsi:type="commons:SProperty" key="vm_flavor" value="small-centos"/>
+      </vms>
+      <vms name="concrete_vm2" maps="//@infrastructure/@nodes.1">
+        <annotations xsi:type="commons:SProperty" key="vm_flavor" value="small-centos"/>
+      </vms>
+      <networks name="concrete_net" maps="//@infrastructure/@networks.0"/>
+    </providers>
+  </concretizations>
+</commons:DOMLModel>

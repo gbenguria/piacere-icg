@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="ASCII"?>
+<commons:DOMLModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:app="http://www.piacere-project.eu/doml/application" xmlns:commons="http://www.piacere-project.eu/doml/commons" xmlns:infra="http://www.piacere-project.eu/doml/infrastructure" xmlns:optimization="http://www.piacere-project.eu/doml/optimization" name="uc3_openstack" activeConfiguration="//@configurations.0" activeInfrastructure="//@concretizations.0">
+  <application name="app">
+    <components xsi:type="app:SoftwareComponent" name="iwg">
+      <exposedInterfaces name="net_info"/>
+    </components>
+    <components xsi:type="app:SoftwareComponent" name="osint" consumedInterfaces="//@application/@components.0/@exposedInterfaces.0 //@application/@components.3/@exposedInterfaces.0 //@application/@components.2/@exposedInterfaces.0">
+      <exposedInterfaces name="osint_info"/>
+    </components>
+    <components xsi:type="app:SoftwareComponent" name="ewcf" consumedInterfaces="//@application/@components.4/@exposedInterfaces.0">
+      <exposedInterfaces name="ewcf_rest_interface"/>
+    </components>
+    <components xsi:type="app:SaaS" name="external_twitter">
+      <exposedInterfaces name="get_twitter" endPoint="https://twitter_api/get"/>
+    </components>
+    <components xsi:type="app:SaaS" name="external_firebase">
+      <exposedInterfaces name="get_firebase" endPoint="https://firebase_api/get"/>
+    </components>
+  </application>
+  <infrastructure name="infra">
+    <nodes xsi:type="infra:VirtualMachine" name="igw_vm" os="CentOS-7-2111" credentials="//@infrastructure/@credentials.0" sizeDescription="small-centos">
+      <ifaces name="igw_vm_oam" belongsTo="//@infrastructure/@networks.0/@subnets.0" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="igw_vm_net1" belongsTo="//@infrastructure/@networks.1/@subnets.0" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="igw_vm_net2" belongsTo="//@infrastructure/@networks.2/@subnets.0" associated="//@infrastructure/@securityGroups.0"/>
+    </nodes>
+    <nodes xsi:type="infra:VirtualMachine" name="osint_vm" os="CentOS-7-2111" credentials="//@infrastructure/@credentials.0" sizeDescription="small-centos">
+      <ifaces name="osint_vm_oam" belongsTo="//@infrastructure/@networks.0/@subnets.1" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="osint_vm_net1" belongsTo="//@infrastructure/@networks.1/@subnets.1" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="osint_vm_net3" belongsTo="//@infrastructure/@networks.3/@subnets.0" associated="//@infrastructure/@securityGroups.0"/>
+    </nodes>
+    <nodes xsi:type="infra:VirtualMachine" name="ewcf_vm" os="CentOS-7-2111" credentials="//@infrastructure/@credentials.0" sizeDescription="small-centos">
+      <ifaces name="ewcf_vm_oam" belongsTo="//@infrastructure/@networks.0/@subnets.2" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="ewcf_vm_net1" belongsTo="//@infrastructure/@networks.1/@subnets.2" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="ewcf_vm_net3" belongsTo="//@infrastructure/@networks.3/@subnets.1" associated="//@infrastructure/@securityGroups.0"/>
+    </nodes>
+    <nodes xsi:type="infra:Container" name="c1" generatedFrom="//@infrastructure/@generators.0">
+      <configs container_port="82" vm_port="8082" host="//@infrastructure/@nodes.0" iface="//@infrastructure/@nodes.0/@ifaces.0"/>
+      <configs container_port="80" vm_port="8080" host="//@infrastructure/@nodes.1" iface="//@infrastructure/@nodes.1/@ifaces.0"/>
+    </nodes>
+    <nodes xsi:type="infra:Container" name="c2" generatedFrom="//@infrastructure/@generators.0">
+      <configs container_port="83" vm_port="8083" host="//@infrastructure/@nodes.0" iface="//@infrastructure/@nodes.0/@ifaces.1"/>
+    </nodes>
+    <nodes xsi:type="infra:Container" name="cont_mongodb" generatedFrom="//@infrastructure/@generators.1">
+      <configs container_port="85" vm_port="8085" host="//@infrastructure/@nodes.2" iface="//@infrastructure/@nodes.2/@ifaces.0"/>
+    </nodes>
+    <generators xsi:type="infra:ContainerImage" name="c_img" uri="docker.hub.io/ericsson/c:1.0" kind="IMAGE" generatedContainers="//@infrastructure/@nodes.3 //@infrastructure/@nodes.4"/>
+    <generators xsi:type="infra:ContainerImage" name="mongodb_img" uri="..." kind="IMAGE" generatedContainers="//@infrastructure/@nodes.5"/>
+    <credentials xsi:type="commons:KeyPair" name="ssh_key" user="ubuntu" keyfile="/home/ubuntu/.ssh/openstack.key" algorithm="RSA" bits="4096"/>
+    <securityGroups name="sg" ifaces="//@infrastructure/@nodes.0/@ifaces.0 //@infrastructure/@nodes.0/@ifaces.1 //@infrastructure/@nodes.0/@ifaces.2 //@infrastructure/@nodes.1/@ifaces.0 //@infrastructure/@nodes.1/@ifaces.1 //@infrastructure/@nodes.1/@ifaces.2 //@infrastructure/@nodes.2/@ifaces.0 //@infrastructure/@nodes.2/@ifaces.1 //@infrastructure/@nodes.2/@ifaces.2">
+      <rules name="icmp" protocol="ICMP" fromPort="-1" toPort="-1">
+        <cidr>0.0.0.0/0</cidr>
+      </rules>
+      <rules name="http" kind="INGRESS" protocol="TCP" fromPort="80" toPort="80">
+        <cidr>0.0.0.0/0</cidr>
+      </rules>
+      <rules name="https" kind="INGRESS" protocol="TCP" fromPort="443" toPort="443">
+        <cidr>0.0.0.0/0</cidr>
+      </rules>
+      <rules name="ssh" kind="INGRESS" protocol="TCP" fromPort="22" toPort="22">
+        <cidr>0.0.0.0/0</cidr>
+      </rules>
+    </securityGroups>
+    <networks name="oam" protocol="TCP/IP" addressRange="16.0.0.0/24">
+      <subnets name="subnet_oam_igw" protocol="TCP/IP" addressRange="16.0.1.0/26" connectedIfaces="//@infrastructure/@nodes.0/@ifaces.0"/>
+      <subnets name="subnet_oam_osint" protocol="TCP/IP" addressRange="16.0.1.64/26" connectedIfaces="//@infrastructure/@nodes.1/@ifaces.0"/>
+      <subnets name="subnet_oam_ewcf" protocol="TCP/IP" addressRange="16.0.1.128/26" connectedIfaces="//@infrastructure/@nodes.2/@ifaces.0"/>
+    </networks>
+    <networks name="net1" protocol="TCP/IP" addressRange="16.0.1.0/24">
+      <subnets name="subnet_net1_igw" protocol="TCP/IP" addressRange="16.0.1.0/25" connectedIfaces="//@infrastructure/@nodes.0/@ifaces.1" connectedTo="//@infrastructure/@networks.1/@subnets.1"/>
+      <subnets name="subnet_net1_osint" protocol="TCP/IP" addressRange="16.0.1.64/26" connectedIfaces="//@infrastructure/@nodes.1/@ifaces.1" connectedTo="//@infrastructure/@networks.1/@subnets.0 //@infrastructure/@networks.1/@subnets.2"/>
+      <subnets name="subnet_net1_ewcf" protocol="TCP/IP" addressRange="16.0.1.128/26" connectedIfaces="//@infrastructure/@nodes.2/@ifaces.1" connectedTo="//@infrastructure/@networks.1/@subnets.1"/>
+    </networks>
+    <networks name="net2" protocol="TCP/IP" addressRange="16.0.2.0/24">
+      <subnets name="subnet_net2_igw" protocol="TCP/IP" addressRange="16.0.2.0/25" connectedIfaces="//@infrastructure/@nodes.0/@ifaces.2"/>
+    </networks>
+    <networks name="net3" protocol="TCP/IP" addressRange="16.0.3.0/24">
+      <subnets name="subnet_net3_osint" protocol="TCP/IP" addressRange="16.0.3.0/25" connectedIfaces="//@infrastructure/@nodes.1/@ifaces.2"/>
+      <subnets name="subnet_net3_ewcf" protocol="TCP/IP" addressRange="16.0.3.128/25" connectedIfaces="//@infrastructure/@nodes.2/@ifaces.2"/>
+    </networks>
+  </infrastructure>
+  <concretizations name="con_infra">
+    <providers name="openstack">
+      <vms name="concrete_osint_vm" maps="//@infrastructure/@nodes.1">
+        <annotations xsi:type="commons:SProperty" key="vm_name" value="osint"/>
+        <annotations xsi:type="commons:SProperty" key="vm_key_name" value="ubuntu"/>
+      </vms>
+      <vms name="concrete_igw_vm" maps="//@infrastructure/@nodes.0">
+        <annotations xsi:type="commons:SProperty" key="vm_name" value="igw"/>
+        <annotations xsi:type="commons:SProperty" key="vm_key_name" value="ubuntu"/>
+      </vms>
+      <vms name="concrete_ewcf_vm" maps="//@infrastructure/@nodes.2">
+        <annotations xsi:type="commons:SProperty" key="vm_name" value="ewcf"/>
+        <annotations xsi:type="commons:SProperty" key="vm_key_name" value="ubuntu"/>
+      </vms>
+      <containerImages name="concrete_c_img" maps="//@infrastructure/@generators.0"/>
+      <containerImages name="concrete_mongodb_img" maps="//@infrastructure/@generators.1"/>
+      <networks name="concrete_oam" maps="//@infrastructure/@networks.0">
+        <annotations xsi:type="commons:SProperty" key="name" value="uc3_oam"/>
+      </networks>
+      <networks name="concrete_net1" maps="//@infrastructure/@networks.1">
+        <annotations xsi:type="commons:SProperty" key="name" value="uc3_net1"/>
+      </networks>
+      <networks name="concrete_net2" maps="//@infrastructure/@networks.2">
+        <annotations xsi:type="commons:SProperty" key="name" value="uc3_net2"/>
+      </networks>
+      <networks name="concrete_net3" maps="//@infrastructure/@networks.3">
+        <annotations xsi:type="commons:SProperty" key="name" value="uc3_net3"/>
+      </networks>
+    </providers>
+  </concretizations>
+  <optimization name="opt">
+    <objectives xsi:type="optimization:MeasurableObjective" kind="min" property="cost"/>
+    <objectives xsi:type="optimization:MeasurableObjective" kind="max" property="performance"/>
+    <objectives xsi:type="optimization:MeasurableObjective" kind="max" property="availability"/>
+    <nonfunctionalRequirements xsi:type="commons:RangedRequirement" name="req1" description="cost &lt;= 300" property="cost" max="300.0"/>
+    <nonfunctionalRequirements xsi:type="commons:RangedRequirement" name="req2" description="performance >= 7%" property="performance" min="7.0"/>
+    <nonfunctionalRequirements name="req3" description="elements" property="VM, Storage"/>
+  </optimization>
+  <configurations name="config1">
+    <deployments component="//@application/@components.1" node="//@infrastructure/@nodes.1"/>
+    <deployments component="//@application/@components.0" node="//@infrastructure/@nodes.0"/>
+    <deployments component="//@application/@components.2" node="//@infrastructure/@nodes.2"/>
+  </configurations>
+</commons:DOMLModel>
+<?xml version="1.0" encoding="ASCII"?>
+<commons:DOMLModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:app="http://www.piacere-project.eu/doml/application" xmlns:commons="http://www.piacere-project.eu/doml/commons" xmlns:infra="http://www.piacere-project.eu/doml/infrastructure" xmlns:optimization="http://www.piacere-project.eu/doml/optimization" name="uc3_openstack" activeConfiguration="//@configurations.0" activeInfrastructure="//@concretizations.0">
+  <application name="app">
+    <components xsi:type="app:SoftwareComponent" name="iwg">
+      <exposedInterfaces name="net_info"/>
+    </components>
+    <components xsi:type="app:SoftwareComponent" name="osint" consumedInterfaces="//@application/@components.0/@exposedInterfaces.0 //@application/@components.3/@exposedInterfaces.0 //@application/@components.2/@exposedInterfaces.0">
+      <exposedInterfaces name="osint_info"/>
+    </components>
+    <components xsi:type="app:SoftwareComponent" name="ewcf" consumedInterfaces="//@application/@components.4/@exposedInterfaces.0">
+      <exposedInterfaces name="ewcf_rest_interface"/>
+    </components>
+    <components xsi:type="app:SaaS" name="external_twitter">
+      <exposedInterfaces name="get_twitter" endPoint="https://twitter_api/get"/>
+    </components>
+    <components xsi:type="app:SaaS" name="external_firebase">
+      <exposedInterfaces name="get_firebase" endPoint="https://firebase_api/get"/>
+    </components>
+  </application>
+  <infrastructure name="infra">
+    <nodes xsi:type="infra:VirtualMachine" name="igw_vm" os="CentOS-7-2111" credentials="//@infrastructure/@credentials.0" sizeDescription="small-centos">
+      <ifaces name="igw_vm_oam" belongsTo="//@infrastructure/@networks.0/@subnets.0" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="igw_vm_net1" belongsTo="//@infrastructure/@networks.1/@subnets.0" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="igw_vm_net2" belongsTo="//@infrastructure/@networks.2/@subnets.0" associated="//@infrastructure/@securityGroups.0"/>
+    </nodes>
+    <nodes xsi:type="infra:VirtualMachine" name="osint_vm" os="CentOS-7-2111" credentials="//@infrastructure/@credentials.0" sizeDescription="small-centos">
+      <ifaces name="osint_vm_oam" belongsTo="//@infrastructure/@networks.0/@subnets.1" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="osint_vm_net1" belongsTo="//@infrastructure/@networks.1/@subnets.1" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="osint_vm_net3" belongsTo="//@infrastructure/@networks.3/@subnets.0" associated="//@infrastructure/@securityGroups.0"/>
+    </nodes>
+    <nodes xsi:type="infra:VirtualMachine" name="ewcf_vm" os="CentOS-7-2111" credentials="//@infrastructure/@credentials.0" sizeDescription="small-centos">
+      <ifaces name="ewcf_vm_oam" belongsTo="//@infrastructure/@networks.0/@subnets.2" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="ewcf_vm_net1" belongsTo="//@infrastructure/@networks.1/@subnets.2" associated="//@infrastructure/@securityGroups.0"/>
+      <ifaces name="ewcf_vm_net3" belongsTo="//@infrastructure/@networks.3/@subnets.1" associated="//@infrastructure/@securityGroups.0"/>
+    </nodes>
+    <nodes xsi:type="infra:Container" name="c1" generatedFrom="//@infrastructure/@generators.0">
+      <configs container_port="82" vm_port="8082" host="//@infrastructure/@nodes.0" iface="//@infrastructure/@nodes.0/@ifaces.0"/>
+      <configs container_port="80" vm_port="8080" host="//@infrastructure/@nodes.1" iface="//@infrastructure/@nodes.1/@ifaces.0"/>
+    </nodes>
+    <nodes xsi:type="infra:Container" name="c2" generatedFrom="//@infrastructure/@generators.0">
+      <configs container_port="83" vm_port="8083" host="//@infrastructure/@nodes.0" iface="//@infrastructure/@nodes.0/@ifaces.1"/>
+    </nodes>
+    <nodes xsi:type="infra:Container" name="cont_mongodb" generatedFrom="//@infrastructure/@generators.1">
+      <configs container_port="85" vm_port="8085" host="//@infrastructure/@nodes.2" iface="//@infrastructure/@nodes.2/@ifaces.0"/>
+    </nodes>
+    <generators xsi:type="infra:ContainerImage" name="c_img" uri="docker.hub.io/ericsson/c:1.0" kind="IMAGE" generatedContainers="//@infrastructure/@nodes.3 //@infrastructure/@nodes.4"/>
+    <generators xsi:type="infra:ContainerImage" name="mongodb_img" uri="..." kind="IMAGE" generatedContainers="//@infrastructure/@nodes.5"/>
+    <credentials xsi:type="commons:KeyPair" name="ssh_key" user="ubuntu" keyfile="/home/ubuntu/.ssh/openstack.key" algorithm="RSA" bits="4096"/>
+    <securityGroups name="sg" ifaces="//@infrastructure/@nodes.0/@ifaces.0 //@infrastructure/@nodes.0/@ifaces.1 //@infrastructure/@nodes.0/@ifaces.2 //@infrastructure/@nodes.1/@ifaces.0 //@infrastructure/@nodes.1/@ifaces.1 //@infrastructure/@nodes.1/@ifaces.2 //@infrastructure/@nodes.2/@ifaces.0 //@infrastructure/@nodes.2/@ifaces.1 //@infrastructure/@nodes.2/@ifaces.2">
+      <rules name="icmp" protocol="ICMP" fromPort="-1" toPort="-1">
+        <cidr>0.0.0.0/0</cidr>
+      </rules>
+      <rules name="http" kind="INGRESS" protocol="TCP" fromPort="80" toPort="80">
+        <cidr>0.0.0.0/0</cidr>
+      </rules>
+      <rules name="https" kind="INGRESS" protocol="TCP" fromPort="443" toPort="443">
+        <cidr>0.0.0.0/0</cidr>
+      </rules>
+      <rules name="ssh" kind="INGRESS" protocol="TCP" fromPort="22" toPort="22">
+        <cidr>0.0.0.0/0</cidr>
+      </rules>
+    </securityGroups>
+    <networks name="oam" protocol="TCP/IP" addressRange="16.0.0.0/24">
+      <subnets name="subnet_oam_igw" protocol="TCP/IP" addressRange="16.0.1.0/26" connectedIfaces="//@infrastructure/@nodes.0/@ifaces.0"/>
+      <subnets name="subnet_oam_osint" protocol="TCP/IP" addressRange="16.0.1.64/26" connectedIfaces="//@infrastructure/@nodes.1/@ifaces.0"/>
+      <subnets name="subnet_oam_ewcf" protocol="TCP/IP" addressRange="16.0.1.128/26" connectedIfaces="//@infrastructure/@nodes.2/@ifaces.0"/>
+    </networks>
+    <networks name="net1" protocol="TCP/IP" addressRange="16.0.1.0/24">
+      <subnets name="subnet_net1_igw" protocol="TCP/IP" addressRange="16.0.1.0/25" connectedIfaces="//@infrastructure/@nodes.0/@ifaces.1" connectedTo="//@infrastructure/@networks.1/@subnets.1"/>
+      <subnets name="subnet_net1_osint" protocol="TCP/IP" addressRange="16.0.1.64/26" connectedIfaces="//@infrastructure/@nodes.1/@ifaces.1" connectedTo="//@infrastructure/@networks.1/@subnets.0 //@infrastructure/@networks.1/@subnets.2"/>
+      <subnets name="subnet_net1_ewcf" protocol="TCP/IP" addressRange="16.0.1.128/26" connectedIfaces="//@infrastructure/@nodes.2/@ifaces.1" connectedTo="//@infrastructure/@networks.1/@subnets.1"/>
+    </networks>
+    <networks name="net2" protocol="TCP/IP" addressRange="16.0.2.0/24">
+      <subnets name="subnet_net2_igw" protocol="TCP/IP" addressRange="16.0.2.0/25" connectedIfaces="//@infrastructure/@nodes.0/@ifaces.2"/>
+    </networks>
+    <networks name="net3" protocol="TCP/IP" addressRange="16.0.3.0/24">
+      <subnets name="subnet_net3_osint" protocol="TCP/IP" addressRange="16.0.3.0/25" connectedIfaces="//@infrastructure/@nodes.1/@ifaces.2"/>
+      <subnets name="subnet_net3_ewcf" protocol="TCP/IP" addressRange="16.0.3.128/25" connectedIfaces="//@infrastructure/@nodes.2/@ifaces.2"/>
+    </networks>
+  </infrastructure>
+  <concretizations name="con_infra">
+    <providers name="openstack">
+      <vms name="concrete_osint_vm" maps="//@infrastructure/@nodes.1">
+        <annotations xsi:type="commons:SProperty" key="vm_name" value="osint"/>
+        <annotations xsi:type="commons:SProperty" key="vm_key_name" value="ubuntu"/>
+      </vms>
+      <vms name="concrete_igw_vm" maps="//@infrastructure/@nodes.0">
+        <annotations xsi:type="commons:SProperty" key="vm_name" value="igw"/>
+        <annotations xsi:type="commons:SProperty" key="vm_key_name" value="ubuntu"/>
+      </vms>
+      <vms name="concrete_ewcf_vm" maps="//@infrastructure/@nodes.2">
+        <annotations xsi:type="commons:SProperty" key="vm_name" value="ewcf"/>
+        <annotations xsi:type="commons:SProperty" key="vm_key_name" value="ubuntu"/>
+      </vms>
+      <containerImages name="concrete_c_img" maps="//@infrastructure/@generators.0"/>
+      <containerImages name="concrete_mongodb_img" maps="//@infrastructure/@generators.1"/>
+      <networks name="concrete_oam" maps="//@infrastructure/@networks.0">
+        <annotations xsi:type="commons:SProperty" key="name" value="uc3_oam"/>
+      </networks>
+      <networks name="concrete_net1" maps="//@infrastructure/@networks.1">
+        <annotations xsi:type="commons:SProperty" key="name" value="uc3_net1"/>
+      </networks>
+      <networks name="concrete_net2" maps="//@infrastructure/@networks.2">
+        <annotations xsi:type="commons:SProperty" key="name" value="uc3_net2"/>
+      </networks>
+      <networks name="concrete_net3" maps="//@infrastructure/@networks.3">
+        <annotations xsi:type="commons:SProperty" key="name" value="uc3_net3"/>
+      </networks>
+    </providers>
+  </concretizations>
+  <optimization name="opt">
+    <objectives xsi:type="optimization:MeasurableObjective" kind="min" property="cost"/>
+    <objectives xsi:type="optimization:MeasurableObjective" kind="max" property="performance"/>
+    <objectives xsi:type="optimization:MeasurableObjective" kind="max" property="availability"/>
+    <nonfunctionalRequirements xsi:type="commons:RangedRequirement" name="req1" description="cost &lt;= 300" property="cost" max="300.0"/>
+    <nonfunctionalRequirements xsi:type="commons:RangedRequirement" name="req2" description="performance >= 7%" property="performance" min="7.0"/>
+    <nonfunctionalRequirements name="req3" description="elements" property="VM, Storage"/>
+  </optimization>
+  <configurations name="config1">
+    <deployments component="//@application/@components.1" node="//@infrastructure/@nodes.1"/>
+    <deployments component="//@application/@components.0" node="//@infrastructure/@nodes.0"/>
+    <deployments component="//@application/@components.2" node="//@infrastructure/@nodes.2"/>
+  </configurations>
+</commons:DOMLModel>

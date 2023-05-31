@@ -1,0 +1,66 @@
+include:
+  - project: piacere/private/t23-ci-setup
+    ref: main
+    file:
+      - gitlab-ci-scripts/utils.gitlab-ci.yml
+
+      # Image tag variables generation job -------------
+      # Stage: variable-generation ---------------------
+      - gitlab-ci-scripts/generate-variables.gitlab-ci.yml
+      
+      # Downstream t23-ci-setup pipeline trigger job ---
+      # Stage: integration-tests-publish-deploy --------
+      - gitlab-ci-scripts/trigger-downstream.gitlab-ci.yml
+
+variables:
+  # ------------------------
+  # Component image tag data
+  # ------------------------
+  COMPONENT_WP: wp3
+  ICG_IMAGE_NAME: icg
+  
+  # ------------------------------------------
+  # Space-separated component image abbreviation list
+  # used to generate image tags and related variables.
+  # It is also passed to the downstream integration tests,
+  # publication and deployment pipeline.
+  # ------------------------------------------
+  IMAGE_NAMES: "$ICG_IMAGE_NAME"
+
+stages:
+  - variable-generation
+  - quality
+  - build
+  - security
+# TODO:  - unit-tests
+  - integration-tests-publish-deploy
+
+# Quality jobs ----------------------
+
+# TODO: quality checks
+
+# Build jobs ----------------------
+
+build-temp-icg:
+  stage: build
+  variables:
+    TMP_IMAGE: "$TMP_IMAGE_ICG"
+    DOCKERFILE_PATH: "."
+    GIT_SUBMODULE_STRATEGY: recursive
+  trigger: !reference [.trigger-build]
+
+# Security job ------------------------
+
+security-trivy-icg:
+  stage: security
+  variables:
+    TMP_IMAGE: "$TMP_IMAGE_ICG"
+  trigger: !reference [.trigger-security-trivy]
+  needs:
+    - job: build-temp-icg
+    - job: generate-variables
+      artifacts: true
+
+# Unit tests jobs ------------------------
+
+# TODO: unit tests

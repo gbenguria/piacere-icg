@@ -15,8 +15,20 @@
 #}
 ---
 input:
-  - instance_ip_{{ node.infra_element_name }}
-  - instance_server_private_key_{{ node.credentials }}
+  {%- if name == "performance_monitoring" %}
+  - INFLUXDB_BUCKET
+  - INFLUXDB_TOKEN
+  - INFLUXDB_ORG
+  - INFLUXDB_ADDR
+  - DEPLOYMENT_ID{%- endif %}
+  {%- if name == "security_monitoring" %}
+  - DEPLOYMENT_ID
+  - WAZUH_MANAGER_HOST
+  - WAZUH_MANAGER_PORT{%- endif %}
+  {%- for node in nodes %}
+  - instance_server_public_ip_{{ node.infra_element_name }}
+  - instance_server_private_key_{{ node.credentials }}_{{ node.infra_element_name }}
+  {%- endfor %}
 output: []
 engine: ansible
 ...

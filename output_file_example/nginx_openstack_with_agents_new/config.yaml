@@ -1,0 +1,6 @@
+---
+iac:
+  - terraform
+  - monitoring
+  - ansible
+...

@@ -16,8 +16,9 @@
 FROM python:3.10.1-alpine
 
 WORKDIR /opt
-COPY . /opt/
-
+COPY requirements.txt /opt/requirements.txt
 RUN pip install -r requirements.txt
 
+COPY . /opt/
+expose 5000
 CMD ["uvicorn", "main:fast_api", "--host", "0.0.0.0", "--port", "5000"]

@@ -1,0 +1,112 @@
+doml scenario2
+
+infrastructure infra {
+
+	vm vm1 {
+		os "ami-02a6bfdcf8224bd77"
+		iface i1 {
+			belongs_to subnet1
+		}
+		credentials VM1SshKey
+	}
+
+	vm vm2 {
+		os "ami-02a6bfdcf8224bd77"
+		iface i1 {
+			belongs_to subnet2
+		}
+		credentials VM2SshKey
+	}
+
+	key_pair VM1SshKey {
+		user "vm1user"
+		keyfile "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 email@example.com"
+	}
+	key_pair VM2SshKey {
+		user "vm2user"
+		keyfile "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 email@example.com"
+	}
+
+	net net1 {
+		address "10.100.0.0/16"
+		protocol "tcp/ip"
+		subnet subnet1 {
+			address "10.100.1.0/24"
+			protocol "tcp/ip"
+		}
+		subnet subnet2 {
+			address "10.100.2.0/24"
+			protocol "tcp/ip"
+		}
+	}
+
+	security_group sg {
+		egress out {
+			protocol "-1"
+			from_port 0
+			to_port 0
+			cidr ["0.0.0.0/0"]
+		}
+
+		ingress ssh {
+			protocol "tcp"
+			from_port 22
+			to_port 22
+			cidr ["10.100.1.0/24"]
+		}
+		ifaces i1
+
+	}
+}
+
+concretizations {
+	concrete_infrastructure con_infra_openstack {
+		provider openstack {
+			properties {}
+
+			vm concrete_vm {
+				properties {
+					vm_flavor = "small-centos";
+				}
+				maps vm1
+			}
+
+			vm concrete_vm2 {
+				properties {
+					vm_flavor = "small-centos";
+				}
+				maps vm2
+			}
+
+			net concrete_net {
+				properties {}
+				maps net1
+			}
+		}
+	}
+	concrete_infrastructure con_infra_aws {
+		provider aws {
+			properties {}
+
+			vm concrete_vm {
+				properties {
+					instance_type = "t2.micro";
+				}
+				maps vm1
+			}
+
+			vm concrete_vm2 {
+				properties {
+					instance_type = "t2.micro";
+				}
+				maps vm2
+			}
+
+			net concrete_net {
+				properties {}
+				maps net1
+			}
+		}
+	}
+	active con_infra_aws
+}

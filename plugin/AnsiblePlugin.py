@@ -15,7 +15,7 @@
 
 import logging
 
-from icgparser.IntermediateRepresentationUtility import IntermediateRepresentationResources
+from icgparser.ModelResourcesUtilities import get_ir_key_name, ModelResources
 from plugin import TemplateUtils
 from plugin.PluginException import PluginResourceNotFoundError
 
@@ -25,13 +25,18 @@ def clean_operating_system_name(operating_system):
     logging.info(f"AnsiblePlugin: extracting operating system from {operating_system}")
     if "ubuntu" in operating_system_lower_case:
         return "ubuntu"
+    if "centos" in operating_system_lower_case:
+        return "centos"
+    ## TODO to be update with more explicit parameter
+    if "ami" in operating_system_lower_case:
+        return "ubuntu"
     else:
         raise PluginResourceNotFoundError(plugin_name="AnsiblePlugin", resource_name="operating system")
 
 
 def find_operating_system(parameters):
     try:
-        operating_system = parameters.get("node").get("os")
+        operating_system = parameters.get("nodes")[0].get("os")
         operating_system_name = clean_operating_system_name(operating_system)
         return operating_system_name
     except Exception:
@@ -46,8 +51,8 @@ def create_template_file(parameters, language, operating_system, template_name):
 
 
 def create_files(step, output_path):
-    language = step[IntermediateRepresentationResources.LANGUAGE.value]
-    step_name = step[IntermediateRepresentationResources.STEP_NAME.value]
+    language = step[get_ir_key_name(ModelResources.LANGUAGE)]
+    step_name = step[get_ir_key_name(ModelResources.STEP_NAME)]
     parameters = step["data"]
     for resource_name, resource in parameters.items():
         logging.info("Creating template for resource '%s'", resource_name)
@@ -62,7 +67,21 @@ def create_files(step, output_path):
             config_output_file_path = output_path + "/".join([step_name, "config"]) + ".yaml"
             ssh_key_output_file_path = output_path + "/".join([step_name, "ssh_key.j2"])
 
-            template = TemplateUtils.read_template(ansible_template_path)
+            ### TODO Refactoring
+            if "," in ansible_template_path:
+                ansible_template_path = ansible_template_path.split(",")
+                template = TemplateUtils.read_template(ansible_template_path[0])                   
+                for i in range(1, len(ansible_template_path)):
+                    output_other_ansible_name_split = ansible_template_path[i].split('/')
+                    output_other_ansible_name = output_other_ansible_name_split[-1].split('.')
+                    other_ansible_output_file_path = output_path + "/".join([step_name, output_other_ansible_name[0]]) + ".yml"
+
+                    other_template = TemplateUtils.read_template(ansible_template_path[i])
+                    other_template_filled = TemplateUtils.edit_template(other_template, resource_params)
+                    TemplateUtils.write_template(other_template_filled, other_ansible_output_file_path)
+            else:
+                template = TemplateUtils.read_template(ansible_template_path)
+
             template_filled = TemplateUtils.edit_template(template, resource_params)
 
             inventory_template_filled = create_template_file(resource_params, language, operating_system, "inventory")

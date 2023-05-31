@@ -1,0 +1,11 @@
+## https://git.code.tecnalia.com/piacere/private/t31-doml-concepts/-/blob/main/case-studies-DOML-models/SIMPA_Validation_v2.doml
+
+---
+input:
+  - GIT_USER
+  - GIT_PASSWORD
+  - git.code.tecnalia.com/piacere/private/wp7-use-cases/uc1.si-mpa/-/tree/main/deploy-nio
+output:
+  - ansible/provision.yml
+engine: git
+...

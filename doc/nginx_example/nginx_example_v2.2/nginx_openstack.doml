@@ -1,0 +1,98 @@
+doml nginx_openstack
+version "2.2.2"
+
+application app {
+
+	software_component nginx {
+		properties {
+			// site
+			source_code="/usr/share/nginx/html/index.html";
+		}
+	}
+}
+
+infrastructure infra {
+	vm nginx_vm {
+		os "Ubuntu-Focal-20.04-Daily-2022-04-19"
+		iface i1 {
+			belongs_to subnet1
+		}
+		credentials ubuntu
+	}
+
+	key_pair ubuntu {
+		user "ubuntu"
+	}
+
+	net net1 {
+		cidr "16.0.0.0/16"
+		protocol "tcp/ip"
+		subnet subnet1 {
+			cidr "16.0.0.1/24"
+			protocol "tcp/ip"
+		}
+	}
+
+	security_group sg {
+		egress icmp {
+			from_port -1
+			to_port -1
+			protocol "icmp"
+			cidr ["0.0.0.0/0"]
+		}
+		ingress http {
+			from_port 80
+			to_port 80
+			protocol "tcp"
+			cidr ["0.0.0.0/0"]
+		}
+		ingress https {
+			from_port 443
+			to_port 443
+			protocol "tcp"
+			cidr ["0.0.0.0/0"]
+		}
+		ingress ssh {
+			from_port 22
+			to_port 22
+			protocol "tcp"
+			cidr ["0.0.0.0/0"]
+		}
+		ifaces i1
+	}
+}
+
+deployment conf {
+	nginx -> nginx_vm
+}
+
+active deployment conf
+
+concretizations {
+	concrete_infrastructure con_infra {
+		provider openstack {
+			vm nginx_host {
+				properties {
+					vm_flavor = "small-centos";
+				}
+				maps nginx_vm
+			}
+
+			net nginx_net {
+				properties {}
+				maps net1
+			}
+		}
+	}
+	active con_infra
+}
+
+optimization opt {
+	objectives {
+		"cost" => min
+	}
+	nonfunctional_requirements {
+		req1 "Cost <= 200" max 200.0 => "cost";
+		req2 "Provider" values "OPEN" => "provider";
+	}
+}

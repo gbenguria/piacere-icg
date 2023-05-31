@@ -1,0 +1,6 @@
+[submodule "templates/ansible/cross-platform/performance_monitoring"]
+	path = templates/ansible/cross-platform/performance_monitoring
+	url = ../../../../piacere/public/agents/pma-playbook.git
+[submodule "templates/ansible/cross-platform/security_monitoring"]
+	path = templates/ansible/cross-platform/security_monitoring
+	url = ../../../../piacere/public/agents/sma-playbook.git

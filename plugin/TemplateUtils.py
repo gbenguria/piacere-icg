@@ -16,6 +16,7 @@
 import configparser
 import logging
 import os
+from collections import OrderedDict
 
 import jinja2
 from jinja2 import Template
@@ -25,12 +26,14 @@ from jinja2 import Template
 def get_context(c):
     return c
 
-
 def find_template_path(iac_language, key, resource_name):
     try:
         properties_reader = configparser.ConfigParser()
         properties_reader.read("template-location.properties")
-        template_path = properties_reader.get(iac_language + "." + key, resource_name)
+        if not iac_language:
+            template_path = properties_reader.get(key, resource_name)
+        else:
+            template_path = properties_reader.get(iac_language + "." + key, resource_name)
         logging.info("Chosen template at: '%s'", template_path)
         return template_path
     except configparser.NoOptionError as error:
@@ -38,10 +41,11 @@ def find_template_path(iac_language, key, resource_name):
         pass
 
 
-def edit_template(template, parameters: dict):
+def edit_template(template, parameters: dict, extra_parameters=None):
     logging.info(f"Starting editing template '{template}'")
     template.globals['context'] = get_context
     template.globals['callable'] = callable
+    template.globals['extra_parameters'] = extra_parameters
     render = template.render(parameters)
     template_with_custom_params = "" + render + "\n"
     return template_with_custom_params

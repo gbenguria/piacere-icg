@@ -1,0 +1,370 @@
+doml uc3_openstack
+
+application app {
+
+	// need to define all sw components of the project this is a placeholder
+	// need to understand what is really needed in this spec
+	// need to specify all provides/consumes
+
+	software_component iwg {
+		provides { net_info }
+	}
+	software_component osint {
+		provides { osint_info }
+		consumes { net_info, get_twitter, ewcf_rest_interface }
+	}
+	software_component ewcf {
+		provides { ewcf_rest_interface }
+		consumes { get_firebase }
+	}
+	saas external_twitter {
+		provides { get_twitter @ "https://twitter_api/get" }
+	}
+	saas external_firebase {
+		provides { get_firebase @ "https://firebase_api/get" }
+	}
+
+}
+
+infrastructure infra {
+	// oam is common to all VMs
+	// igw should have: oam, net1 to osint and net2 to external 5g
+
+	// VMs region
+	vm igw_vm {
+		os "CentOS-7-2111"
+		size "small-centos"
+
+		iface igw_vm_oam {
+			belongs_to subnet_oam_igw
+		}
+
+		iface igw_vm_net1 {
+			belongs_to subnet_net1_igw
+		}
+
+		iface igw_vm_net2 {
+			belongs_to subnet_net2_igw
+		}
+
+		credentials ssh_key
+	}
+
+	// sint should have: oam, net1 to igw, net3 to internet
+	vm osint_vm {
+		os "CentOS-7-2111"
+		size "small-centos"
+
+		iface osint_vm_oam {
+			belongs_to subnet_oam_osint
+		}
+
+		iface osint_vm_net1 {
+			belongs_to subnet_net1_osint
+		}
+
+		iface osint_vm_net3 {
+			belongs_to subnet_net3_osint
+		}
+
+		credentials ssh_key
+	}
+
+	// ewcf should have: oam, net1 to osint, and net3 to internet
+	vm ewcf_vm {
+		os "CentOS-7-2111"
+		size "small-centos"
+
+		iface ewcf_vm_oam {
+			belongs_to subnet_oam_ewcf
+		}
+
+		iface ewcf_vm_net1 {
+			belongs_to subnet_net1_ewcf
+		}
+
+		iface ewcf_vm_net3 {
+			belongs_to subnet_net3_ewcf
+		}
+
+		credentials ssh_key
+	}
+
+	// Containers region
+	container c1 {
+		host igw_vm {
+			container_port 82
+			vm_port 8082
+			iface igw_vm_oam
+		}
+
+		host osint_vm {
+
+			// Exposed port
+			container_port 80
+			// Port on the VM where the container will map to
+			vm_port 8080
+
+			// Most of the interfaces should be on the internal network, but some of them need access through Internet
+			// Containers should have two interfaces: an exposed interface to be accessed through Internet and an interface for internal access
+			// TODO: However, we can specify only one network interface connected to the container
+			iface osint_vm_oam
+
+		}
+
+	}
+
+	container c2 {
+		host igw_vm {
+			container_port 83
+			vm_port 8083
+			iface igw_vm_net1
+		}
+	}
+
+
+	container cont_mongodb {
+		host ewcf_vm {
+			container_port 85
+			vm_port 8085
+			iface ewcf_vm_oam
+		}
+	}
+
+	cont_image c_img {
+		generates c1, c2
+		image "docker.hub.io/ericsson/c:1.0" // Esempio
+		// Sergio: Si potrebbe anche usare "script" al posto di "image", ma avevamo deciso di usare "image" per questo caso perchÃ© ci sembrava piÃ¹ appropriato
+	}
+
+	cont_image mongodb_img {
+		generates cont_mongodb
+		image "..."
+	}
+
+	// Network region
+
+	// Internal Network
+	net oam {
+		protocol "TCP/IP"
+		cidr "16.0.0.0/24"
+
+		subnet subnet_oam_igw {
+			protocol "TCP/IP"
+			cidr "16.0.1.0/26"
+		}
+
+		subnet subnet_oam_osint {
+			protocol "TCP/IP"
+			cidr "16.0.1.64/26"
+		}
+
+		subnet subnet_oam_ewcf {
+			protocol "TCP/IP"
+			cidr "16.0.1.128/26"
+		}
+	}
+
+	// Internal network
+	net net1 {
+		protocol "TCP/IP"
+		cidr "16.0.1.0/24"
+
+		// Subnets definition
+		subnet subnet_net1_igw {
+			connections {
+				subnet_net1_osint
+			}
+			protocol "TCP/IP"
+			cidr "16.0.1.0/25"
+		}
+
+		subnet subnet_net1_osint {
+			connections {
+				subnet_net1_igw
+				subnet_net1_ewcf
+			}
+			protocol "TCP/IP"
+			cidr "16.0.1.64/26"
+		}
+
+		subnet subnet_net1_ewcf {
+			connections {
+				subnet_net1_osint
+			}
+			protocol "TCP/IP"
+			cidr "16.0.1.128/26"
+		}
+	}
+
+	// Network connecting igw to 5G
+	net net2 {
+		protocol "TCP/IP"
+		cidr "16.0.2.0/24"
+
+		subnet subnet_net2_igw {
+			protocol "TCP/IP"
+			cidr "16.0.2.0/25"
+		}
+
+	}
+
+	// Network connecting osint and ewcf to Internet
+	net net3 {
+		protocol "TCP/IP"
+		cidr "16.0.3.0/24"
+
+		subnet subnet_net3_osint {
+			protocol "TCP/IP"
+			cidr "16.0.3.0/25"
+		}
+
+		subnet subnet_net3_ewcf {
+			protocol "TCP/IP"
+			cidr "16.0.3.128/25"
+		}
+
+	}
+
+	// credentials region
+	key_pair ssh_key {
+		user "ubuntu"
+		keyfile "/home/ubuntu/.ssh/openstack.key"
+		algorithm "RSA"
+		bits 4096
+	}
+
+	// Computing groups region
+
+	// Currently not used since it is not implemented
+	// Autoscale groups should currently be removed (leave them commented in order to be eventually reused,
+	// even though the name could probably be different since there are not autoscale groups on Openstack)
+
+
+	// Security region
+
+	// security group is left as originally defined needs to be updated
+	security_group sg {
+		egress icmp {
+			protocol "ICMP"
+			from_port -1
+			to_port -1
+			cidr ["0.0.0.0/0"]
+		}
+		ingress http {
+			protocol "TCP"
+			from_port 80
+			to_port 80
+			cidr ["0.0.0.0/0"]
+		}
+		ingress https {
+			protocol "TCP"
+			from_port 443
+			to_port 443
+			cidr ["0.0.0.0/0"]
+		}
+		ingress ssh {
+			protocol "TCP"
+			from_port 22
+			to_port 22
+			cidr ["0.0.0.0/0"]
+		}
+
+		ifaces igw_vm_oam, igw_vm_net1, igw_vm_net2, osint_vm_oam, osint_vm_net1, osint_vm_net3, ewcf_vm_oam, ewcf_vm_net1, ewcf_vm_net3
+	}
+}
+
+deployment config1 {
+	osint -> osint_vm,
+	iwg -> igw_vm,
+	ewcf -> ewcf_vm
+}
+
+active deployment config1
+
+concretizations {
+	concrete_infrastructure con_infra {
+
+		provider openstack {
+
+			// Concrete computing nodes region
+
+			vm concrete_osint_vm {
+				properties {
+					// Actually, this is not recognized by ICG, so it's useless
+					vm_name = "osint";
+					// vm_flavor property moved to "size" attribute
+					vm_key_name = "ubuntu";
+				}
+				maps osint_vm
+			}
+
+			vm concrete_igw_vm {
+				properties {
+					vm_name = "igw";
+					vm_key_name = "ubuntu";
+				}
+				maps igw_vm
+			}
+
+			vm concrete_ewcf_vm {
+				properties {
+					vm_name = "ewcf";
+					vm_key_name = "ubuntu";
+				}
+				maps ewcf_vm
+			}
+
+			cont_image concrete_c_img {
+				maps c_img
+			}
+
+			cont_image concrete_mongodb_img {
+				maps mongodb_img
+			}
+
+			// Concrete Network region
+			net concrete_oam {
+				properties {
+					name = "uc3_oam";
+				}
+				maps oam
+			}
+
+			net concrete_net1 {
+				properties {
+					name = "uc3_net1";
+				}
+				maps net1
+			}
+
+			net concrete_net2 {
+				properties {
+					name = "uc3_net2";
+				}
+				maps net2
+			}
+
+			net concrete_net3 {
+				properties {
+					name = "uc3_net3";
+				}
+				maps net3
+			}
+
+		}
+	}
+	active con_infra
+}
+optimization opt {
+	objectives {
+		"cost" => min
+		"performance" => max
+		"availability" => max
+	}
+	nonfunctional_requirements {
+		req1 "cost <= 300" max 300.0 => "cost";
+		req2 "performance >= 7%" min 7.0 => "performance";
+		req3 "elements" => "VM, Storage";
+	}
+}

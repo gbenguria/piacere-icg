@@ -1,0 +1,147 @@
+doml nio3_test_exec_env
+
+application app {
+
+	software_component nio3 {
+		properties {}
+	}
+}
+
+infrastructure infra {
+	
+	net net1 {
+		cidr "/24"
+		protocol "tcp/ip"
+		gateway g1 {
+			address "10.83.18.65"
+		}
+	}
+
+	key_pair ssh_key {
+		algorithm "RSA"		
+		bits 4096
+	}
+	
+	vm_image img {
+		generates vm1, vm2
+	}
+	
+	vm vm1 {
+		os "centos7_64Guest"
+		cpu_count 2
+		mem_mb 1024.0
+		iface i1 {
+			address "10.83.18.92"
+			belongs_to net1
+		}
+		credentials ssh_key
+	}
+	
+	vm vm2 {
+		os "centos7_64Guest"
+		cpu_count 2
+		mem_mb 1024.0
+		iface i1 {
+			address "10.83.18.88"
+			belongs_to net1
+		}
+		credentials ssh_key
+	}
+	
+	storage disk0 {
+		label "disk0"
+		size_gb 100
+	}
+}
+
+deployment conf {
+	nio3 => vm1, nio3 => vm2
+}
+
+active deployment conf
+
+concretizations {
+	concrete_infrastructure con_infra {
+		provider vsphere {
+			properties {
+				username = "vc_username"
+				password = "vc_password"
+				vsphere_server = "psvc10000002.cd.sigov.si"
+				allow_unverified_ssl = true
+			}
+			
+			generic_resource dc {
+				preexisting true
+				type 'vsphere_datacenter'
+				gname 'PIACDC'
+			}
+
+			generic_resource cl {
+				preexisting true
+				refs_to dc
+				type 'vsphere_compute_cluster'
+				gname 'PIACC'
+			}
+
+			generic_resource pool {
+				preexisting true
+				refs_to dc
+				type 'vsphere_resource_pool'
+				gname 'Piacere'
+			}
+			
+			vm_image template {
+				preexisting true
+				refs_to dc
+				properties {
+					vsphere_virtual_machine_name = "c7tmp"
+				}
+				maps img
+			}
+			
+			storage datastore {
+				preexisting true
+				refs_to dc
+				properties {
+					vsphere_datastore_name = 'NFSShare01'
+				}
+				maps disk0
+			}
+
+			net network {
+				preexisting true
+				refs_to dc
+				properties {
+					vsphere_network_name = "Nested-ESXi"
+				}
+				maps net1
+			}
+
+			vm con_vm1 {
+				refs_to pool, datastore, template
+				properties {
+					host_name = "simpa-test00-piacere"
+					domain    = "tri.lan"			
+					guest_id  = "centos7_64Guest"
+					disk      = "disk0"
+					disk_size = 100
+					
+				}
+				maps vm1
+			}
+
+			vm con_vm2 {
+				refs_to pool, datastore, template
+				properties {
+					host_name = "simpa-test00-piacere"
+					domain    = "tri.lan"		
+					guest_id  = "centos7_64Guest"
+					disk      = "disk1"
+					disk_size = 100
+				}
+				maps vm2
+			}
+		}
+	}
+	active con_infra
+}
