@@ -18,6 +18,10 @@ telegraf_agent_output:
 telegraf_global_tags:
   - tag_name: deployment_id
     tag_value: "{{ pma_deployment_id }}"
+  - tag_name: doml_element_name
+    tag_value: "{{ doml_element_name }}"
+  - tag_name: doml_element_type
+    tag_value: "vm"
 
 telegraf_plugins_default:
   - plugin: cpu

@@ -16,9 +16,34 @@
 {##-------- Variables ##}
 {%- set var_network_name = infra_element_name -%}
 {%- set var_security_groups = infra_sgs -%}
+{%- set preexinsting = preexisting -%}
 
 ## Network
+{%- if preexisting %}{% if resourceName %}
+# Retrieve Network
+data "openstack_networking_network_v2" "{{ var_network_name }}" {
+  name = "{{ resourceName }}"
+}
 
+{% for subnet in subnets %}
+# Retrieve Subnet
+data "openstack_networking_subnet_v2" "{{ subnet.name ~ "_subnet" }}" {
+  name = "{{ resourceName }}"
+}
+{% endfor %}
+{% else %}
+# Retrieve Network
+data "openstack_networking_network_v2" "{{ var_network_name }}" {
+  name = "{{ name }}"
+}
+
+{% for subnet in subnets %}
+# Retrieve Subnet
+data "openstack_networking_subnet_v2" "{{ subnet.name ~ "_subnet" }}" {
+  name = "{{ subnet.name }}"
+}
+{% endfor %}{% endif %}
+{%- else %}
 # Create Network
 resource "openstack_networking_network_v2" "{{ var_network_name }}" {
   name = "{{ name }}"
@@ -27,22 +52,23 @@ resource "openstack_networking_network_v2" "{{ var_network_name }}" {
 # Create router
 resource "openstack_networking_router_v2" "router_{{ var_network_name }}" { 
   name                = "router_{{ var_network_name }}"
-  external_network_id = data.openstack_networking_network_v2.external.id    #External network id
+  external_network_id = data.openstack_networking_network_v2.external.id
 }
 
 {##-------- Subnets Here ##}
-{%- for key, value in context().items() -%}{%- if not callable(value) -%}{%-if key.startswith('Subnet') -%}
+{%- for subnet in subnets %}
 # Subnet
-resource "openstack_networking_subnet_v2" "{{ value.name ~ "_subnet" }}" {
-  name            = "{{ value.name ~ "_subnet" }}"
+resource "openstack_networking_subnet_v2" "{{ subnet.name ~ "_subnet" }}" {
+  name            = "{{ subnet.name ~ "_subnet" }}"
   network_id      = openstack_networking_network_v2.{{ var_network_name }}.id
-  cidr            = "{{ value.addressRange }}"
+  cidr            = "{{ subnet.addressRange }}"
   dns_nameservers = ["8.8.8.8", "8.8.8.4"]
 }
 
 # Create router interface on subnet
-resource "openstack_networking_router_interface_v2" "router_interface_{{ var_network_name }}_{{ value.name ~ "_subnet" }}" {
+resource "openstack_networking_router_interface_v2" "router_interface_{{ var_network_name }}_{{ subnet.name ~ "_subnet" }}" {
   router_id = "${openstack_networking_router_v2.router_{{ var_network_name }}.id}"
-  subnet_id = "${openstack_networking_subnet_v2.{{ value.name ~ "_subnet" }}.id}"
+  subnet_id = "${openstack_networking_subnet_v2.{{ subnet.name ~ "_subnet" }}.id}"
 }
-{%-endif %}{% endif %}{% endfor %}
+{% endfor %}
+{%- endif %}

@@ -15,5 +15,5 @@
 #}
 resource "aws_key_pair" "{{infra_element_name}}" {
   key_name   = "{{infra_element_name}}"
-  public_key = "{{keyfile}}"
+  public_key = "{{key}}"
 }

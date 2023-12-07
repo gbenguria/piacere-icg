@@ -6,7 +6,7 @@ Security Monitoring Agent (Wazuh agent) deployment as a docker
 
 ### Configuration
 
-`vars.yml` include:
+Important variables within `vars.yml` include these:
 
 ```
 ---
@@ -26,6 +26,8 @@ To run the playbook:
 ansible-playbook main.yml -i inventory.txt
 ```
 
+The Wazuh agent should be running as a process on the target infrastructure (e.g., a VM).
+
 ## Usage - Docker
 
 To build the agent's docker image on `docker` host from the `inventory`, run this command:
@@ -36,11 +38,17 @@ ansible-playbook build-wazuh-agent.yml -i inventory.txt
 
 You could also build the image manually and push it to some other docker registry. In this case you should change the variable for the image name within `vars.yml`.
 
-To start the deployment, run this command:
+### Running the agent and modifying Inventory file
+
+To start the deployment locally (local docker engine), run this command:
 
 ```
 ansible-playbook deploy-wazuh-docker-agent.yml -i inventory.txt
 ```
+
+In order docker engine is on the other machine, change the inventory accordingly. 
+
+### Configuration
 
 Example of the configuration (`vars.yml`):
 
@@ -60,7 +68,7 @@ wazuh_agent_image_name: "wazuh-agent-image"
 piacere_deployment_id: "123e4567-e89b-12d3-a456-426614174002"
 ```
 
-All these variables can be overriden via environemnt. 
+All these variables can be overriden via environment. 
 
 ### `Build Wazuh Agent` playbook
 

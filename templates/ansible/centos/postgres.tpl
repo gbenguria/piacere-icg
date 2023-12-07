@@ -15,7 +15,7 @@
 #}
 
 ---
-- hosts: DB
+- hosts: {{ "servers_for_" ~ name }}
   become: yes
 
   pre_tasks:

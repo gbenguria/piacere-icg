@@ -9,9 +9,10 @@ def find_objects(object_name: ModelResources, intermediate_representation):
     steps = intermediate_representation[ir_step_name]
     object_ir_name = get_ir_key_name(object_name)
     for step in steps:
-        data = step[get_ir_key_name(ModelResources.DATA)]
-        if object_ir_name in data.keys():
-            return data[object_ir_name]
+        if step:
+            data = step[get_ir_key_name(ModelResources.DATA)]
+            if object_ir_name in data.keys():
+                return data[object_ir_name]
     return []
 
 

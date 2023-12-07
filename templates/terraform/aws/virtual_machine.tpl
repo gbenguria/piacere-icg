@@ -15,7 +15,7 @@
 #}
 
 resource "aws_instance" "{{infra_element_name}}" {
-  ami = "{{ os }}"
+{% for image_el in extra_parameters["vmImages"] %}{%- if image_el["infra_element_name"] == generatedFrom %}  ami = "{{ image_el.image_name }}"{%- endif %}{% endfor %}
   instance_type = "{% if 'vm_flavor' in context().keys() %}{{ vm_flavor }}{% else %}{{ instance_type }}{% endif %}"
   key_name = "{{credentials}}"
   {% if 'group' in context().keys() %}vpc_security_group_ids = [aws_security_group.{{group ~ "_security_group"}}.id]{% endif %}

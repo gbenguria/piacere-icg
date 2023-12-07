@@ -17,6 +17,7 @@
       when: item is not defined
       with_items:
         - pma_deployment_id
+        - doml_element_name
         - pma_influxdb_bucket
         - pma_influxdb_token
         - pma_influxdb_org
@@ -25,6 +26,7 @@
       debug:
         msg: 
           - "pma_deployment_id: {{ pma_deployment_id }}"
+          - "doml_element_name: {{ doml_element_name }}"
           - "pma_influxdb_bucket: {{ pma_influxdb_bucket }}"
           - "pma_influxdb_token: {{ pma_influxdb_token }}"
           - "pma_influxdb_org: {{ pma_influxdb_org }}"

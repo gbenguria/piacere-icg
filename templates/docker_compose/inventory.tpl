@@ -14,14 +14,13 @@
 #-------------------------------------------------------------------------
 #}
 
+
 [{{ "servers_for_" ~ name }}]
-{%- for config in configs %}
-{% raw %}{{ instance_server_public_ip_{% endraw %}{{ config.host.name }} {% raw %}}}{% endraw %}
-{%- endfor %}
+{%- for image in extra_parameters %}{% if image["maps"] is sameas generatedFrom["name"] %}{% for cont in image["generatedContainers"] %}{% if cont["name"] is sameas name %}{% if "hostConfigs" in cont %}
+{% raw %}{{ instance_server_public_ip_{% endraw %}{{ cont.hostConfigs.0.host }} {% raw %}}}{% endraw %}
+{%- endif %}{% endif %}{% endfor %}{% endif %}{%- endfor %}
 
 [{{ "servers_for_" ~ name }}:vars]
 ansible_connection=ssh
-{%- for config in configs %}
-ansible_user={%- if "ubuntu" in config.host.os.lower() %}ubuntu{%- elif "centos" in config.host.os.lower() %}centos{%- endif %}
-{%- endfor %}
+ansible_user=centos
 ansible_ssh_private_key_file=ssh_key

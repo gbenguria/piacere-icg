@@ -10,6 +10,7 @@ class ModelResources(Enum):
     NETWORKS = 6,
     SECURITY_GROUPS = 7,
     AUTOSCALING_GROUPS = 8,
+    STEP_TYPE = 9,
 
 def from_model_resources_to_ir_names_version1(model_resource: ModelResources):
     switcher = {
@@ -21,6 +22,7 @@ def from_model_resources_to_ir_names_version1(model_resource: ModelResources):
         6: "networks",
         7: "computingGroup",
         8: "group",
+        9: "step_type"
     }
     if model_resource.value[0]:
         resource_number = model_resource.value[0]
@@ -38,7 +40,8 @@ def from_model_resources_to_ir_names_version2(model_resource: ModelResources):
         5: "vms",
         6: "networks",
         7: "securityGroup",
-        8: "group",
+        8: "autoScalingGroups",
+        9: "step_type"
     }
     if model_resource.value[0]:
         resource_number = model_resource.value[0]
@@ -71,10 +74,14 @@ class ModelResourcesUtilities:
         switcher = {
             "1": from_model_resources_to_ir_names_version1(model_resource),
             "2": from_model_resources_to_ir_names_version2(model_resource),
+            "2.0": from_model_resources_to_ir_names_version2(model_resource),
             "2.2": from_model_resources_to_ir_names_version2(model_resource),
             "2.2.2": from_model_resources_to_ir_names_version2(model_resource),
+            "2.3": from_model_resources_to_ir_names_version2(model_resource),
+            "3.0": from_model_resources_to_ir_names_version2(model_resource),
+            "3.1": from_model_resources_to_ir_names_version2(model_resource),
         }
-        return switcher.get(self.doml_version, from_model_resources_to_ir_names_version1(model_resource))
+        return switcher.get(self.doml_version, from_model_resources_to_ir_names_version2(model_resource))
 
     def set_doml_version(self, doml_version):
         self.doml_version = doml_version

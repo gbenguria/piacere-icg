@@ -16,6 +16,7 @@ def create_piacere_agents_ansible_step(piacere_component_name, intermediate_repr
     if vms or autoscaling_group_vms:
         intermediate_repr_step = {"programming_language": "ansible",
                                   "step_name": step_name,
+                                  "step_type": "SoftwareComponent",
                                   "data": {step_name: {"name": step_name}}}
         intermediate_repr_step["data"][step_name]["nodes"] = []
         if vms:
@@ -62,18 +63,22 @@ def add_internal_tool_information(intermediate_representation):
 
 def add_files_for_monitoring_agents(template_generated_folder_path):
     monitoring_folder_path = template_generated_folder_path + "performance_monitoring"
+    if not os.path.exists(monitoring_folder_path):
+        os.makedirs(monitoring_folder_path)
     logging.info(f"Adding monitoring agents folder in {monitoring_folder_path}")
     monitoring_folder = "templates/ansible/cross-platform/performance_monitoring"
-    if not monitoring_folder:
+    if not os.path.exists(monitoring_folder):
         os.makedirs(monitoring_folder)
     copy_tree("templates/ansible/cross-platform/performance_monitoring", monitoring_folder_path)
 
 
 def add_files_for_security_agents(template_generated_folder_path):
     security_folder_path = template_generated_folder_path + "security_monitoring"
+    if not os.path.exists(security_folder_path):
+        os.makedirs(security_folder_path)
     logging.info(f"Adding monitoring agents folder in {security_folder_path}")
     security_folder = "templates/ansible/cross-platform/security_monitoring"
-    if not security_folder:
+    if not os.path.exists(security_folder):
         os.makedirs(security_folder)
     copy_tree("templates/ansible/cross-platform/security_monitoring", security_folder_path)
 

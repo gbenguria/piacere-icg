@@ -1,7 +1,13 @@
 
+[local]
+127.0.0.1
+
+[local:vars]
+ansible_connection=local
+instance_server_public_ip_vm1={{ instance_server_public_ip_vm1 }}
 
 [servers_for_nginx]
-{{ instance_server_public_ip_nginx_vm }}
+{{ instance_server_public_ip_vm1 }} doml_element_name=vm1
 
 [servers_for_nginx:vars]
 ansible_connection=ssh

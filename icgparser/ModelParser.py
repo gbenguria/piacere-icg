@@ -27,15 +27,16 @@
 # -------------------------------------------------------------------------
 import logging
 import re
-from icgparser import DomlParserUtilities
+from icgparser import DomlParserUtilities, IntermediateRepresentationUtility
 from icgparser.DomlParserUtilities import get_reference_list_if_exists, get_resources_from_concrete_layer, \
-    get_infrastructure_element_from, get_external_references, save_references_info
-from icgparser.ModelResourcesUtilities import ModelResourcesUtilities
+    get_infrastructure_element_from, get_external_references, save_references_info, update_missing_parsed_resources
+from icgparser.ModelResourcesUtilities import ModelResourcesUtilities, ModelResources
 from plugin.PluginUtility import find_external_plugins_name, find_resources_names_for_plugin
 
 OUTPUT_BASE_DIR_PATH = "output_files_generated/"
 doml_layers = {
     "active_infrastructure_layer": "activeInfrastructure",
+    "infrastructure_layer": "infrastructure",
 }
 
 
@@ -55,8 +56,10 @@ def include_missing_objects_from_infrastructure_layer(to_step):
                                                                                 infra_object_representation)
         infra_object_representation = DomlParserUtilities.add_infrastructure_information(obj["resource"],
                                                                                          infra_object_representation)
-
-        ir_key_name = to_camel_case(obj["reference"].eType.name)
+        if "SecurityGroup" in str(type(obj["reference"])):
+            ir_key_name = "securityGroup"
+        else:
+            ir_key_name = to_camel_case(obj["reference"].eType.name)
         if ir_key_name in to_step["data"].keys():
             to_step["data"][ir_key_name].append(infra_object_representation)
         else:
@@ -86,8 +89,8 @@ def save_object_from_concrete_layer(object):
     object_representation = DomlParserUtilities.save_references_link(object, object_representation)
     object_representation = DomlParserUtilities.save_concrete_references_info(object, object_representation)
     if DomlParserUtilities.hasMaps(object):
-        object_representation = DomlParserUtilities.add_infrastructure_information(object.maps,
-                                                                                   object_representation)
+            object_representation = DomlParserUtilities.add_infrastructure_information(object.maps,
+                                                                                       object_representation)
     return object_representation
 
 
@@ -103,6 +106,8 @@ def parse_infrastructural_objects(doml_model):
     infra_object_step = {"programming_language": "terraform"}  ## TODO refactoring: generalize
     concretization_layer = doml_model.eGet(doml_layers["active_infrastructure_layer"])
     providers = concretization_layer.providers
+    infa_layer = doml_model.eGet(doml_layers["infrastructure_layer"])
+
     for provider in providers:
         logging.info(f'Searching objects to be generates for provider "{provider.name}"')
         infra_object_step["data"] = {}  ## TODO refactoring, fix (maybe list?): generalize
@@ -110,6 +115,13 @@ def parse_infrastructural_objects(doml_model):
 
         infra_object_step = include_provide_info_from_concrete_layer(provider, infra_object_step)
         infra_object_step = include_infra_object_from_concrete_layer(provider, infra_object_step)
+        try:
+            infra_sec_groups = infa_layer.securityGroups
+            for infra_sec_group in infra_sec_groups:
+                logging.info(f'Found security group name "{infra_sec_group.name}"')
+                update_missing_parsed_resources(infra_sec_group, reference=infra_sec_group, is_to_be_parsed=True)
+        except:
+            logging.info(f'No security group found')
         infra_object_step = include_missing_objects_from_infrastructure_layer(infra_object_step)
     return infra_object_step
 
@@ -125,24 +137,77 @@ def parse_application_layer(deployment, infra_object_step):
 
     application_object_step = {"programming_language": "ansible", "data": {}}
     deployment_component_name = deployment.component.name
-    logging.info(f'Parsing deployment for component {deployment_component_name}')
+    deployment_component_type = deployment.component.eClass.name
+    logging.info(f'Parsing deployment for component {deployment_component_name} of type {deployment_component_type}')
     object_representation = {}
 
     application_resource = deployment.eGet("component")
-    vm = deployment.eGet("node")
-    try:
-        for infra_vm in infra_object_step.get("data").get("vms"):
-            if infra_vm.get("infra_element_name") == vm.name:
-                ## TODO fake list, refactoring -> far diventare lista nodi? nel monitoring sono più nodi
-                object_representation["nodes"] = [infra_vm]
-    except Exception:
-        logging.error(f"parsing error: no vm {vm.name} found for deployment {deployment_component_name}")
+
+    if deployment_component_type == "SoftwareComponent" or deployment_component_type == "DBMS":
+        vm = deployment.eGet("node")
+        # Looking for VM named vm.name
+        found = False
+        try:
+            if "autoScalingGroups" in infra_object_step.get("data").keys():
+                for ag in infra_object_step.get("data").get("autoScalingGroups"):
+                    ag_vm = next(v for k, v in ag.items() if k.lower().startswith('virtualmachine'))
+                    if ag_vm.get("name") == vm.name:
+                        ## TODO fake list, refactoring -> far diventare lista nodi? nel monitoring sono più nodi
+                        object_representation["nodes"] = [ag_vm]
+                        found = True
+                ## Can be optimized by doing further searches only if not found?
+                for infra_vm in infra_object_step.get("data").get("virtualMachine"):
+                    if infra_vm.get("infra_element_name") == vm.name:
+                        ## TODO fake list, refactoring -> far diventare lista nodi? nel monitoring sono più nodi
+                        object_representation["nodes"] = [infra_vm]
+                        found = True
+            elif "group" in infra_object_step.get("data").keys():
+                for ag in infra_object_step.get("data").get("group"):
+                    ag_vm = next(v for k, v in ag.items() if k.lower().startswith('virtualmachine'))
+                    if ag_vm.get("name") == vm.name:
+                        ## TODO fake list, refactoring -> far diventare lista nodi? nel monitoring sono più nodi
+                        object_representation["nodes"] = [ag_vm]
+                        found = True
+                for infra_vm in infra_object_step.get("data").get("vms"):
+                    if infra_vm.get("infra_element_name") == vm.name:
+                        ## TODO fake list, refactoring -> far diventare lista nodi? nel monitoring sono più nodi
+                        object_representation["nodes"] = [infra_vm]
+                        found = True
+            if not found and "vms" in infra_object_step.get("data").keys():
+                for infra_vm in infra_object_step.get("data").get("vms"):
+                    if infra_vm.get("infra_element_name") == vm.name:
+                        ## TODO fake list, refactoring -> far diventare lista nodi? nel monitoring sono più nodi
+                        object_representation["nodes"] = [infra_vm]
+                        found = True
+            if not found and "virtualMachine" in infra_object_step.get("data").keys():
+                for infra_vm in infra_object_step.get("data").get("virtualMachine"):
+                    if infra_vm.get("infra_element_name") == vm.name:
+                        ## TODO fake list, refactoring -> far diventare lista nodi? nel monitoring sono più nodi
+                        object_representation["nodes"] = [infra_vm]
+                        found = True
+            if not found:
+                logging.error(f"VM missing: no vm {vm.name} found for deployment {deployment_component_name}")
+                        
+        except Exception:
+            logging.error(f"parsing error: no vm {vm.name} found for deployment {deployment_component_name}")
+
+    elif deployment_component_type == "SaaSDBMS":
+    # Include exec_env information into saas IR
+        execenv = deployment.eGet("node")
+    # @@@@
+        for infra_execenv in infra_object_step.get("data").get("executionEnvironments"):
+            if infra_execenv.get("infra_element_name") == execenv.name:
+                object_representation["nodes"] = [infra_execenv]
+# Further application layer component types should be handled here
 
     object_representation = DomlParserUtilities.save_annotations(application_resource, object_representation)
     object_representation = DomlParserUtilities.save_attributes(application_resource, object_representation)
+    object_representation = DomlParserUtilities.save_references_info(application_resource, object_representation)
 
     application_object_step["data"][deployment_component_name] = object_representation
     application_object_step["step_name"] = deployment_component_name
+    application_object_step["step_type"] = deployment_component_type
+
     return application_object_step
 
 

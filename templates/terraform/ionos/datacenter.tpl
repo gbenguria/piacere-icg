@@ -16,6 +16,6 @@
 
 resource "ionoscloud_datacenter" "dc_for_vm" {
   name        = "{{gname}}"
-  location    = "{% if 'vm_Region' in context().keys() %}{{ vm_Region }}{% else %}de/txl{% endif %}"
+  location    = var.location
   description = "Piacere demo with IONOS, Terraform and Gaia-X orchestrator"
 }

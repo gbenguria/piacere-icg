@@ -15,8 +15,4 @@
 #}
 
 provider "vsphere" {
-  #user                 = VSPHERE_USER
-  #password             = VSPHERE_PASSWORD
-  #vsphere_server       = VSPHERE_SERVER
-  #allow_unverified_ssl = {{allow_unverified_ssl}}
 }

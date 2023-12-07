@@ -200,4 +200,14 @@
     <location>/var/log/maillog</location>
   </localfile>
 
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/*</location>
+  </localfile>
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/lib/docker/containers/*/*.log</location>
+  </localfile>
+
 </ossec_config>

@@ -22,6 +22,12 @@ output "instance_server_private_key_{{ credentials }}_{{ infra_element_name }}" 
   value = openstack_compute_keypair_v2.{{ credentials }}.private_key
 }
 
+{%- if configInterface is defined %}
+output "instance_server_public_ip_{{ infra_element_name }}" {
+  value = openstack_networking_port_v2.{{ configInterface }}_networking_port.all_fixed_ips.0
+}
+{%- else %}
 output "instance_server_public_ip_{{ infra_element_name }}" {
   value = openstack_compute_floatingip_associate_v2.{{ infra_element_name ~ "_floating_ip_association" }}.floating_ip
 }
+{%- endif %}

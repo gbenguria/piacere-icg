@@ -14,33 +14,41 @@
 #-------------------------------------------------------------------------
 #}
 
+variable "username" {
+  type = string
+  default = "esilab"
+}
+
+variable "password" {
+  type = string
+  default = "NoNeedForSpecialChars04392"
+}
+
 # Create virtual machine
 resource "vsphere_virtual_machine" "{{ infra_element_name }}" {
   name        = "{{ name }}"
-  {%- if pool and pool.preexisting %}
-  resource_pool_id  = ${data.{{pool.type}}.{{ pool.name }}.id}
-  {%- endif %}
-  {%- if datastore and datastore.preexisting %}
-  datastore_id = ${data.vsphere_datastore.{{ datastore.name }}.id}
-  {%- endif %}
+{%- if pool and pool.preexisting %}
+  resource_pool_id  = "${data.{{pool.type}}.{{ pool.name }}.id}"{%- endif %}
+{%- if datastore and datastore.preexisting %}
+  datastore_id = "${data.vsphere_datastore.{{ datastore.name }}.id}"{%- endif %}
   num_cpus = {% if 'vm_Virtual_CPU_Cores' in context().keys() %}{{ vm_Virtual_CPU_Cores }}{% else %}{{ cpu_count }}{% endif %}
   memory   = {% if 'vm_Memory' in context().keys() %}{{ vm_Memory }}{% else %}{{ memory_mb }}{% endif %}
 
   guest_id = "{{guest_id}}"
 
   network_interface {
-    network_id = {%- for key, value in context().items() %}{% if not callable(value)%}{%if key.startswith('NetworkInterface') %} ${data.vsphere_network.{{ value.belongsTo }}.id}
-    {%- endif %}{% endif %}{% endfor %}
+    network_id = {%- for key, value in context().items() %}{% if not callable(value)%}{%if key.startswith('NetworkInterface') %} "${data.vsphere_network.{{ value.belongsTo }}.id}"{%- endif %}{% endif %}{% endfor %}
   }
 
   disk {
-    label = "{{disk}}"                //TODO Missing attach option in DOML - datastore and disk are two different resources
-    size  = {% if 'vm_Instance_Storage' in context().keys() %}{{ vm_Instance_Storage }}{% else %}{{ disk_size }}{% endif %}
-    
+{% for store_el in extra_parameters["storages"] %}
+    label = "{{ store_el.label }}"
+    size  = "{{ store_el.size_gb }}"
+{% endfor %}   
   }
 
   clone {
-    template_uuid = ${data.vsphere_virtual_machine.{{template.name}}.id} 
+    template_uuid = "${data.vsphere_virtual_machine.{{template.name}}.id}"
     customize {
       linux_options {
         host_name = "{{host_name}}"
@@ -48,10 +56,10 @@ resource "vsphere_virtual_machine" "{{ infra_element_name }}" {
       }
       network_interface {
         ipv4_address = {%- for key, value in context().items() %}{% if not callable(value)%}{%if key.startswith('NetworkInterface') %} "{{ value.endPoint }}"{%- endif %}{% endif %}{% endfor %}
-        ipv4_netmask = 27               //TODO retrieve in some way the netmask from the network (ICG Parser)
+        ipv4_netmask = 27
         dns_server_list = ["10.81.34.36, 10.81.34.60"]
       }
-      ipv4_gateway = "10.83.18.65"      //TODO the DOML v2.2 definition of gateway is still not implemented in IDE
+      ipv4_gateway = "10.83.18.65"
     }
   }
 
@@ -59,7 +67,7 @@ resource "vsphere_virtual_machine" "{{ infra_element_name }}" {
     type     = "ssh"
     user     = "${var.username}"
     password = "${var.password}"
-    host     = "${self.default_ip_address}"  # TCN GBE
+    host     = "${self.default_ip_address}" 
   }
 
   provisioner "remote-exec"  {
@@ -70,8 +78,7 @@ resource "vsphere_virtual_machine" "{{ infra_element_name }}" {
       "chmod 700 /root/.ssh",
       "touch /root/.ssh/authorized_keys",
       "chmod 600 /root/.ssh/authorized_keys",
-      "echo -e '${tls_private_key.{{ credentials }}.public_key_openssh}' >> /root/.ssh/authorized_keys"  # TCN GBE 
+      "echo -e '${tls_private_key.{{ credentials }}.public_key_openssh}' >> /root/.ssh/authorized_keys"
     ]
   }
-
 }

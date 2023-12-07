@@ -50,25 +50,40 @@ def create_template_file(parameters, language, operating_system, template_name):
     return template_filled
 
 
+def is_external_code(resource_params):
+    return resource_params.get("src")
+
+
 def create_files(step, output_path):
     language = step[get_ir_key_name(ModelResources.LANGUAGE)]
     step_name = step[get_ir_key_name(ModelResources.STEP_NAME)]
+    step_type = step[get_ir_key_name(ModelResources.STEP_TYPE)]
     parameters = step["data"]
     for resource_name, resource in parameters.items():
         logging.info("Creating template for resource '%s'", resource_name)
-        operating_system = find_operating_system(resource)
-        ansible_template_path = TemplateUtils.find_template_path(language, operating_system, resource_name)
+        if "SaaS" in step_type:
+            # handle SaaSDBMS and other SaaS types
+            operating_system = "saas"
+        else:
+            operating_system = find_operating_system(resource)
+        # for resource_params in parameters[resource_name]:
+        resource_params = parameters[resource_name]
+        if is_external_code(resource_params):
+            ansible_template_path = TemplateUtils.find_template_path(language, operating_system, "external_iac")
+            template = TemplateUtils.read_template(ansible_template_path)
+        elif "SaaS" in step_type:
+            ansible_template_path = TemplateUtils.find_template_path(language, operating_system, step_type)
+        else:  
+            ansible_template_path = TemplateUtils.find_template_path(language, operating_system, resource_name)
         if ansible_template_path:
-            # for resource_params in parameters[resource_name]:
-            resource_params = parameters[resource_name]
-
             ansible_output_file_path = output_path + "/".join([step_name, "main"]) + ".yml"
             inventory_output_file_path = output_path + "/".join([step_name, "inventory"]) + ".j2"
             config_output_file_path = output_path + "/".join([step_name, "config"]) + ".yaml"
             ssh_key_output_file_path = output_path + "/".join([step_name, "ssh_key.j2"])
-
+            if is_external_code(resource_params):
+                template = TemplateUtils.read_template(ansible_template_path)
             ### TODO Refactoring
-            if "," in ansible_template_path:
+            elif "," in ansible_template_path:
                 ansible_template_path = ansible_template_path.split(",")
                 template = TemplateUtils.read_template(ansible_template_path[0])                   
                 for i in range(1, len(ansible_template_path)):

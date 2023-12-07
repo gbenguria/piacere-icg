@@ -25,7 +25,7 @@ resource "aws_vpc" "{{infra_element_name}}" {
 # Subnet
 resource "aws_subnet" "{{value.name ~ "_subnet"}}" {
   vpc_id = aws_vpc.{{infra_element_name}}.id
-  cidr_block = "{{value.addressRange}}"
+  cidr_block = "{{ subnets | selectattr('maps', 'equalto', value.name) | map(attribute='addressRange') | first }}"
   map_public_ip_on_launch  = false
   tags = {
     Name = "{{value.name}}"

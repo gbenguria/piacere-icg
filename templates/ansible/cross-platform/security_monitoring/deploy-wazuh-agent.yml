@@ -35,8 +35,9 @@
 
   - name: Other distributions not supported
     ansible.builtin.shell: echo "only on Ubuntu or Debian"
-    when: ansible_distribution != 'Debian' and ansible_distribution != 'Ubuntu'   
+    when: ansible_distribution != 'Debian' and ansible_distribution != 'Ubuntu'
 
+  # Setup for debian based distributions
   - name: System upgrade
     ansible.builtin.apt:
       name: "*"
@@ -78,12 +79,46 @@
           name: wazuh-agent
     when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'          
 
+  # Setup for CentOS
+  - name: Upgrade all packages
+    become: yes
+    ansible.builtin.yum:
+      name: '*'
+      state: latest
+    when: ansible_distribution == 'CentOS'
+
+  - name: Add the Wazuh repository and install wazuh agent
+    become: yes
+    block:
+      - name: Import the GPG key
+        become: yes
+        ansible.builtin.rpm_key:
+          state: present
+          key: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+        when: ansible_distribution == 'CentOS'
+
+      - name: Add the repository
+        ansible.builtin.yum_repository:
+          name: wazuh
+          description: EL-\$releasever - Wazuh
+          baseurl: https://packages.wazuh.com/4.x/yum/
+          gpgcheck: true
+          gpgkey: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+          enabled: true
+          protect: true
+
+      - name: Install wazuh-agent
+        ansible.builtin.yum:
+          name: wazuh-agent
+          state: latest
+    when: ansible_distribution == 'CentOS'
+
   - name: Create config path
     ansible.builtin.file:
       path: "{{ service_config_dir }}"
       state: directory
       mode: 0755
-    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'      
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' or ansible_distribution == 'CentOS'
 
   - name: Copy config template to remote host
     become: yes
@@ -92,7 +127,7 @@
       dest: "/var/ossec/etc/ossec.conf"
       mode: 0644
     register: config_changed
-    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'    
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' or ansible_distribution == 'CentOS'
 
   - name: Start wazuh agent service
     become: yes
@@ -107,4 +142,5 @@
         ansible.builtin.systemd:
           name: wazuh-agent
           state: started
-    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'          
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' or ansible_distribution == 'CentOS'
+

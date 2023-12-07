@@ -1,4 +1,4 @@
-{# Copyright 2022 Hewlett Packard Enterprise Development LP
+{# Copyright 2023 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,17 +13,6 @@
 # limitations under the License.
 #-------------------------------------------------------------------------
 #}
-
----
-engine: terraform
-input:
-  - VSPHERE_USER
-  - VSPHERE_PASSWORD
-  - VSPHERE_SERVER
-  - VSPHERE_ALLOW_UNVERIFIED_SSL
-output:
-{% for vm in vms %}
-  - instance_server_private_key_{{ vm.credentials }}_{{ vm.infra_element_name }}
-  - instance_server_public_ip_{{ vm.infra_element_name }}
-{% endfor %}
-...
+{# 
+# Still TBD
+#}
