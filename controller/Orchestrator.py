@@ -65,7 +65,7 @@ def choose_plugin(parameters, template_generated_folder):
                 ### IMPORTANT, TO SOLVE
                 ### ADDED EXPLICIT EXCEPTION FOR SIMPA UC
                 ###
-                if step["step_name"] == "security_monitoring" or step["step_name"] == "performance_monitoring":
+                if step["step_name"] == "security_monitoring" or step["step_name"] == "performance_monitoring" or step["step_name"] == "self_healing_monitoring":
                     logging.info("Ansible Plugin chosen")
                     step_name = step[get_ir_key_name(ModelResources.STEP_NAME)]
                     metadata_root_folder["iac"].append(step_name)

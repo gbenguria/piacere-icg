@@ -1,19 +1,20 @@
 version: '3'
 services:
   {{ name }}:
-    image: {{ generatedFrom.uri }}
+    {%- for image in extra_parameters %}{% if image.maps is sameas generatedFrom %}
+    image: {{ image.uri }}
+    {% endif %}{%- endfor %}
     restart: on-failure
-    {%- for image in extra_parameters %}{% if image["maps"] is sameas generatedFrom["name"] %}{% for cont in image["generatedContainers"] %}{% if cont["name"] is sameas name %}{% if "hostConfigs" in cont %}
     ports:
-    {%- for config in cont["hostConfigs"][0]["configurations"] %}
+    {%- for config in hostConfigs[0]["configurations"] %}
     - "{{ config.container_port }}:{{ config.vm_port }}"
     {%- endfor %}
-    {%- if cont["hostConfigs"][0]["environment_variables"] is defined %}
+    {%- if hostConfigs[0]["environment_variables"] is defined %}
     environment:
-    {%- for environ in cont["hostConfigs"][0]["environment_variables"] %}
-      {{ environ.key }}: "{{ environ.value }}"
-    {%- endfor %}{% endif %}
-    {%- endif %}{% endif %}{% endfor %}{% endif %}{%- endfor %}
+    {%- for variable in hostConfigs[0]["environment_variables"] %}
+    - {{ variable.key }}="{{ variable.value }}"
+    {%- endfor %}
+    {%- endif %}
 {%- if networks is defined %}
     networks:
       - {{ networks.0.name }}

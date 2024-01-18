@@ -1,1270 +1,68 @@
 {
-  "output_path": "output_files_generated/uc3_openstack/",
+  "output_path": "output_files_generated/wordpress/",
   "steps": [
     {
       "data": {
-        "computingNode": [
-          {
-            "BProperty_config_drive": true,
-            "NetworkInterface_ewcf_vm_net1": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_net1_ewcf",
-              "name": "ewcf_vm_net1"
-            },
-            "NetworkInterface_ewcf_vm_net3": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_net3_ewcf",
-              "name": "ewcf_vm_net3"
-            },
-            "NetworkInterface_ewcf_vm_oam": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_oam_ewcf",
-              "name": "ewcf_vm_oam"
-            },
-            "annotations": [
-              {
-                "key": "config_drive",
-                "value": true
-              }
-            ],
-            "configInterface": "ewcf_vm_oam",
-            "credentials": "ssh_key",
-            "disabledMonitorings": [],
-            "ifaces": [
-              {
-                "name": "ewcf_vm_oam"
-              },
-              {
-                "name": "ewcf_vm_net1"
-              },
-              {
-                "name": "ewcf_vm_net3"
-              }
-            ],
-            "infra_element_name": "ewcf_vm",
-            "os": "CentOS-7-2111",
-            "sizeDescription": "small-centos"
-          },
-          {
-            "BProperty_config_drive": true,
-            "NetworkInterface_igw_vm_net1": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_net1_igw",
-              "name": "igw_vm_net1"
-            },
-            "NetworkInterface_igw_vm_net2": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_net2_igw",
-              "name": "igw_vm_net2"
-            },
-            "NetworkInterface_igw_vm_oam": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_oam_igw",
-              "name": "igw_vm_oam"
-            },
-            "annotations": [
-              {
-                "key": "config_drive",
-                "value": true
-              }
-            ],
-            "configInterface": "igw_vm_oam",
-            "credentials": "ssh_key",
-            "disabledMonitorings": [],
-            "ifaces": [
-              {
-                "name": "igw_vm_oam"
-              },
-              {
-                "name": "igw_vm_net1"
-              },
-              {
-                "name": "igw_vm_net2"
-              }
-            ],
-            "infra_element_name": "igw_vm",
-            "os": "CentOS-7-2111",
-            "sizeDescription": "small-centos"
-          }
-        ],
-        "containerImage": [
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_kafka"
-              }
-            ],
-            "infra_element_name": "cont_kafka_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/wurstmeister/kafka:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_zookeeper"
-              }
-            ],
-            "infra_element_name": "cont_zookeeper_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/wurstmeister/zookeeper:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_test_consumer_4_kafka"
-              }
-            ],
-            "infra_element_name": "test_consumer_4_kafka_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/test-consumer_4_kafka:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_test_producer_4_kafka"
-              }
-            ],
-            "infra_element_name": "test_producer_4_kafka_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/test-producer_4_kafka:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_go_poster"
-              }
-            ],
-            "infra_element_name": "go_poster_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/go_poster:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_ewcf_rest"
-              }
-            ],
-            "infra_element_name": "ewcf_rest_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/restapi:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_mongodb"
-              }
-            ],
-            "infra_element_name": "mongodb_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/mongo:4.2"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_tis"
-              }
-            ],
-            "infra_element_name": "tis_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/tis:1.0"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_tia"
-              }
-            ],
-            "infra_element_name": "tia_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/tia:1.0"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_twr"
-              }
-            ],
-            "infra_element_name": "twr_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/twr:1.0"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_ivre_web"
-              }
-            ],
-            "infra_element_name": "ivre_web_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/web:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_ivre_db"
-              }
-            ],
-            "infra_element_name": "ivre_db_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/db:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_ivre_client"
-              }
-            ],
-            "infra_element_name": "ivre_client_img",
-            "kind": "IMAGE",
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/client:latest"
-          }
-        ],
-        "containerImages": [
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": "cont_kafka_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 9092,
-                        "iface": "ewcf_vm_oam",
-                        "vm_port": 9092
-                      }
-                    ],
-                    "environment_variables": [
-                      {
-                        "key": "KAFKA_ADVERTISED_HOST_NAME",
-                        "value": "kafka"
-                      },
-                      {
-                        "key": "KAFKA_CREATE_TOPICS",
-                        "value": "stats:1:1"
-                      },
-                      {
-                        "key": "KAFKA_AUTO_CREATE_TOPICS_ENABLE",
-                        "value": "true"
-                      },
-                      {
-                        "key": "KAFKA_ZOOKEEPER_CONNECT",
-                        "value": "zookeeper:2181"
-                      }
-                    ],
-                    "host": "ewcf_vm"
-                  }
-                ],
-                "name": "cont_kafka",
-                "networks": [
-                  {
-                    "containerNetworkName": "kafka_net",
-                    "name": "kafka_net"
-                  }
-                ]
-              }
-            ],
-            "infra_element_name": "cont_kafka_img",
-            "kind": "IMAGE",
-            "maps": "cont_kafka_img",
-            "name": "concrete_cont_kafka_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/wurstmeister/kafka:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": "cont_zookeeper_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 2181,
-                        "iface": "ewcf_vm_oam",
-                        "vm_port": 2181
-                      }
-                    ],
-                    "host": "ewcf_vm"
-                  }
-                ],
-                "name": "cont_zookeeper",
-                "networks": [
-                  {
-                    "containerNetworkName": "kafka_net",
-                    "name": "kafka_net"
-                  }
-                ]
-              }
-            ],
-            "infra_element_name": "cont_zookeeper_img",
-            "kind": "IMAGE",
-            "maps": "cont_zookeeper_img",
-            "name": "concrete_cont_zookeeper_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/wurstmeister/zookeeper:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "dependsOn": [
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": "python_img",
-                    "hostConfigs": [
-                      {
-                        "host": "ewcf_vm"
-                      }
-                    ],
-                    "name": "cont_python"
-                  },
-                  {
-                    "disabledMonitorings": [],
-                    "name": "cont_kafka"
-                  },
-                  {
-                    "disabledMonitorings": [],
-                    "name": "cont_zookeeper"
-                  }
-                ],
-                "disabledMonitorings": [],
-                "generatedFrom": "test_consumer_4_kafka_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 5012,
-                        "iface": "ewcf_vm_oam",
-                        "vm_port": 5013
-                      }
-                    ],
-                    "host": "ewcf_vm"
-                  }
-                ],
-                "name": "cont_test_consumer_4_kafka",
-                "networks": [
-                  {
-                    "containerNetworkName": "kafka_net",
-                    "name": "kafka_net"
-                  }
-                ]
-              }
-            ],
-            "infra_element_name": "test_consumer_4_kafka_img",
-            "kind": "IMAGE",
-            "maps": "test_consumer_4_kafka_img",
-            "name": "concrete_test_consumer_4_kafka_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/test-consumer_4_kafka:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "dependsOn": [
-                  {
-                    "disabledMonitorings": [],
-                    "name": "cont_python"
-                  }
-                ],
-                "disabledMonitorings": [],
-                "generatedFrom": "test_producer_4_kafka_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 5014,
-                        "iface": "ewcf_vm_oam",
-                        "vm_port": 5015
-                      }
-                    ],
-                    "host": "ewcf_vm"
-                  }
-                ],
-                "name": "cont_test_producer_4_kafka",
-                "networks": [
-                  {
-                    "containerNetworkName": "kafka_net",
-                    "name": "kafka_net"
-                  }
-                ]
-              }
-            ],
-            "infra_element_name": "test_producer_4_kafka_img",
-            "kind": "IMAGE",
-            "maps": "test_producer_4_kafka_img",
-            "name": "concrete_test_producer_4_kafka_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/test-producer_4_kafka:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "dependsOn": [
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": "golang_img",
-                    "hostConfigs": [
-                      {
-                        "host": "ewcf_vm"
-                      }
-                    ],
-                    "name": "cont_golang"
-                  }
-                ],
-                "disabledMonitorings": [],
-                "generatedFrom": "go_poster_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 5009,
-                        "iface": "ewcf_vm_oam",
-                        "vm_port": 5008
-                      }
-                    ],
-                    "host": "ewcf_vm"
-                  }
-                ],
-                "name": "cont_go_poster"
-              }
-            ],
-            "infra_element_name": "go_poster_img",
-            "kind": "IMAGE",
-            "maps": "go_poster_img",
-            "name": "concrete_go_poster_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/go_poster:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "dependsOn": [
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": "hello_mongo_img",
-                    "hostConfigs": [
-                      {
-                        "configurations": [
-                          {
-                            "container_port": 5003,
-                            "iface": "ewcf_vm_oam",
-                            "vm_port": 5002
-                          }
-                        ],
-                        "host": "ewcf_vm"
-                      }
-                    ],
-                    "name": "cont_hello_mongo"
-                  },
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": "node_img",
-                    "hostConfigs": [
-                      {
-                        "configurations": [
-                          {
-                            "container_port": 5005,
-                            "iface": "ewcf_vm_oam",
-                            "vm_port": 5004
-                          }
-                        ],
-                        "host": "ewcf_vm"
-                      }
-                    ],
-                    "name": "cont_node"
-                  }
-                ],
-                "disabledMonitorings": [],
-                "generatedFrom": "ewcf_rest_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 5007,
-                        "iface": "ewcf_vm_net1",
-                        "vm_port": 5006
-                      }
-                    ],
-                    "host": "ewcf_vm"
-                  }
-                ],
-                "name": "cont_ewcf_rest"
-              }
-            ],
-            "infra_element_name": "ewcf_rest_img",
-            "kind": "IMAGE",
-            "maps": "ewcf_rest_img",
-            "name": "concrete_ewct_rest_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/restapi:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_hello_mongo"
-              }
-            ],
-            "infra_element_name": "hello_mongo_img",
-            "kind": "IMAGE",
-            "maps": "hello_mongo_img",
-            "name": "concrete_hello_mondo_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/hello-mongo:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_node"
-              }
-            ],
-            "infra_element_name": "node_img",
-            "kind": "IMAGE",
-            "maps": "node_img",
-            "name": "concrete_node_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/node:18.12.1"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_golang"
-              }
-            ],
-            "infra_element_name": "golang_img",
-            "kind": "IMAGE",
-            "maps": "golang_img",
-            "name": "concrete_golang_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/golang:1.16-alpine"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": "mongodb_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 85,
-                        "iface": "ewcf_vm_oam",
-                        "vm_port": 8085
-                      }
-                    ],
-                    "host": "ewcf_vm"
-                  }
-                ],
-                "name": "cont_mongodb"
-              }
-            ],
-            "infra_element_name": "mongodb_img",
-            "kind": "IMAGE",
-            "maps": "mongodb_img",
-            "name": "concrete_mongodb_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/mongo:4.2"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": "tis_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 90,
-                        "iface": "osint_vm_oam",
-                        "vm_port": 8090
-                      }
-                    ],
-                    "host": "ewcf_vm"
-                  }
-                ],
-                "name": "cont_tis"
-              }
-            ],
-            "infra_element_name": "tis_img",
-            "kind": "IMAGE",
-            "maps": "tis_img",
-            "name": "concrete_tis_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/tis:1.0"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": "tia_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 91,
-                        "iface": "osint_vm_oam",
-                        "vm_port": 8091
-                      }
-                    ],
-                    "host": "ewcf_vm"
-                  }
-                ],
-                "name": "cont_tia"
-              }
-            ],
-            "infra_element_name": "tia_img",
-            "kind": "IMAGE",
-            "maps": "tia_img",
-            "name": "tia_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/tia:1.0"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": "twr_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 92,
-                        "iface": "osint_vm_oam",
-                        "vm_port": 8092
-                      }
-                    ],
-                    "host": "ewcf_vm"
-                  }
-                ],
-                "name": "cont_twr"
-              }
-            ],
-            "infra_element_name": "twr_img",
-            "kind": "IMAGE",
-            "maps": "twr_img",
-            "name": "concrete_twr_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/twr:1.0"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "name": "cont_python"
-              }
-            ],
-            "infra_element_name": "python_img",
-            "kind": "IMAGE",
-            "maps": "python_img",
-            "name": "concrete_python_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/python:3.7"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": "ivre_web_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 85,
-                        "iface": "igw_vm_oam",
-                        "vm_port": 8085
-                      }
-                    ],
-                    "host": "igw_vm"
-                  }
-                ],
-                "name": "cont_ivre_web"
-              }
-            ],
-            "infra_element_name": "ivre_web_img",
-            "kind": "IMAGE",
-            "maps": "ivre_web_img",
-            "name": "concrete_ivre_web_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/web:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "dependsOn": [
-                  {
-                    "disabledMonitorings": [],
-                    "name": "cont_mongodb"
-                  }
-                ],
-                "disabledMonitorings": [],
-                "generatedFrom": "ivre_db_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 86,
-                        "iface": "igw_vm_oam",
-                        "vm_port": 8086
-                      }
-                    ],
-                    "host": "igw_vm"
-                  }
-                ],
-                "name": "cont_ivre_db"
-              }
-            ],
-            "infra_element_name": "ivre_db_img",
-            "kind": "IMAGE",
-            "maps": "ivre_db_img",
-            "name": "concrete_ivre_db_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/db:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": "ivre_client_img",
-                "hostConfigs": [
-                  {
-                    "configurations": [
-                      {
-                        "container_port": 87,
-                        "iface": "igw_vm_oam",
-                        "vm_port": 8087
-                      }
-                    ],
-                    "host": "igw_vm"
-                  }
-                ],
-                "name": "cont_ivre_client"
-              }
-            ],
-            "infra_element_name": "ivre_client_img",
-            "kind": "IMAGE",
-            "maps": "ivre_client_img",
-            "name": "concrete_ivre_client_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/client:latest"
-          }
-        ],
         "credentials": [
           {
-            "algorithm": "RSA",
-            "bits": 4096,
             "infra_element_name": "ssh_key",
-            "key": "/home/ubuntu/.ssh/ssh_key_aws.pub",
-            "user": "ubuntu"
+            "key": "local path to ssh key",
+            "user": "myuser"
           }
         ],
         "network": [
           {
             "connectedIfaces": [
               {
-                "name": "igw_vm_oam"
-              }
-            ],
-            "infra_element_name": "subnet_oam_igw",
-            "protocol": "TCP/IP"
-          },
-          {
-            "connectedIfaces": [
-              {
-                "name": "igw_vm_net1"
-              }
-            ],
-            "connectedTo": [
-              {
-                "name": "subnet_net1_osint",
-                "protocol": "TCP/IP"
-              }
-            ],
-            "infra_element_name": "subnet_net1_igw",
-            "protocol": "TCP/IP"
-          },
-          {
-            "connectedIfaces": [
-              {
-                "name": "igw_vm_net2"
-              }
-            ],
-            "infra_element_name": "subnet_net2_igw",
-            "protocol": "TCP/IP"
-          },
-          {
-            "connectedIfaces": [
-              {
-                "name": "osint_vm_net1"
-              }
-            ],
-            "connectedTo": [
-              {
-                "name": "subnet_net1_igw",
-                "protocol": "TCP/IP"
+                "name": "i1"
               },
               {
-                "name": "subnet_net1_ewcf",
-                "protocol": "TCP/IP"
+                "name": "i2"
               }
             ],
-            "infra_element_name": "subnet_net1_osint",
+            "infra_element_name": "subnet1",
             "protocol": "TCP/IP"
-          },
-          {
-            "connectedIfaces": [
-              {
-                "name": "osint_vm_net3"
-              }
-            ],
-            "infra_element_name": "subnet_net3_osint",
-            "protocol": "TCP/IP"
-          },
-          {
-            "connectedIfaces": [
-              {
-                "name": "ewcf_vm_oam"
-              }
-            ],
-            "infra_element_name": "subnet_oam_ewcf",
-            "protocol": "TCP/IP"
-          },
-          {
-            "connectedIfaces": [
-              {
-                "name": "ewcf_vm_net1"
-              }
-            ],
-            "connectedTo": [
-              {
-                "name": "subnet_net1_osint",
-                "protocol": "TCP/IP"
-              }
-            ],
-            "infra_element_name": "subnet_net1_ewcf",
-            "protocol": "TCP/IP"
-          },
-          {
-            "connectedIfaces": [
-              {
-                "name": "ewcf_vm_net3"
-              }
-            ],
-            "infra_element_name": "subnet_net3_ewcf",
-            "protocol": "TCP/IP"
-          },
-          {
-            "connectedIfaces": [
-              {
-                "name": "osint_vm_oam"
-              }
-            ],
-            "infra_element_name": "subnet_oam_osint",
-            "protocol": "TCP/IP"
-          }
-        ],
-        "networkInterface": [
-          {
-            "associated": [
-              {
-                "name": "sg"
-              }
-            ],
-            "belongsTo": "subnet_oam_osint",
-            "infra_element_name": "osint_vm_oam"
-          },
-          {
-            "associated": [
-              {
-                "name": "sg"
-              }
-            ],
-            "belongsTo": "subnet_oam_igw",
-            "infra_element_name": "igw_vm_oam"
-          },
-          {
-            "associated": [
-              {
-                "name": "sg"
-              }
-            ],
-            "belongsTo": "subnet_oam_ewcf",
-            "infra_element_name": "ewcf_vm_oam"
-          },
-          {
-            "associated": [
-              {
-                "name": "sg"
-              }
-            ],
-            "belongsTo": "subnet_net1_ewcf",
-            "infra_element_name": "ewcf_vm_net1"
           }
         ],
         "networks": [
           {
-            "Subnet_subnet_oam_ewcf": {
+            "Subnet_subnet1": {
               "connectedIfaces": [
                 {
-                  "name": "ewcf_vm_oam"
-                }
-              ],
-              "name": "subnet_oam_ewcf",
-              "protocol": "TCP/IP"
-            },
-            "Subnet_subnet_oam_igw": {
-              "connectedIfaces": [
-                {
-                  "name": "igw_vm_oam"
-                }
-              ],
-              "name": "subnet_oam_igw",
-              "protocol": "TCP/IP"
-            },
-            "Subnet_subnet_oam_osint": {
-              "connectedIfaces": [
-                {
-                  "name": "osint_vm_oam"
-                }
-              ],
-              "name": "subnet_oam_osint",
-              "protocol": "TCP/IP"
-            },
-            "infra_element_name": "oam",
-            "infra_sgs": [
-              "icmp",
-              "http",
-              "https",
-              "ssh"
-            ],
-            "infra_subnets": [
-              {
-                "connectedIfaces": [
-                  {
-                    "name": "igw_vm_oam"
-                  }
-                ],
-                "name": "subnet_oam_igw",
-                "protocol": "TCP/IP"
-              },
-              {
-                "connectedIfaces": [
-                  {
-                    "name": "osint_vm_oam"
-                  }
-                ],
-                "name": "subnet_oam_osint",
-                "protocol": "TCP/IP"
-              },
-              {
-                "connectedIfaces": [
-                  {
-                    "name": "ewcf_vm_oam"
-                  }
-                ],
-                "name": "subnet_oam_ewcf",
-                "protocol": "TCP/IP"
-              }
-            ],
-            "maps": "oam",
-            "name": "concrete_oam",
-            "preexisting": true,
-            "protocol": "TCP/IP",
-            "resourceName": "external",
-            "subnets": [
-              {
-                "maps": "subnet_oam_igw",
-                "name": "concrete_subnet_oam_igw",
-                "preexisting": true,
-                "resourceName": "external"
-              },
-              {
-                "maps": "subnet_oam_osint",
-                "name": "concrete_subnet_oam_osint",
-                "preexisting": true,
-                "resourceName": "external"
-              },
-              {
-                "maps": "subnet_oam_ewcf",
-                "name": "concrete_subnet_oam_ewcf",
-                "preexisting": true,
-                "resourceName": "external"
-              }
-            ]
-          },
-          {
-            "Subnet_subnet_net1_ewcf": {
-              "connectedIfaces": [
-                {
-                  "name": "ewcf_vm_net1"
-                }
-              ],
-              "connectedTo": [
-                {
-                  "name": "subnet_net1_osint",
-                  "protocol": "TCP/IP"
-                }
-              ],
-              "name": "subnet_net1_ewcf",
-              "protocol": "TCP/IP"
-            },
-            "Subnet_subnet_net1_igw": {
-              "connectedIfaces": [
-                {
-                  "name": "igw_vm_net1"
-                }
-              ],
-              "connectedTo": [
-                {
-                  "name": "subnet_net1_osint",
-                  "protocol": "TCP/IP"
-                }
-              ],
-              "name": "subnet_net1_igw",
-              "protocol": "TCP/IP"
-            },
-            "Subnet_subnet_net1_osint": {
-              "connectedIfaces": [
-                {
-                  "name": "osint_vm_net1"
-                }
-              ],
-              "connectedTo": [
-                {
-                  "name": "subnet_net1_igw",
-                  "protocol": "TCP/IP"
+                  "name": "i1"
                 },
                 {
-                  "name": "subnet_net1_ewcf",
-                  "protocol": "TCP/IP"
+                  "name": "i2"
                 }
               ],
-              "name": "subnet_net1_osint",
+              "name": "subnet1",
               "protocol": "TCP/IP"
             },
-            "addressRange": "16.0.2.0/24",
+            "addressRange": "10.10.10.0/24",
             "infra_element_name": "net1",
-            "infra_sgs": [
-              "icmp",
-              "http",
-              "https",
-              "ssh"
-            ],
             "infra_subnets": [
               {
                 "connectedIfaces": [
                   {
-                    "name": "igw_vm_net1"
-                  }
-                ],
-                "connectedTo": [
+                    "name": "i1"
+                  },
                   {
-                    "connectedIfaces": [
-                      {
-                        "name": "osint_vm_net1"
-                      }
-                    ],
-                    "connectedTo": [
-                      {
-                        "name": "subnet_net1_igw",
-                        "protocol": "TCP/IP"
-                      },
-                      {
-                        "connectedIfaces": [
-                          {
-                            "name": "ewcf_vm_net1"
-                          }
-                        ],
-                        "connectedTo": [
-                          {
-                            "name": "subnet_net1_osint",
-                            "protocol": "TCP/IP"
-                          }
-                        ],
-                        "name": "subnet_net1_ewcf",
-                        "protocol": "TCP/IP"
-                      }
-                    ],
-                    "name": "subnet_net1_osint",
-                    "protocol": "TCP/IP"
+                    "name": "i2"
                   }
                 ],
-                "name": "subnet_net1_igw",
-                "protocol": "TCP/IP"
-              },
-              {
-                "name": "subnet_net1_osint",
-                "protocol": "TCP/IP"
-              },
-              {
-                "name": "subnet_net1_ewcf",
+                "name": "subnet1",
                 "protocol": "TCP/IP"
               }
             ],
             "maps": "net1",
-            "name": "concrete_net1",
+            "name": "concrete_net",
             "preexisting": false,
-            "protocol": "TCP/IP",
+            "protocol": "tcp/ip",
             "subnets": [
               {
-                "addressRange": "16.0.2.0/26",
-                "maps": "subnet_net1_igw",
-                "name": "concrete_subnet_net1_igw",
-                "preexisting": false
-              },
-              {
-                "addressRange": "16.0.2.64/26",
-                "maps": "subnet_net1_osint",
-                "name": "concrete_subnet_net1_osint",
-                "preexisting": false
-              },
-              {
-                "addressRange": "16.0.2.128/26",
-                "maps": "subnet_net1_ewcf",
-                "name": "concrete_subnet_net1_ewcf",
-                "preexisting": false
-              }
-            ]
-          },
-          {
-            "Subnet_subnet_net2_igw": {
-              "connectedIfaces": [
-                {
-                  "name": "igw_vm_net2"
-                }
-              ],
-              "name": "subnet_net2_igw",
-              "protocol": "TCP/IP"
-            },
-            "addressRange": "16.0.3.0/24",
-            "infra_element_name": "net2",
-            "infra_sgs": [
-              "icmp",
-              "http",
-              "https",
-              "ssh"
-            ],
-            "infra_subnets": [
-              {
-                "connectedIfaces": [
-                  {
-                    "name": "igw_vm_net2"
-                  }
-                ],
-                "name": "subnet_net2_igw",
-                "protocol": "TCP/IP"
-              }
-            ],
-            "maps": "net2",
-            "name": "concrete_net2",
-            "preexisting": false,
-            "protocol": "TCP/IP",
-            "subnets": [
-              {
-                "addressRange": "16.0.3.0/25",
-                "name": "subnet_net2_igw",
-                "preexisting": false
-              }
-            ]
-          },
-          {
-            "Subnet_subnet_net3_ewcf": {
-              "connectedIfaces": [
-                {
-                  "name": "ewcf_vm_net3"
-                }
-              ],
-              "name": "subnet_net3_ewcf",
-              "protocol": "TCP/IP"
-            },
-            "Subnet_subnet_net3_osint": {
-              "connectedIfaces": [
-                {
-                  "name": "osint_vm_net3"
-                }
-              ],
-              "name": "subnet_net3_osint",
-              "protocol": "TCP/IP"
-            },
-            "addressRange": "16.0.4.0/24",
-            "infra_element_name": "net3",
-            "infra_sgs": [
-              "icmp",
-              "http",
-              "https",
-              "ssh"
-            ],
-            "infra_subnets": [
-              {
-                "connectedIfaces": [
-                  {
-                    "name": "osint_vm_net3"
-                  }
-                ],
-                "name": "subnet_net3_osint",
-                "protocol": "TCP/IP"
-              },
-              {
-                "connectedIfaces": [
-                  {
-                    "name": "ewcf_vm_net3"
-                  }
-                ],
-                "name": "subnet_net3_ewcf",
-                "protocol": "TCP/IP"
-              }
-            ],
-            "maps": "net3",
-            "name": "concrete_net3",
-            "preexisting": false,
-            "protocol": "TCP/IP",
-            "subnets": [
-              {
-                "addressRange": "16.0.4.0/25",
-                "name": "subnet_net3_osint",
-                "preexisting": false
-              },
-              {
-                "addressRange": "16.0.4.128/25",
-                "name": "subnet_net3_ewcf",
+                "addressRange": "10.100.1.0/24",
+                "maps": "subnet1",
+                "name": "concrete_subnet",
                 "preexisting": false
               }
             ]
@@ -1272,460 +70,61 @@
         ],
         "provider_info": [
           {
-            "provider_name": "openstack"
-          }
-        ],
-        "securityGroup": [
-          {
-            "Rule_http": {
-              "cidr": [
-                "0.0.0.0/0"
-              ],
-              "fromPort": 80,
-              "kind": "INGRESS",
-              "name": "http",
-              "protocol": "TCP",
-              "toPort": 80
-            },
-            "Rule_https": {
-              "cidr": [
-                "0.0.0.0/0"
-              ],
-              "fromPort": 443,
-              "kind": "INGRESS",
-              "name": "https",
-              "protocol": "TCP",
-              "toPort": 443
-            },
-            "Rule_icmp": {
-              "cidr": [
-                "0.0.0.0/0"
-              ],
-              "fromPort": -1,
-              "kind": "EGRESS",
-              "name": "icmp",
-              "protocol": "ICMP",
-              "toPort": -1
-            },
-            "Rule_ssh": {
-              "cidr": [
-                "0.0.0.0/0"
-              ],
-              "fromPort": 22,
-              "kind": "INGRESS",
-              "name": "ssh",
-              "protocol": "TCP",
-              "toPort": 22
-            },
-            "ifaces": [
-              {
-                "name": "igw_vm_oam"
-              },
-              {
-                "name": "igw_vm_net1"
-              },
-              {
-                "name": "igw_vm_net2"
-              },
-              {
-                "name": "osint_vm_oam"
-              },
-              {
-                "name": "osint_vm_net1"
-              },
-              {
-                "name": "osint_vm_net3"
-              },
-              {
-                "name": "ewcf_vm_oam"
-              },
-              {
-                "name": "ewcf_vm_net1"
-              },
-              {
-                "name": "ewcf_vm_net3"
-              }
-            ],
-            "infra_element_name": "sg",
-            "rules": [
-              {
-                "cidr": [
-                  "0.0.0.0/0"
-                ],
-                "fromPort": -1,
-                "kind": "EGRESS",
-                "name": "icmp",
-                "protocol": "ICMP",
-                "toPort": -1
-              },
-              {
-                "cidr": [
-                  "0.0.0.0/0"
-                ],
-                "fromPort": 80,
-                "kind": "INGRESS",
-                "name": "http",
-                "protocol": "TCP",
-                "toPort": 80
-              },
-              {
-                "cidr": [
-                  "0.0.0.0/0"
-                ],
-                "fromPort": 443,
-                "kind": "INGRESS",
-                "name": "https",
-                "protocol": "TCP",
-                "toPort": 443
-              },
-              {
-                "cidr": [
-                  "0.0.0.0/0"
-                ],
-                "fromPort": 22,
-                "kind": "INGRESS",
-                "name": "ssh",
-                "protocol": "TCP",
-                "toPort": 22
-              }
-            ]
-          }
-        ],
-        "storages": [
-          {
-            "concrete_igw_vm": {
-              "maps": "igw_vm",
-              "name": "concrete_igw_vm",
-              "preexisting": false
-            },
-            "infra_element_name": "ext_sto_1",
-            "label": "vm_storage",
-            "maps": "ext_sto_1",
-            "name": "concrete_ext_sto_mongo1",
-            "preexisting": false,
-            "refs": [
-              {
-                "maps": "igw_vm",
-                "name": "concrete_igw_vm",
-                "preexisting": false
-              }
-            ],
-            "size_gb": 512
-          },
-          {
-            "concrete_ewcf_vm": {
-              "maps": "ewcf_vm",
-              "name": "concrete_ewcf_vm",
-              "preexisting": false
-            },
-            "infra_element_name": "ext_sto_2",
-            "label": "vm_storage",
-            "maps": "ext_sto_2",
-            "name": "concrete_ext_sto_mongo2",
-            "preexisting": false,
-            "refs": [
-              {
-                "maps": "ewcf_vm",
-                "name": "concrete_ewcf_vm",
-                "preexisting": false
-              }
-            ],
-            "size_gb": 512
+            "provider_name": "aws"
           }
         ],
         "vms": [
           {
-            "BProperty_config_drive": true,
-            "NetworkInterface_osint_vm_net1": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_net1_osint",
-              "name": "osint_vm_net1"
-            },
-            "NetworkInterface_osint_vm_net3": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_net3_osint",
-              "name": "osint_vm_net3"
-            },
-            "NetworkInterface_osint_vm_oam": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_oam_osint",
-              "name": "osint_vm_oam"
+            "NetworkInterface_i1": {
+              "belongsTo": "subnet1",
+              "name": "i1"
             },
             "annotations": [
               {
-                "key": "config_drive",
-                "value": true
+                "key": "vm_flavor",
+                "value": "t2.micro"
               }
             ],
-            "configInterface": "osint_vm_oam",
             "credentials": "ssh_key",
             "disabledMonitorings": [],
             "ifaces": [
               {
-                "associated": [
-                  {
-                    "ifaces": [
-                      {
-                        "associated": [
-                          {
-                            "name": "sg"
-                          }
-                        ],
-                        "belongsTo": "subnet_oam_igw",
-                        "name": "igw_vm_oam"
-                      },
-                      {
-                        "associated": [
-                          {
-                            "name": "sg"
-                          }
-                        ],
-                        "belongsTo": "subnet_net1_igw",
-                        "name": "igw_vm_net1"
-                      },
-                      {
-                        "associated": [
-                          {
-                            "name": "sg"
-                          }
-                        ],
-                        "belongsTo": "subnet_net2_igw",
-                        "name": "igw_vm_net2"
-                      },
-                      {
-                        "name": "osint_vm_oam"
-                      },
-                      {
-                        "associated": [
-                          {
-                            "name": "sg"
-                          }
-                        ],
-                        "belongsTo": "subnet_net1_osint",
-                        "name": "osint_vm_net1"
-                      },
-                      {
-                        "associated": [
-                          {
-                            "name": "sg"
-                          }
-                        ],
-                        "belongsTo": "subnet_net3_osint",
-                        "name": "osint_vm_net3"
-                      },
-                      {
-                        "associated": [
-                          {
-                            "name": "sg"
-                          }
-                        ],
-                        "belongsTo": "subnet_oam_ewcf",
-                        "name": "ewcf_vm_oam"
-                      },
-                      {
-                        "associated": [
-                          {
-                            "name": "sg"
-                          }
-                        ],
-                        "belongsTo": "subnet_net1_ewcf",
-                        "name": "ewcf_vm_net1"
-                      },
-                      {
-                        "associated": [
-                          {
-                            "name": "sg"
-                          }
-                        ],
-                        "belongsTo": "subnet_net3_ewcf",
-                        "name": "ewcf_vm_net3"
-                      }
-                    ],
-                    "name": "sg",
-                    "rules": [
-                      {
-                        "cidr": [
-                          "0.0.0.0/0"
-                        ],
-                        "fromPort": -1,
-                        "kind": "EGRESS",
-                        "name": "icmp",
-                        "protocol": "ICMP",
-                        "toPort": -1
-                      },
-                      {
-                        "cidr": [
-                          "0.0.0.0/0"
-                        ],
-                        "fromPort": 80,
-                        "kind": "INGRESS",
-                        "name": "http",
-                        "protocol": "TCP",
-                        "toPort": 80
-                      },
-                      {
-                        "cidr": [
-                          "0.0.0.0/0"
-                        ],
-                        "fromPort": 443,
-                        "kind": "INGRESS",
-                        "name": "https",
-                        "protocol": "TCP",
-                        "toPort": 443
-                      },
-                      {
-                        "cidr": [
-                          "0.0.0.0/0"
-                        ],
-                        "fromPort": 22,
-                        "kind": "INGRESS",
-                        "name": "ssh",
-                        "protocol": "TCP",
-                        "toPort": 22
-                      }
-                    ]
-                  }
-                ],
-                "belongsTo": "subnet_oam_osint",
-                "name": "osint_vm_oam"
-              },
-              {
-                "name": "osint_vm_net1"
-              },
-              {
-                "name": "osint_vm_net3"
+                "belongsTo": "subnet1",
+                "name": "i1"
               }
             ],
-            "infra_element_name": "osint_vm",
-            "maps": "osint_vm",
-            "name": "concrete_osint_vm",
-            "os": "CentOS-7-2111",
+            "infra_element_name": "vm1",
+            "maps": "vm1",
+            "name": "concrete_vm1",
+            "os": "ubuntu-20.04.3",
             "preexisting": false,
-            "sizeDescription": "small-centos"
+            "vm_flavor": "t2.micro"
           },
           {
-            "BProperty_config_drive": true,
-            "NetworkInterface_igw_vm_net1": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_net1_igw",
-              "name": "igw_vm_net1"
-            },
-            "NetworkInterface_igw_vm_net2": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_net2_igw",
-              "name": "igw_vm_net2"
-            },
-            "NetworkInterface_igw_vm_oam": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_oam_igw",
-              "name": "igw_vm_oam"
+            "NetworkInterface_i2": {
+              "belongsTo": "subnet1",
+              "name": "i2"
             },
             "annotations": [
               {
-                "key": "config_drive",
-                "value": true
+                "key": "vm_flavor",
+                "value": "t2.micro"
               }
             ],
-            "configInterface": "igw_vm_oam",
             "credentials": "ssh_key",
             "disabledMonitorings": [],
             "ifaces": [
               {
-                "name": "igw_vm_oam"
-              },
-              {
-                "name": "igw_vm_net1"
-              },
-              {
-                "name": "igw_vm_net2"
+                "belongsTo": "subnet1",
+                "name": "i2"
               }
             ],
-            "infra_element_name": "igw_vm",
-            "maps": "igw_vm",
-            "name": "concrete_igw_vm",
-            "os": "CentOS-7-2111",
+            "infra_element_name": "vm2",
+            "maps": "vm2",
+            "name": "concrete_vm2",
+            "os": "ubuntu-20.04.3",
             "preexisting": false,
-            "sizeDescription": "small-centos"
-          },
-          {
-            "BProperty_config_drive": true,
-            "NetworkInterface_ewcf_vm_net1": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_net1_ewcf",
-              "name": "ewcf_vm_net1"
-            },
-            "NetworkInterface_ewcf_vm_net3": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_net3_ewcf",
-              "name": "ewcf_vm_net3"
-            },
-            "NetworkInterface_ewcf_vm_oam": {
-              "associated": [
-                {
-                  "name": "sg"
-                }
-              ],
-              "belongsTo": "subnet_oam_ewcf",
-              "name": "ewcf_vm_oam"
-            },
-            "annotations": [
-              {
-                "key": "config_drive",
-                "value": true
-              }
-            ],
-            "configInterface": "ewcf_vm_oam",
-            "credentials": "ssh_key",
-            "disabledMonitorings": [],
-            "ifaces": [
-              {
-                "name": "ewcf_vm_oam"
-              },
-              {
-                "name": "ewcf_vm_net1"
-              },
-              {
-                "name": "ewcf_vm_net3"
-              }
-            ],
-            "infra_element_name": "ewcf_vm",
-            "maps": "ewcf_vm",
-            "name": "concrete_ewcf_vm",
-            "os": "CentOS-7-2111",
-            "preexisting": false,
-            "sizeDescription": "small-centos"
+            "vm_flavor": "t2.micro"
           }
         ]
       },
@@ -1737,297 +136,56 @@
           "name": "performance_monitoring",
           "nodes": [
             {
-              "BProperty_config_drive": true,
-              "NetworkInterface_osint_vm_net1": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net1_osint",
-                "name": "osint_vm_net1"
-              },
-              "NetworkInterface_osint_vm_net3": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net3_osint",
-                "name": "osint_vm_net3"
-              },
-              "NetworkInterface_osint_vm_oam": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_oam_osint",
-                "name": "osint_vm_oam"
+              "NetworkInterface_i1": {
+                "belongsTo": "subnet1",
+                "name": "i1"
               },
               "annotations": [
                 {
-                  "key": "config_drive",
-                  "value": true
+                  "key": "vm_flavor",
+                  "value": "t2.micro"
                 }
               ],
-              "configInterface": "osint_vm_oam",
               "credentials": "ssh_key",
               "disabledMonitorings": [],
               "ifaces": [
                 {
-                  "associated": [
-                    {
-                      "ifaces": [
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_oam_igw",
-                          "name": "igw_vm_oam"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net1_igw",
-                          "name": "igw_vm_net1"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net2_igw",
-                          "name": "igw_vm_net2"
-                        },
-                        {
-                          "name": "osint_vm_oam"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net1_osint",
-                          "name": "osint_vm_net1"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net3_osint",
-                          "name": "osint_vm_net3"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_oam_ewcf",
-                          "name": "ewcf_vm_oam"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net1_ewcf",
-                          "name": "ewcf_vm_net1"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net3_ewcf",
-                          "name": "ewcf_vm_net3"
-                        }
-                      ],
-                      "name": "sg",
-                      "rules": [
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": -1,
-                          "kind": "EGRESS",
-                          "name": "icmp",
-                          "protocol": "ICMP",
-                          "toPort": -1
-                        },
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": 80,
-                          "kind": "INGRESS",
-                          "name": "http",
-                          "protocol": "TCP",
-                          "toPort": 80
-                        },
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": 443,
-                          "kind": "INGRESS",
-                          "name": "https",
-                          "protocol": "TCP",
-                          "toPort": 443
-                        },
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": 22,
-                          "kind": "INGRESS",
-                          "name": "ssh",
-                          "protocol": "TCP",
-                          "toPort": 22
-                        }
-                      ]
-                    }
-                  ],
-                  "belongsTo": "subnet_oam_osint",
-                  "name": "osint_vm_oam"
-                },
-                {
-                  "name": "osint_vm_net1"
-                },
-                {
-                  "name": "osint_vm_net3"
+                  "belongsTo": "subnet1",
+                  "name": "i1"
                 }
               ],
-              "infra_element_name": "osint_vm",
-              "maps": "osint_vm",
-              "name": "concrete_osint_vm",
-              "os": "CentOS-7-2111",
+              "infra_element_name": "vm1",
+              "maps": "vm1",
+              "name": "concrete_vm1",
+              "os": "ubuntu-20.04.3",
               "preexisting": false,
-              "sizeDescription": "small-centos"
+              "vm_flavor": "t2.micro"
             },
             {
-              "BProperty_config_drive": true,
-              "NetworkInterface_igw_vm_net1": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net1_igw",
-                "name": "igw_vm_net1"
-              },
-              "NetworkInterface_igw_vm_net2": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net2_igw",
-                "name": "igw_vm_net2"
-              },
-              "NetworkInterface_igw_vm_oam": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_oam_igw",
-                "name": "igw_vm_oam"
+              "NetworkInterface_i2": {
+                "belongsTo": "subnet1",
+                "name": "i2"
               },
               "annotations": [
                 {
-                  "key": "config_drive",
-                  "value": true
+                  "key": "vm_flavor",
+                  "value": "t2.micro"
                 }
               ],
-              "configInterface": "igw_vm_oam",
               "credentials": "ssh_key",
               "disabledMonitorings": [],
               "ifaces": [
                 {
-                  "name": "igw_vm_oam"
-                },
-                {
-                  "name": "igw_vm_net1"
-                },
-                {
-                  "name": "igw_vm_net2"
+                  "belongsTo": "subnet1",
+                  "name": "i2"
                 }
               ],
-              "infra_element_name": "igw_vm",
-              "maps": "igw_vm",
-              "name": "concrete_igw_vm",
-              "os": "CentOS-7-2111",
+              "infra_element_name": "vm2",
+              "maps": "vm2",
+              "name": "concrete_vm2",
+              "os": "ubuntu-20.04.3",
               "preexisting": false,
-              "sizeDescription": "small-centos"
-            },
-            {
-              "BProperty_config_drive": true,
-              "NetworkInterface_ewcf_vm_net1": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net1_ewcf",
-                "name": "ewcf_vm_net1"
-              },
-              "NetworkInterface_ewcf_vm_net3": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net3_ewcf",
-                "name": "ewcf_vm_net3"
-              },
-              "NetworkInterface_ewcf_vm_oam": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_oam_ewcf",
-                "name": "ewcf_vm_oam"
-              },
-              "annotations": [
-                {
-                  "key": "config_drive",
-                  "value": true
-                }
-              ],
-              "configInterface": "ewcf_vm_oam",
-              "credentials": "ssh_key",
-              "disabledMonitorings": [],
-              "ifaces": [
-                {
-                  "name": "ewcf_vm_oam"
-                },
-                {
-                  "name": "ewcf_vm_net1"
-                },
-                {
-                  "name": "ewcf_vm_net3"
-                }
-              ],
-              "infra_element_name": "ewcf_vm",
-              "maps": "ewcf_vm",
-              "name": "concrete_ewcf_vm",
-              "os": "CentOS-7-2111",
-              "preexisting": false,
-              "sizeDescription": "small-centos"
+              "vm_flavor": "t2.micro"
             }
           ]
         }
@@ -2042,297 +200,56 @@
           "name": "security_monitoring",
           "nodes": [
             {
-              "BProperty_config_drive": true,
-              "NetworkInterface_osint_vm_net1": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net1_osint",
-                "name": "osint_vm_net1"
-              },
-              "NetworkInterface_osint_vm_net3": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net3_osint",
-                "name": "osint_vm_net3"
-              },
-              "NetworkInterface_osint_vm_oam": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_oam_osint",
-                "name": "osint_vm_oam"
+              "NetworkInterface_i1": {
+                "belongsTo": "subnet1",
+                "name": "i1"
               },
               "annotations": [
                 {
-                  "key": "config_drive",
-                  "value": true
+                  "key": "vm_flavor",
+                  "value": "t2.micro"
                 }
               ],
-              "configInterface": "osint_vm_oam",
               "credentials": "ssh_key",
               "disabledMonitorings": [],
               "ifaces": [
                 {
-                  "associated": [
-                    {
-                      "ifaces": [
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_oam_igw",
-                          "name": "igw_vm_oam"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net1_igw",
-                          "name": "igw_vm_net1"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net2_igw",
-                          "name": "igw_vm_net2"
-                        },
-                        {
-                          "name": "osint_vm_oam"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net1_osint",
-                          "name": "osint_vm_net1"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net3_osint",
-                          "name": "osint_vm_net3"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_oam_ewcf",
-                          "name": "ewcf_vm_oam"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net1_ewcf",
-                          "name": "ewcf_vm_net1"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net3_ewcf",
-                          "name": "ewcf_vm_net3"
-                        }
-                      ],
-                      "name": "sg",
-                      "rules": [
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": -1,
-                          "kind": "EGRESS",
-                          "name": "icmp",
-                          "protocol": "ICMP",
-                          "toPort": -1
-                        },
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": 80,
-                          "kind": "INGRESS",
-                          "name": "http",
-                          "protocol": "TCP",
-                          "toPort": 80
-                        },
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": 443,
-                          "kind": "INGRESS",
-                          "name": "https",
-                          "protocol": "TCP",
-                          "toPort": 443
-                        },
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": 22,
-                          "kind": "INGRESS",
-                          "name": "ssh",
-                          "protocol": "TCP",
-                          "toPort": 22
-                        }
-                      ]
-                    }
-                  ],
-                  "belongsTo": "subnet_oam_osint",
-                  "name": "osint_vm_oam"
-                },
-                {
-                  "name": "osint_vm_net1"
-                },
-                {
-                  "name": "osint_vm_net3"
+                  "belongsTo": "subnet1",
+                  "name": "i1"
                 }
               ],
-              "infra_element_name": "osint_vm",
-              "maps": "osint_vm",
-              "name": "concrete_osint_vm",
-              "os": "CentOS-7-2111",
+              "infra_element_name": "vm1",
+              "maps": "vm1",
+              "name": "concrete_vm1",
+              "os": "ubuntu-20.04.3",
               "preexisting": false,
-              "sizeDescription": "small-centos"
+              "vm_flavor": "t2.micro"
             },
             {
-              "BProperty_config_drive": true,
-              "NetworkInterface_igw_vm_net1": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net1_igw",
-                "name": "igw_vm_net1"
-              },
-              "NetworkInterface_igw_vm_net2": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net2_igw",
-                "name": "igw_vm_net2"
-              },
-              "NetworkInterface_igw_vm_oam": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_oam_igw",
-                "name": "igw_vm_oam"
+              "NetworkInterface_i2": {
+                "belongsTo": "subnet1",
+                "name": "i2"
               },
               "annotations": [
                 {
-                  "key": "config_drive",
-                  "value": true
+                  "key": "vm_flavor",
+                  "value": "t2.micro"
                 }
               ],
-              "configInterface": "igw_vm_oam",
               "credentials": "ssh_key",
               "disabledMonitorings": [],
               "ifaces": [
                 {
-                  "name": "igw_vm_oam"
-                },
-                {
-                  "name": "igw_vm_net1"
-                },
-                {
-                  "name": "igw_vm_net2"
+                  "belongsTo": "subnet1",
+                  "name": "i2"
                 }
               ],
-              "infra_element_name": "igw_vm",
-              "maps": "igw_vm",
-              "name": "concrete_igw_vm",
-              "os": "CentOS-7-2111",
+              "infra_element_name": "vm2",
+              "maps": "vm2",
+              "name": "concrete_vm2",
+              "os": "ubuntu-20.04.3",
               "preexisting": false,
-              "sizeDescription": "small-centos"
-            },
-            {
-              "BProperty_config_drive": true,
-              "NetworkInterface_ewcf_vm_net1": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net1_ewcf",
-                "name": "ewcf_vm_net1"
-              },
-              "NetworkInterface_ewcf_vm_net3": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net3_ewcf",
-                "name": "ewcf_vm_net3"
-              },
-              "NetworkInterface_ewcf_vm_oam": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_oam_ewcf",
-                "name": "ewcf_vm_oam"
-              },
-              "annotations": [
-                {
-                  "key": "config_drive",
-                  "value": true
-                }
-              ],
-              "configInterface": "ewcf_vm_oam",
-              "credentials": "ssh_key",
-              "disabledMonitorings": [],
-              "ifaces": [
-                {
-                  "name": "ewcf_vm_oam"
-                },
-                {
-                  "name": "ewcf_vm_net1"
-                },
-                {
-                  "name": "ewcf_vm_net3"
-                }
-              ],
-              "infra_element_name": "ewcf_vm",
-              "maps": "ewcf_vm",
-              "name": "concrete_ewcf_vm",
-              "os": "CentOS-7-2111",
-              "preexisting": false,
-              "sizeDescription": "small-centos"
+              "vm_flavor": "t2.micro"
             }
           ]
         }
@@ -2343,993 +260,162 @@
     },
     {
       "data": {
-        "containerImages": [
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_kafka"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "cont_kafka_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/wurstmeister/kafka:latest"
-                },
-                "hostConfigs": [],
-                "name": "cont_kafka",
-                "networks": [
-                  {
-                    "containerNetworkName": "kafka_net",
-                    "name": "kafka_net"
-                  }
-                ]
-              }
-            ],
-            "infra_element_name": "cont_kafka_img",
-            "kind": "IMAGE",
-            "maps": "cont_kafka_img",
-            "name": "concrete_cont_kafka_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/wurstmeister/kafka:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_zookeeper"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "cont_zookeeper_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/wurstmeister/zookeeper:latest"
-                },
-                "hostConfigs": [],
-                "name": "cont_zookeeper",
-                "networks": [
-                  {
-                    "containerNetworkName": "kafka_net",
-                    "name": "kafka_net"
-                  }
-                ]
-              }
-            ],
-            "infra_element_name": "cont_zookeeper_img",
-            "kind": "IMAGE",
-            "maps": "cont_zookeeper_img",
-            "name": "concrete_cont_zookeeper_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/wurstmeister/zookeeper:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "dependsOn": [
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": {
-                      "generatedContainers": [
-                        {
-                          "disabledMonitorings": [],
-                          "name": "cont_python"
-                        }
-                      ],
-                      "kind": "IMAGE",
-                      "name": "python_img",
-                      "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/python:3.7"
-                    },
-                    "hostConfigs": [],
-                    "name": "cont_python"
-                  },
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": {
-                      "generatedContainers": [
-                        {
-                          "disabledMonitorings": [],
-                          "name": "cont_kafka"
-                        }
-                      ],
-                      "kind": "IMAGE",
-                      "name": "cont_kafka_img",
-                      "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/wurstmeister/kafka:latest"
-                    },
-                    "hostConfigs": [],
-                    "name": "cont_kafka",
-                    "networks": [
-                      {
-                        "containerNetworkName": "kafka_net",
-                        "name": "kafka_net"
-                      }
-                    ]
-                  },
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": {
-                      "generatedContainers": [
-                        {
-                          "disabledMonitorings": [],
-                          "name": "cont_zookeeper"
-                        }
-                      ],
-                      "kind": "IMAGE",
-                      "name": "cont_zookeeper_img",
-                      "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/wurstmeister/zookeeper:latest"
-                    },
-                    "hostConfigs": [],
-                    "name": "cont_zookeeper",
-                    "networks": [
-                      {
-                        "containerNetworkName": "kafka_net",
-                        "name": "kafka_net"
-                      }
-                    ]
-                  }
-                ],
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_test_consumer_4_kafka"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "test_consumer_4_kafka_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/test-consumer_4_kafka:latest"
-                },
-                "hostConfigs": [],
-                "name": "cont_test_consumer_4_kafka",
-                "networks": [
-                  {
-                    "containerNetworkName": "kafka_net",
-                    "name": "kafka_net"
-                  }
-                ]
-              }
-            ],
-            "infra_element_name": "test_consumer_4_kafka_img",
-            "kind": "IMAGE",
-            "maps": "test_consumer_4_kafka_img",
-            "name": "concrete_test_consumer_4_kafka_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/test-consumer_4_kafka:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "dependsOn": [
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": {
-                      "generatedContainers": [
-                        {
-                          "disabledMonitorings": [],
-                          "name": "cont_python"
-                        }
-                      ],
-                      "kind": "IMAGE",
-                      "name": "python_img",
-                      "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/python:3.7"
-                    },
-                    "hostConfigs": [],
-                    "name": "cont_python"
-                  }
-                ],
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_test_producer_4_kafka"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "test_producer_4_kafka_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/test-producer_4_kafka:latest"
-                },
-                "hostConfigs": [],
-                "name": "cont_test_producer_4_kafka",
-                "networks": [
-                  {
-                    "containerNetworkName": "kafka_net",
-                    "name": "kafka_net"
-                  }
-                ]
-              }
-            ],
-            "infra_element_name": "test_producer_4_kafka_img",
-            "kind": "IMAGE",
-            "maps": "test_producer_4_kafka_img",
-            "name": "concrete_test_producer_4_kafka_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/piacere/piacere/test-producer_4_kafka:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "dependsOn": [
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": {
-                      "generatedContainers": [
-                        {
-                          "disabledMonitorings": [],
-                          "name": "cont_golang"
-                        }
-                      ],
-                      "kind": "IMAGE",
-                      "name": "golang_img",
-                      "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/golang:1.16-alpine"
-                    },
-                    "hostConfigs": [],
-                    "name": "cont_golang"
-                  }
-                ],
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_go_poster"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "go_poster_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/go_poster:latest"
-                },
-                "hostConfigs": [],
-                "name": "cont_go_poster"
-              }
-            ],
-            "infra_element_name": "go_poster_img",
-            "kind": "IMAGE",
-            "maps": "go_poster_img",
-            "name": "concrete_go_poster_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/go_poster:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "dependsOn": [
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": {
-                      "generatedContainers": [
-                        {
-                          "disabledMonitorings": [],
-                          "name": "cont_hello_mongo"
-                        }
-                      ],
-                      "kind": "IMAGE",
-                      "name": "hello_mongo_img",
-                      "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/hello-mongo:latest"
-                    },
-                    "hostConfigs": [],
-                    "name": "cont_hello_mongo"
-                  },
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": {
-                      "generatedContainers": [
-                        {
-                          "disabledMonitorings": [],
-                          "name": "cont_node"
-                        }
-                      ],
-                      "kind": "IMAGE",
-                      "name": "node_img",
-                      "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/node:18.12.1"
-                    },
-                    "hostConfigs": [],
-                    "name": "cont_node"
-                  }
-                ],
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_ewcf_rest"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "ewcf_rest_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/restapi:latest"
-                },
-                "hostConfigs": [],
-                "name": "cont_ewcf_rest"
-              }
-            ],
-            "infra_element_name": "ewcf_rest_img",
-            "kind": "IMAGE",
-            "maps": "ewcf_rest_img",
-            "name": "concrete_ewct_rest_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/restapi:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_hello_mongo"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "hello_mongo_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/hello-mongo:latest"
-                },
-                "hostConfigs": [],
-                "name": "cont_hello_mongo"
-              }
-            ],
-            "infra_element_name": "hello_mongo_img",
-            "kind": "IMAGE",
-            "maps": "hello_mongo_img",
-            "name": "concrete_hello_mondo_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/hello-mongo:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_node"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "node_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/node:18.12.1"
-                },
-                "hostConfigs": [],
-                "name": "cont_node"
-              }
-            ],
-            "infra_element_name": "node_img",
-            "kind": "IMAGE",
-            "maps": "node_img",
-            "name": "concrete_node_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/node:18.12.1"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_golang"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "golang_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/golang:1.16-alpine"
-                },
-                "hostConfigs": [],
-                "name": "cont_golang"
-              }
-            ],
-            "infra_element_name": "golang_img",
-            "kind": "IMAGE",
-            "maps": "golang_img",
-            "name": "concrete_golang_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/golang:1.16-alpine"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_mongodb"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "mongodb_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/mongo:4.2"
-                },
-                "hostConfigs": [],
-                "name": "cont_mongodb"
-              }
-            ],
-            "infra_element_name": "mongodb_img",
-            "kind": "IMAGE",
-            "maps": "mongodb_img",
-            "name": "concrete_mongodb_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/mongo:4.2"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_tis"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "tis_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/tis:1.0"
-                },
-                "hostConfigs": [],
-                "name": "cont_tis"
-              }
-            ],
-            "infra_element_name": "tis_img",
-            "kind": "IMAGE",
-            "maps": "tis_img",
-            "name": "concrete_tis_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/tis:1.0"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_tia"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "tia_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/tia:1.0"
-                },
-                "hostConfigs": [],
-                "name": "cont_tia"
-              }
-            ],
-            "infra_element_name": "tia_img",
-            "kind": "IMAGE",
-            "maps": "tia_img",
-            "name": "tia_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/tia:1.0"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_twr"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "twr_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/twr:1.0"
-                },
-                "hostConfigs": [],
-                "name": "cont_twr"
-              }
-            ],
-            "infra_element_name": "twr_img",
-            "kind": "IMAGE",
-            "maps": "twr_img",
-            "name": "concrete_twr_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/twr:1.0"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_python"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "python_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/python:3.7"
-                },
-                "hostConfigs": [],
-                "name": "cont_python"
-              }
-            ],
-            "infra_element_name": "python_img",
-            "kind": "IMAGE",
-            "maps": "python_img",
-            "name": "concrete_python_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/python:3.7"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_ivre_web"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "ivre_web_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/web:latest"
-                },
-                "hostConfigs": [],
-                "name": "cont_ivre_web"
-              }
-            ],
-            "infra_element_name": "ivre_web_img",
-            "kind": "IMAGE",
-            "maps": "ivre_web_img",
-            "name": "concrete_ivre_web_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/web:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "dependsOn": [
-                  {
-                    "disabledMonitorings": [],
-                    "generatedFrom": {
-                      "generatedContainers": [
-                        {
-                          "disabledMonitorings": [],
-                          "name": "cont_mongodb"
-                        }
-                      ],
-                      "kind": "IMAGE",
-                      "name": "mongodb_img",
-                      "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/mongo:4.2"
-                    },
-                    "hostConfigs": [],
-                    "name": "cont_mongodb"
-                  }
-                ],
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_ivre_db"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "ivre_db_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/db:latest"
-                },
-                "hostConfigs": [],
-                "name": "cont_ivre_db"
-              }
-            ],
-            "infra_element_name": "ivre_db_img",
-            "kind": "IMAGE",
-            "maps": "ivre_db_img",
-            "name": "concrete_ivre_db_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/db:latest"
-          },
-          {
-            "generatedContainers": [
-              {
-                "disabledMonitorings": [],
-                "generatedFrom": {
-                  "generatedContainers": [
-                    {
-                      "disabledMonitorings": [],
-                      "name": "cont_ivre_client"
-                    }
-                  ],
-                  "kind": "IMAGE",
-                  "name": "ivre_client_img",
-                  "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/client:latest"
-                },
-                "hostConfigs": [],
-                "name": "cont_ivre_client"
-              }
-            ],
-            "infra_element_name": "ivre_client_img",
-            "kind": "IMAGE",
-            "maps": "ivre_client_img",
-            "name": "concrete_ivre_client_img",
-            "preexisting": false,
-            "uri": "optima-piacere-docker-dev.artifact.tecnalia.com/wp7/ericsson/ivre/client:latest"
-          }
-        ]
-      },
-      "programming_language": "docker-compose"
-    },
-    {
-      "data": {
-        "osint": {
-          "consumedInterfaces": [
-            {
-              "name": "net_info"
-            },
-            {
-              "endPoint": "https://twitter_api/get",
-              "name": "get_twitter"
-            },
-            {
-              "name": "ewcf_kafka_if"
-            }
-          ],
-          "exposedInterfaces": [
-            {
-              "name": "osint_info"
-            }
-          ],
-          "isPersistent": false,
-          "name": "osint",
+        "self_healing_monitoring": {
+          "name": "self_healing_monitoring",
           "nodes": [
             {
-              "BProperty_config_drive": true,
-              "NetworkInterface_osint_vm_net1": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net1_osint",
-                "name": "osint_vm_net1"
-              },
-              "NetworkInterface_osint_vm_net3": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net3_osint",
-                "name": "osint_vm_net3"
-              },
-              "NetworkInterface_osint_vm_oam": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_oam_osint",
-                "name": "osint_vm_oam"
+              "NetworkInterface_i1": {
+                "belongsTo": "subnet1",
+                "name": "i1"
               },
               "annotations": [
                 {
-                  "key": "config_drive",
-                  "value": true
+                  "key": "vm_flavor",
+                  "value": "t2.micro"
                 }
               ],
-              "configInterface": "osint_vm_oam",
               "credentials": "ssh_key",
               "disabledMonitorings": [],
               "ifaces": [
                 {
-                  "associated": [
-                    {
-                      "ifaces": [
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_oam_igw",
-                          "name": "igw_vm_oam"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net1_igw",
-                          "name": "igw_vm_net1"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net2_igw",
-                          "name": "igw_vm_net2"
-                        },
-                        {
-                          "name": "osint_vm_oam"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net1_osint",
-                          "name": "osint_vm_net1"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net3_osint",
-                          "name": "osint_vm_net3"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_oam_ewcf",
-                          "name": "ewcf_vm_oam"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net1_ewcf",
-                          "name": "ewcf_vm_net1"
-                        },
-                        {
-                          "associated": [
-                            {
-                              "name": "sg"
-                            }
-                          ],
-                          "belongsTo": "subnet_net3_ewcf",
-                          "name": "ewcf_vm_net3"
-                        }
-                      ],
-                      "name": "sg",
-                      "rules": [
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": -1,
-                          "kind": "EGRESS",
-                          "name": "icmp",
-                          "protocol": "ICMP",
-                          "toPort": -1
-                        },
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": 80,
-                          "kind": "INGRESS",
-                          "name": "http",
-                          "protocol": "TCP",
-                          "toPort": 80
-                        },
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": 443,
-                          "kind": "INGRESS",
-                          "name": "https",
-                          "protocol": "TCP",
-                          "toPort": 443
-                        },
-                        {
-                          "cidr": [
-                            "0.0.0.0/0"
-                          ],
-                          "fromPort": 22,
-                          "kind": "INGRESS",
-                          "name": "ssh",
-                          "protocol": "TCP",
-                          "toPort": 22
-                        }
-                      ]
-                    }
-                  ],
-                  "belongsTo": "subnet_oam_osint",
-                  "name": "osint_vm_oam"
-                },
-                {
-                  "name": "osint_vm_net1"
-                },
-                {
-                  "name": "osint_vm_net3"
+                  "belongsTo": "subnet1",
+                  "name": "i1"
                 }
               ],
-              "infra_element_name": "osint_vm",
-              "maps": "osint_vm",
-              "name": "concrete_osint_vm",
-              "os": "CentOS-7-2111",
+              "infra_element_name": "vm1",
+              "maps": "vm1",
+              "name": "concrete_vm1",
+              "os": "ubuntu-20.04.3",
               "preexisting": false,
-              "sizeDescription": "small-centos"
+              "vm_flavor": "t2.micro"
+            },
+            {
+              "NetworkInterface_i2": {
+                "belongsTo": "subnet1",
+                "name": "i2"
+              },
+              "annotations": [
+                {
+                  "key": "vm_flavor",
+                  "value": "t2.micro"
+                }
+              ],
+              "credentials": "ssh_key",
+              "disabledMonitorings": [],
+              "ifaces": [
+                {
+                  "belongsTo": "subnet1",
+                  "name": "i2"
+                }
+              ],
+              "infra_element_name": "vm2",
+              "maps": "vm2",
+              "name": "concrete_vm2",
+              "os": "ubuntu-20.04.3",
+              "preexisting": false,
+              "vm_flavor": "t2.micro"
             }
           ]
         }
       },
       "programming_language": "ansible",
-      "step_name": "osint",
+      "step_name": "self_healing_monitoring",
       "step_type": "SoftwareComponent"
     },
     {
       "data": {
-        "iwg": {
+        "mysql": {
+          "db_name": "app1",
+          "db_password": "app1user",
+          "db_user": "app1user",
           "exposedInterfaces": [
             {
-              "name": "net_info"
+              "name": "DB_interface"
             }
           ],
           "isPersistent": false,
-          "name": "iwg",
+          "name": "mysql",
           "nodes": [
             {
-              "BProperty_config_drive": true,
-              "NetworkInterface_igw_vm_net1": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net1_igw",
-                "name": "igw_vm_net1"
-              },
-              "NetworkInterface_igw_vm_net2": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net2_igw",
-                "name": "igw_vm_net2"
-              },
-              "NetworkInterface_igw_vm_oam": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_oam_igw",
-                "name": "igw_vm_oam"
+              "NetworkInterface_i1": {
+                "belongsTo": "subnet1",
+                "name": "i1"
               },
               "annotations": [
                 {
-                  "key": "config_drive",
-                  "value": true
+                  "key": "vm_flavor",
+                  "value": "t2.micro"
                 }
               ],
-              "configInterface": "igw_vm_oam",
               "credentials": "ssh_key",
               "disabledMonitorings": [],
               "ifaces": [
                 {
-                  "name": "igw_vm_oam"
-                },
-                {
-                  "name": "igw_vm_net1"
-                },
-                {
-                  "name": "igw_vm_net2"
+                  "belongsTo": "subnet1",
+                  "name": "i1"
                 }
               ],
-              "infra_element_name": "igw_vm",
-              "maps": "igw_vm",
-              "name": "concrete_igw_vm",
-              "os": "CentOS-7-2111",
+              "infra_element_name": "vm1",
+              "maps": "vm1",
+              "name": "concrete_vm1",
+              "os": "ubuntu-20.04.3",
               "preexisting": false,
-              "sizeDescription": "small-centos"
+              "vm_flavor": "t2.micro"
             }
           ]
         }
       },
       "programming_language": "ansible",
-      "step_name": "iwg",
+      "step_name": "mysql",
       "step_type": "SoftwareComponent"
     },
     {
       "data": {
-        "ewcf": {
+        "wordpress": {
           "consumedInterfaces": [
             {
-              "endPoint": "https://firebase_api/get",
-              "name": "get_firebase"
-            }
-          ],
-          "exposedInterfaces": [
-            {
-              "name": "ewcf_restapi_if"
-            },
-            {
-              "name": "ewcf_kafka_if"
+              "name": "DB_interface"
             }
           ],
           "isPersistent": false,
-          "name": "ewcf",
+          "name": "wordpress",
           "nodes": [
             {
-              "BProperty_config_drive": true,
-              "NetworkInterface_ewcf_vm_net1": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net1_ewcf",
-                "name": "ewcf_vm_net1"
-              },
-              "NetworkInterface_ewcf_vm_net3": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_net3_ewcf",
-                "name": "ewcf_vm_net3"
-              },
-              "NetworkInterface_ewcf_vm_oam": {
-                "associated": [
-                  {
-                    "name": "sg"
-                  }
-                ],
-                "belongsTo": "subnet_oam_ewcf",
-                "name": "ewcf_vm_oam"
+              "NetworkInterface_i2": {
+                "belongsTo": "subnet1",
+                "name": "i2"
               },
               "annotations": [
                 {
-                  "key": "config_drive",
-                  "value": true
+                  "key": "vm_flavor",
+                  "value": "t2.micro"
                 }
               ],
-              "configInterface": "ewcf_vm_oam",
               "credentials": "ssh_key",
               "disabledMonitorings": [],
               "ifaces": [
                 {
-                  "name": "ewcf_vm_oam"
-                },
-                {
-                  "name": "ewcf_vm_net1"
-                },
-                {
-                  "name": "ewcf_vm_net3"
+                  "belongsTo": "subnet1",
+                  "name": "i2"
                 }
               ],
-              "infra_element_name": "ewcf_vm",
-              "maps": "ewcf_vm",
-              "name": "concrete_ewcf_vm",
-              "os": "CentOS-7-2111",
+              "infra_element_name": "vm2",
+              "maps": "vm2",
+              "name": "concrete_vm2",
+              "os": "ubuntu-20.04.3",
               "preexisting": false,
-              "sizeDescription": "small-centos"
+              "vm_flavor": "t2.micro"
             }
-          ]
+          ],
+          "wordpress_db_host": "db_host",
+          "wordpress_db_name": "app1",
+          "wordpress_db_password": "app1user",
+          "wordpress_db_user": "app1user",
+          "wordpress_table_prefix": "wp"
         }
       },
       "programming_language": "ansible",
-      "step_name": "ewcf",
+      "step_name": "wordpress",
       "step_type": "SoftwareComponent"
     }
   ]

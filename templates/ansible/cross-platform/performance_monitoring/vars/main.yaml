@@ -21,7 +21,7 @@ telegraf_global_tags:
   - tag_name: doml_element_name
     tag_value: "{{ doml_element_name }}"
   - tag_name: doml_element_type
-    tag_value: "vm"
+    tag_value: "{{ doml_element_type | default('vm') }}"
 
 telegraf_plugins_default:
   - plugin: cpu

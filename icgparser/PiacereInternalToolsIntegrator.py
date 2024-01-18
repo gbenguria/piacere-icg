@@ -44,6 +44,12 @@ def extract_infor_for_security_agents(intermediate_representation):
     return security_object_step
 
 
+def extract_info_for_self_healing(intermediate_representation):
+    logging.info("Adding info for self healing step")
+    self_healing_object_step = create_piacere_agents_ansible_step("self_healing", intermediate_representation)
+    return self_healing_object_step
+
+
 def add_internal_tool_information(intermediate_representation):
     performance_monitoring_directory_path = "templates/ansible/cross-platform/performance_monitoring"
     security_monitoring_directory_path = "templates/ansible/cross-platform/security_monitoring"
@@ -51,6 +57,7 @@ def add_internal_tool_information(intermediate_representation):
         logging.warning(f"add_internal_tool_information: {performance_monitoring_directory_path} "
                         f"or {security_monitoring_directory_path} is empty.")
         return intermediate_representation
+    self_healing_step = extract_info_for_self_healing(intermediate_representation)
     monitoring_step = extract_info_for_monitoring_agents(intermediate_representation)
     security_step = extract_infor_for_security_agents(intermediate_representation)
     intermediate_representation_with_monitoring = IntermediateRepresentationUtility.add_step(monitoring_step,
@@ -58,7 +65,9 @@ def add_internal_tool_information(intermediate_representation):
                                                                                              1)
     intermediate_representation_with_security_monitoring = IntermediateRepresentationUtility \
         .add_step(security_step, intermediate_representation_with_monitoring, 2)
-    return intermediate_representation_with_security_monitoring
+    intermediate_representation_with_self_healing = IntermediateRepresentationUtility \
+        .add_step(self_healing_step, intermediate_representation_with_security_monitoring, 3)
+    return intermediate_representation_with_self_healing
 
 
 def add_files_for_monitoring_agents(template_generated_folder_path):

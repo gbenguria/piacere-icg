@@ -28,6 +28,21 @@ doml_layers = {
     "active_infrastructure_layer": "activeInfrastructure",
 }
 
+def remove_from_navigated_references(resource):
+    if(resource in NAVIGATED_REFERENCES):
+        NAVIGATED_REFERENCES.remove(resource)
+
+def remove_from_navigated_references_all_refs_under(resource):
+    # same way to access all references of the given object as in save_references_link()
+    refs = resource.eClass.eAllReferences()
+    for ref in refs:
+        reference_object_list = get_reference_list_if_exists(resource, ref)
+        if reference_object_list:
+            for reference_object in reference_object_list:
+                if(reference_object in NAVIGATED_REFERENCES):
+                    NAVIGATED_REFERENCES.remove(reference_object)
+
+
 
 def extract_value_from(ecore_object_value):
     if isinstance(ecore_object_value, EOrderedSet):
@@ -153,7 +168,7 @@ def update_missing_parsed_resources(resource, reference, is_to_be_parsed):
         print(f'update_missing_parsed_resources: skipping {resource_name}')
 
 
-def save_references_info(from_object, to_object):
+def save_references_info(from_object, to_object, recursive=True):
     logging.info(f"Searching references from {from_object}")
     refs = from_object.eClass.eReferences
     for ref in refs:
@@ -168,11 +183,12 @@ def save_references_info(from_object, to_object):
                     object_representation = save_annotations(reference_object, object_representation)
                     object_representation = save_attributes(reference_object, object_representation)
                     object_representation = save_references_link(reference_object, object_representation)
-                    save_references_info(reference_object, object_representation)
+                    #object_representation_list.append(object_representation)
+                    if(recursive):
+                        save_references_info(reference_object, object_representation, False)
                     object_representation_list.append(object_representation)
             to_object[ref.name] = object_representation_list
             logging.info(f"References added: {to_object}")
-                # save_references_info(reference_object, to_object)
         elif from_object.eGet(ref.name):
             logging.info(f'Adding object info "{ref.name}"')
             reference_object = from_object.eGet(ref.name)
@@ -199,9 +215,18 @@ def save_references_link(from_object, to_object):  ## TODO refactoring
                 object_representation = save_attributes(reference_object, object_representation)                    
                 if not reference_object in NAVIGATED_REFERENCES:
                     NAVIGATED_REFERENCES.append(reference_object)
+                    if hasattr(reference_object, "name"):
+                        logging.info(f'Added {reference_object.name} to NAVIGATED_REFERENCES list')
+                    else:
+                        logging.info(f'Added {reference_object} to NAVIGATED_REFERENCES list')
                     object_representation = save_annotations(reference_object, object_representation)
                     object_representation = save_references_link(reference_object, object_representation)
                     #save_references_info(reference_object, object_representation)
+                else:
+                    if hasattr(reference_object, "name"):
+                        logging.info(f'Skipping {reference_object.name} as already in NAVIGATED_REFERENCES list')
+                    else:
+                        logging.info(f'Skipping {reference_object} as already in NAVIGATED_REFERENCES list')
                 #save_references_info(reference_object, object_representation)
                 object_representation_list.append(object_representation)                                
                 #update_missing_parsed_list_resources(reference_object, reference=ref, is_to_be_parsed=True)
