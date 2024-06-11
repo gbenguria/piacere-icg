@@ -24,7 +24,8 @@ resource "openstack_compute_instance_v2" "{{ infra_element_name }}" {
 {%- if 'BProperty_config_drive' in context().keys() %}
   config_drive = true 
 {%- endif %}
-  {%- for key, value in context().items() %}{% if not callable(value)%}{%- if key.startswith('NetworkInterface') %}
+  {%- for key, value in context().items() %}{% if not callable(value)%}
+  {%- if key.startswith('NetworkInterface') and "configInterface" in context().keys() and context()["configInterface"] == value.name %}
   network {
     port = openstack_networking_port_v2.{{ value.name ~ "_networking_port"}}.id
   }
@@ -55,7 +56,7 @@ data "openstack_compute_secgroup_v2" "default" {
 {%- endif %}
 
 {# adding security groups for interfaces #}
-# Attach networking port
+# Define networking ports
 resource "openstack_networking_port_v2" "{{ value.name ~ "_networking_port" }}" {
   name           = "{{ value.name }}"
   admin_state_up = true
@@ -82,7 +83,11 @@ resource "openstack_networking_port_v2" "{{ value.name ~ "_networking_port" }}" 
 {%- endif %}{% endif %}{% endfor %}{%- endfor %}
 }
 
+{%- if ("configInterface" not in context().keys()) or ("configInterface" in context().keys() and context()["configInterface"] != value.name) %}
+# Attach networking port
 resource "openstack_compute_interface_attach_v2" "{{ infra_element_name ~ "_port_association" }}" {
   instance_id = openstack_compute_instance_v2.{{ infra_element_name }}.id
   port_id = openstack_networking_port_v2.{{ value.name ~ "_networking_port" }}.id
-}{% endif %}{% endif %}{% endfor %}
+}
+{% endif %}
+{% endif %}{% endif %}{% endfor %}
